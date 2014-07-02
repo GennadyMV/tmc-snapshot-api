@@ -1,7 +1,7 @@
 tmc-snapshot-api
 ================
 
-TMC Snapshot API for [CodeBrowser](https://github.com/codebrowser).
+An API for accessing TMC exercise snapshots.
 
 ## Start Server
 
@@ -14,5 +14,3 @@ Run tests with `mvn test`.
 ## Build
 
 Build the project with `mvn package`.
-
-
