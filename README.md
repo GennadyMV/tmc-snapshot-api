@@ -13,6 +13,6 @@ Run tests with `mvn test`.
 
 ## Build
 
-Install dependencies and build the project with `mvn package`.
+Build the project with `mvn package`.
 
 
