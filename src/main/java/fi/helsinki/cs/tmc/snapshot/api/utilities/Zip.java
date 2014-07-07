@@ -22,7 +22,7 @@ public class Zip {
 
             while ((entry = input.getNextEntry()) != null) {
 
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
                 final byte[] buffer = new byte[2048];
                 int bytesRead;

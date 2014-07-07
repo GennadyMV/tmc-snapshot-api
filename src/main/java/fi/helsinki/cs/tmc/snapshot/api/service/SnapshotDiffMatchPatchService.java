@@ -115,13 +115,13 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
         }
 
         // Parse patches
-        List<Patch> patches = patcher.patch_fromText(information.getPatches());
+        final List<Patch> patches = patcher.patch_fromText(information.getPatches());
 
         // Current file content
-        String currentContent = files.containsKey(information.getFile()) ? files.get(information.getFile()) : "";
+        final String currentContent = files.containsKey(information.getFile()) ? files.get(information.getFile()) : "";
 
         // Apply patch to content
-        String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
+        final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
         files.put(information.getFile(), updatedContent);
     }
 
