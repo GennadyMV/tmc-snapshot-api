@@ -2,30 +2,61 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 public final class Event implements Comparable<Event> {
 
-    private String courseName;
     private String exerciseName;
     private String eventType;
-    private String content;
     private String data;
     private String happenedAt;
     private String systemNanotime;
-    private EventInformation eventInformation;
-    private String metadataString;
-    private Metadata metadata;
+    private String metadata;
 
-    public boolean isCodeSnapshotEvent() {
+    public boolean isProjectActionEvent() {
 
-        return eventType.contains("code_snapshot");
+        return eventType.contains("project_action");
     }
 
-    public String getMetadataAsString() {
+    public void setExerciseName(final String exerciseName) {
 
-        return metadataString;
+        this.exerciseName = exerciseName;
     }
 
-    public void setMetadata(final Metadata metadata) {
+    public String getExerciseName() {
+
+        return exerciseName;
+    }
+
+    public void setEventType(final String eventType) {
+
+        this.eventType = eventType;
+    }
+
+    public void setData(final String data) {
+
+        this.data = data;
+    }
+
+    public String getData() {
+
+        return data;
+    }
+
+    public void setHappenedAt(final String happenedAt) {
+
+        this.happenedAt = happenedAt;
+    }
+
+    public void setSystemNanotime(final String systemNanotime) {
+
+        this.systemNanotime = systemNanotime;
+    }
+
+    public void setMetadata(final String metadata) {
 
         this.metadata = metadata;
+    }
+
+    public String getMetadata() {
+
+        return metadata;
     }
 
     @Override

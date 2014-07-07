@@ -1,9 +1,13 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class EventInformation {
 
     private String file;
     private String patches;
+
+    @JsonProperty("full_document")
     private Boolean fullDocument;
 
     public String getFile() {

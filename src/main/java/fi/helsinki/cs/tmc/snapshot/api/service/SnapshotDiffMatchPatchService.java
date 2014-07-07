@@ -1,24 +1,30 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.DiffMatchPatch;
+import com.google.DiffMatchPatch.Patch;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Event;
-import fi.helsinki.cs.tmc.snapshot.api.model.Metadata;
+import fi.helsinki.cs.tmc.snapshot.api.model.EventInformation;
+import fi.helsinki.cs.tmc.snapshot.api.utilities.GZip;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import org.springframework.stereotype.Service;
@@ -26,37 +32,27 @@ import org.springframework.stereotype.Service;
 @Service
 public final class SnapshotDiffMatchPatchService implements SnapshotPatchService {
 
-    private DiffMatchPatch patcher = new DiffMatchPatch();
-
-    private byte[] decompressGzip(final byte[] content) {
-
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        try {
-            IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(content)), output);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        return output.toByteArray();
-    }
+    private final DiffMatchPatch patcher = new DiffMatchPatch();
 
     private Collection<Event> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
         try {
 
+            final List<Event> eventsList = new ArrayList<Event>();
+
             final ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
             final Event[] events = mapper.readValue(eventsJson, Event[].class);
 
             for (Event event : events) {
 
-                // Snapshot
-                if (event.isCodeSnapshotEvent()) {
-                    event.setMetadata(mapper.readValue(event.getMetadataAsString(), Metadata.class));
+                if (!event.isProjectActionEvent()) {
+                    eventsList.add(event);
                 }
             }
 
-            return Arrays.asList(events);
+            return eventsList;
 
         } catch (IOException exception) {
             return null;
@@ -88,7 +84,7 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
             final byte[] compressed = Arrays.copyOfRange(content, start, start + length);
 
             // Decompress .dat content
-            final byte[] decompressed = decompressGzip(compressed);
+            final byte[] decompressed = GZip.decompress(compressed);
 
             // Generate events from decompressed string data
             final Collection<Event> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
@@ -101,10 +97,43 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
         return events;
     }
 
+    private void patchFile(final Event event, final Map<String, String> files) throws UnsupportedEncodingException {
+
+        final ObjectMapper mapper = new ObjectMapper();
+        final byte[] decodedData = Base64.decodeBase64(event.getData());
+        EventInformation information;
+
+        try {
+            information = mapper.readValue(new String(decodedData, "UTF-8"), EventInformation.class);
+        } catch (IOException exception) {
+            return;
+        }
+
+        // No patches to apply
+        if (information.getPatches() == null || information.getPatches().isEmpty()) {
+            return;
+        }
+
+        // Parse patches
+        List<Patch> patches = patcher.patch_fromText(information.getPatches());
+
+        // Current file content
+        String currentContent = files.containsKey(information.getFile()) ? files.get(information.getFile()) : "";
+
+        // Apply patch to content
+        String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
+        files.put(information.getFile(), updatedContent);
+    }
+
     @Override
     public Collection<Event> patch() throws IOException {
 
-        final Collection<Event> events = readEvents("test-data", "perusoskari");
+        final Collection<Event> events = readEvents("test-data", "012608144");
+        final Map<String, String> files = new TreeMap<String, String>();
+
+        for (Event event : events) {
+            patchFile(event, files);
+        }
 
         return events;
     }
