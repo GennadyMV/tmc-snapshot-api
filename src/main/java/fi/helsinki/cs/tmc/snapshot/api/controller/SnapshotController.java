@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/participants", produces = "application/json")
-public class SnapshotController {
+public final class SnapshotController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{participant}/snapshots")
     public String list(@PathVariable final Long participant) {

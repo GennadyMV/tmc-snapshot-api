@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class BaseController {
+public final class BaseController {
 
     @Autowired
     private SnapshotService spywareService;

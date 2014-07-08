@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/participants", produces = "application/json")
-public class ParticipantController {
+public final class ParticipantController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list() {

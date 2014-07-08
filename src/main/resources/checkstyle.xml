@@ -8,6 +8,7 @@
     <property name='localeCountry' value='' />
     <property name='localeLanguage' value='' />
 
+    <!-- Suppressions -->
     <module name='SuppressionFilter'>
         <property name='file' value='src/main/resources/suppressions.xml' />
     </module>

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/participants", produces = "application/json")
-public class SnapshotFileController {
+public final class SnapshotFileController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{participant}/snapshots/{snapshot}/files")
     public String list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
@@ -22,7 +22,9 @@ public class SnapshotFileController {
     @RequestMapping(method = RequestMethod.GET,
                     value = "/{participant}/snapshots/{snapshot}/files/**",
                     produces = "text/plain")
-    public String read(final HttpServletRequest request, @PathVariable final Long participant, @PathVariable final Long snapshot) throws UnsupportedEncodingException {
+    public String read(final HttpServletRequest request,
+                       @PathVariable final Long participant,
+                       @PathVariable final Long snapshot) throws UnsupportedEncodingException {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";
