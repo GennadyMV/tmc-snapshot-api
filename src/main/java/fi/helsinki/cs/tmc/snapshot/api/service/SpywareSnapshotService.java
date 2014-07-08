@@ -4,6 +4,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
@@ -30,7 +31,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SpywareSnapshotService implements SnapshotService {
+public final class SpywareSnapshotService implements SnapshotService {
 
     @Autowired
     private SnapshotPatchService patchService;
@@ -54,30 +55,36 @@ public class SpywareSnapshotService implements SnapshotService {
 
     private void setCredentials() {
 
+        // Basic authentication
+
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
-
         final HttpHost host = new HttpHost(spywareUrl, 80, "http");
 
         cache.put(host, scheme);
 
-        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(spywareUsername, spywarePassword);
+        // Set credentials
 
+        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(spywareUsername, spywarePassword);
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+
         credentialsProvider.setCredentials(new AuthScope(host), credentials);
 
         httpFactory.setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private InputStream fetchFile(final String directory, final String username, final String extension) throws IOException, URISyntaxException {
+    private InputStream fetchFile(final String instance,
+                                  final String username,
+                                  final String extension) throws IOException, URISyntaxException {
 
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(directory)
+        builder.append(instance)
                .append(username)
                .append(extension);
 
-        final ClientHttpRequest request = httpFactory.createRequest(new URL("http", spywareUrl, builder.toString()).toURI(), HttpMethod.GET);
+        final URI url = new URL("http", spywareUrl, builder.toString()).toURI();
+        final ClientHttpRequest request = httpFactory.createRequest(url, HttpMethod.GET);
         final ClientHttpResponse response = request.execute();
 
         // Response body
@@ -85,11 +92,12 @@ public class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public Collection<SnapshotEvent> findAll(final String directory, final String username) throws IOException, URISyntaxException {
+    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException,
+                                                                                                  URISyntaxException {
 
         // Fetch index and data file
-        final InputStream index = fetchFile(directory, username, ".idx");
-        final InputStream content = fetchFile(directory, username, ".dat");
+        final InputStream index = fetchFile(instance, username, ".idx");
+        final InputStream content = fetchFile(instance, username, ".dat");
 
         return patchService.patch(index, content);
     }

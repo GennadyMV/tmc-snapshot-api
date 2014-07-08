@@ -7,7 +7,9 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
 
-public class GZip {
+public final class GZip {
+
+    private GZip() {}
 
     public static byte[] decompress(final byte[] content) {
 

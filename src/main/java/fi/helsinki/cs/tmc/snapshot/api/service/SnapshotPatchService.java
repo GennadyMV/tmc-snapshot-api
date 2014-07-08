@@ -8,6 +8,6 @@ import java.util.Collection;
 
 public interface SnapshotPatchService {
 
-    Collection<SnapshotEvent> patch(InputStream indexData, InputStream content) throws IOException;
+    Collection<SnapshotEvent> patch(InputStream index, InputStream content) throws IOException;
 
 }

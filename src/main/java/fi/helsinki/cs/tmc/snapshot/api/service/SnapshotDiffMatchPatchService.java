@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 public final class SnapshotDiffMatchPatchService implements SnapshotPatchService {
 
     private final DiffMatchPatch patcher = new DiffMatchPatch();
-    private final Map<String, String> filesCache = new TreeMap<>();
+    private final Map<String, String> fileCache = new TreeMap<>();
 
     private Collection<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
@@ -112,21 +112,21 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
         final List<Patch> patches = patcher.patch_fromText(information.getPatches());
 
         // Current file content from cache
-        final String currentContent = filesCache.containsKey(information.getFile()) ? filesCache.get(information.getFile()) : "";
+        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
 
         // Apply patches to content
         final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
-        filesCache.put(information.getFile(), updatedContent);
+        fileCache.put(information.getFile(), updatedContent);
 
         // Save content to specific event
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
     @Override
-    public Collection<SnapshotEvent> patch(final InputStream indexData, final InputStream content) throws IOException {
+    public Collection<SnapshotEvent> patch(final InputStream index, final InputStream content) throws IOException {
 
         // Get events
-        final Collection<SnapshotEvent> events = readEvents(indexData, content);
+        final Collection<SnapshotEvent> events = readEvents(index, content);
 
         // Patch files
         for (SnapshotEvent event : events) {
