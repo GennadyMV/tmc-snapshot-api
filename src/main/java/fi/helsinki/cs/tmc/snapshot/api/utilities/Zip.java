@@ -8,33 +8,34 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Zip {
+public final class Zip {
+
+    private Zip() {}
 
     public static Map<String, byte[]> decompress(final byte[] content) {
 
-        final Map<String, byte[]> entries = new TreeMap<String, byte[]>();
+        final Map<String, byte[]> entries = new TreeMap<>();
 
         try {
 
-            final ZipInputStream input = new ZipInputStream(new ByteArrayInputStream(content));
+            try (ZipInputStream input = new ZipInputStream(new ByteArrayInputStream(content))) {
 
-            ZipEntry entry;
+                ZipEntry entry;
 
-            while ((entry = input.getNextEntry()) != null) {
+                while ((entry = input.getNextEntry()) != null) {
 
-                final ByteArrayOutputStream output = new ByteArrayOutputStream();
+                    final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-                final byte[] buffer = new byte[2048];
-                int bytesRead;
+                    final byte[] buffer = new byte[2048];
+                    int bytesRead;
 
-                while ((bytesRead = input.read(buffer, 0, 2048)) != -1) {
-                    output.write(buffer, 0, bytesRead);
+                    while ((bytesRead = input.read(buffer, 0, 2048)) != -1) {
+                        output.write(buffer, 0, bytesRead);
+                    }
+
+                    entries.put(entry.getName(), output.toByteArray());
                 }
-
-                entries.put(entry.getName(), output.toByteArray());
             }
-
-            input.close();
 
         } catch (IOException exception) {
             throw new RuntimeException(exception);

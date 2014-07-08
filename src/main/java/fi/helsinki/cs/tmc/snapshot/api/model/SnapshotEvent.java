@@ -11,7 +11,6 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     private String happenedAt;
     private String systemNanotime;
     private String metadata;
-
     private final Map<String, String> files = new HashMap<>();
 
     public boolean isProjectActionEvent() {
