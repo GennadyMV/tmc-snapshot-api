@@ -1,6 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-public final class Event implements Comparable<Event> {
+import java.util.HashMap;
+import java.util.Map;
+
+public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
     private String exerciseName;
     private String eventType;
@@ -8,6 +11,8 @@ public final class Event implements Comparable<Event> {
     private String happenedAt;
     private String systemNanotime;
     private String metadata;
+
+    private final Map<String, String> files = new HashMap<>();
 
     public boolean isProjectActionEvent() {
 
@@ -59,8 +64,13 @@ public final class Event implements Comparable<Event> {
         return metadata;
     }
 
+    public Map<String, String> getFiles() {
+
+        return files;
+    }
+
     @Override
-    public int compareTo(final Event event) {
+    public int compareTo(final SnapshotEvent event) {
 
         if (!happenedAt.equals(event.happenedAt)) {
             return new Long(Long.parseLong(happenedAt)).compareTo(Long.parseLong(event.happenedAt));
