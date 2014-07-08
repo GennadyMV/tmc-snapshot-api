@@ -5,3 +5,4 @@
 # Project
 
 target/
+src/main/resources/application-development.properties

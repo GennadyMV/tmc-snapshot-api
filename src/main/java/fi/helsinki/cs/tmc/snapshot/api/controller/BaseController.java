@@ -1,8 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotPatchService;
-
-import java.io.IOException;
+import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,13 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class BaseController {
 
     @Autowired
-    private SnapshotPatchService patchService;
+    private SnapshotService spywareService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
     @ResponseBody
-    public String getRoot() throws IOException {
+    public String getRoot() throws Exception {
 
-        patchService.patch();
+        spywareService.findAll("/peliohjelmointi/", "Miklu04");
 
         return "Hello!";
     }

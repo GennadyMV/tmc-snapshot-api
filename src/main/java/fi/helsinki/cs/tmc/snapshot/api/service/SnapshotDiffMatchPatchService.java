@@ -10,9 +10,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.EventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.utilities.GZip;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,19 +59,13 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
         }
     }
 
-    private Collection<SnapshotEvent> readEvents(final String directory, final String studentName) throws IOException {
+    private Collection<SnapshotEvent> readEvents(final InputStream index, final InputStream data) throws IOException {
 
         final Set<SnapshotEvent> events = new TreeSet<>();
-        final File indexFile = new File(directory, studentName + ".idx");
-
-        // Index file not found
-        if (!indexFile.exists()) {
-            throw new RuntimeException("No entries for student " + studentName);
-        }
 
         // Event content
-        final String indexData = IOUtils.toString(new FileInputStream(indexFile));
-        final byte[] content = IOUtils.toByteArray(new FileInputStream(new File(directory, studentName + ".dat")));
+        final String indexData = IOUtils.toString(index);
+        final byte[] content = IOUtils.toByteArray(data);
 
         for (String event : indexData.split("\\n")) {
 
@@ -130,10 +123,12 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
     }
 
     @Override
-    public Collection<SnapshotEvent> patch() throws IOException {
+    public Collection<SnapshotEvent> patch(final InputStream indexData, final InputStream content) throws IOException {
 
-        final Collection<SnapshotEvent> events = readEvents("test-data", "012608144");
+        // Get events
+        final Collection<SnapshotEvent> events = readEvents(indexData, content);
 
+        // Patch files
         for (SnapshotEvent event : events) {
             patchFile(event);
         }
