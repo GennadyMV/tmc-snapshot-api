@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/participants", produces = "application/json")
 public final class SnapshotController {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{participant}/snapshots")
+    @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public String list(@PathVariable final Long participant) {
 
         return "Participant " + participant + "'s snapshots";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{participant}/snapshots/{snapshot}")
+    @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
     public String read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
         return "Participant " + participant + "'s snapshot " + snapshot;

@@ -15,7 +15,7 @@ public final class ParticipantController {
         return "Participants";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{participant}")
+    @RequestMapping(method = RequestMethod.GET, value = "{participant}")
     public String read(@PathVariable final Long participant) {
 
         return "Participant " + participant;
