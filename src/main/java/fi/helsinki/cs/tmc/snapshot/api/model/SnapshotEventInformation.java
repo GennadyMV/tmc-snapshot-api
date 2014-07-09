@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class EventInformation {
+public final class SnapshotEventInformation {
 
     private String file;
     private String patches;
