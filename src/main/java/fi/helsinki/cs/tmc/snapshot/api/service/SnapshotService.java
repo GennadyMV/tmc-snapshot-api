@@ -6,6 +6,7 @@ import java.util.Collection;
 
 public interface SnapshotService {
 
+    Collection<SnapshotEvent> findWithRange(String instance, String username) throws Exception;
     Collection<SnapshotEvent> findAll(String instance, String username) throws Exception;
 
 }
