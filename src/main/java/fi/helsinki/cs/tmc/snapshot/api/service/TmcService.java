@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.annotation.PostConstruct;
@@ -66,7 +65,7 @@ public class TmcService implements TmcServiceInterface {
         httpFactory.setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private InputStream fetchJson(final String instance) throws IOException, URISyntaxException {
+    private String fetchJson(final String instance) throws IOException, URISyntaxException {
 
         final StringBuilder builder = new StringBuilder();
 
@@ -82,9 +81,10 @@ public class TmcService implements TmcServiceInterface {
         final ClientHttpRequest request = httpFactory.createRequest(url, HttpMethod.GET);
         final ClientHttpResponse response = request.execute();
 
-        final InputStream responseBody = response.getBody();
+        final String responseBody = IOUtils.toString(response.getBody(), "UTF-8");
 
         //response.
+        response.close();
 
         // Response body
         return responseBody;
@@ -96,7 +96,7 @@ public class TmcService implements TmcServiceInterface {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        final JsonNode rootNode = mapper.readTree(IOUtils.toString(fetchJson(instance), "UTF-8"));
+        final JsonNode rootNode = mapper.readTree(fetchJson(instance));
 
         // No Checkstyle-configuration found, use default
         if (rootNode.findValue("participants") == null) {

@@ -5,12 +5,12 @@ public final class TmcParticipant {
     private Long id;
     private String username;
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
 
         this.id = id;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
 
         this.username = username;
     }
