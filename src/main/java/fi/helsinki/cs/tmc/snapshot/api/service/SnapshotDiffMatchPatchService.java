@@ -11,10 +11,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.utilities.GZip;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 import org.springframework.stereotype.Service;
 
@@ -59,23 +56,11 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
         }
     }
 
-    private Collection<SnapshotEvent> readEvents(final InputStream index, final InputStream data) throws IOException {
+    private Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
 
         final Set<SnapshotEvent> events = new TreeSet<>();
 
-        // Event content
-        final String indexData = IOUtils.toString(index);
-        final byte[] content = IOUtils.toByteArray(data);
-
-        for (String event : indexData.split("\\n")) {
-
-            // Split on whitespace characters
-            final String[] indexes = event.split("\\s+");
-            final int start = Integer.parseInt(indexes[0]);
-            final int length = Integer.parseInt(indexes[1]);
-
-            // Copy content from .dat file with range
-            final byte[] compressed = Arrays.copyOfRange(content, start, start + length);
+        for (byte[] compressed : data) {
 
             // Decompress .dat content
             final byte[] decompressed = GZip.decompress(compressed);
@@ -123,10 +108,10 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
     }
 
     @Override
-    public Collection<SnapshotEvent> patch(final InputStream index, final InputStream content) throws IOException {
+    public Collection<SnapshotEvent> patch(final List<byte[]> content) throws IOException {
 
         // Get events
-        final Collection<SnapshotEvent> events = readEvents(index, content);
+        final Collection<SnapshotEvent> events = readEvents(content);
 
         // Patch files
         for (SnapshotEvent event : events) {
