@@ -1,6 +1,10 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,9 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public final class SnapshotFileController {
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public String list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
-        return "Participant " + participant + "'s snapshot " + snapshot + "'s files";
+        final List<SnapshotFile> files = new ArrayList<>();
+        files.add(new SnapshotFile("Example.java", "content"));
+
+        return files;
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -30,6 +37,6 @@ public final class SnapshotFileController {
         final String separator = "/files/";
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
-        return "Participant " + participant + "'s snapshot " + snapshot + "'s file " + path;
+        return new SnapshotFile("Example.java", "Content for: " + path).getContent();
     }
 }

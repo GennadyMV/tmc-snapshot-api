@@ -12,4 +12,14 @@ public final class Participant {
         this.id = id;
         this.snapshots = snapshots;
     }
+
+    public Long getId() {
+
+        return id;
+    }
+
+    public List<Snapshot> getSnapshots() {
+
+        return snapshots;
+    }
 }

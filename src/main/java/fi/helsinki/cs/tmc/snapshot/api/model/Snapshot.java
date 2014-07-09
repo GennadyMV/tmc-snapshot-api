@@ -12,4 +12,14 @@ public final class Snapshot {
         this.id = id;
         this.files = files;
     }
+
+    public Long getId() {
+
+        return id;
+    }
+
+    public Map<String, SnapshotFile> getFiles() {
+
+        return files;
+    }
 }
