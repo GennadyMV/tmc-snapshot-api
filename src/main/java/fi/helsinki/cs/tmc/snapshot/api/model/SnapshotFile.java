@@ -1,5 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-public class SnapshotFile {
+public final class SnapshotFile {
 
+    private final String content;
+
+    public SnapshotFile(final String content) {
+
+        this.content = content;
+    }
 }
