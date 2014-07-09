@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.DiffMatchPatch;
 import com.google.DiffMatchPatch.Patch;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.EventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.utilities.GZip;
 
 import java.io.IOException;
@@ -80,10 +80,10 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
 
         final ObjectMapper mapper = new ObjectMapper();
         final byte[] decodedData = Base64.decodeBase64(event.getData());
-        EventInformation information;
+        SnapshotEventInformation information;
 
         try {
-            information = mapper.readValue(new String(decodedData, "UTF-8"), EventInformation.class);
+            information = mapper.readValue(new String(decodedData, "UTF-8"), SnapshotEventInformation.class);
         } catch (IOException exception) {
             return;
         }

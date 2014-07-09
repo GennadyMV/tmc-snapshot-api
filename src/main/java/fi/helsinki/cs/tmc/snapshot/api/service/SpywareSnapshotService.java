@@ -39,7 +39,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     @Autowired
     private SnapshotPatchService patchService;
 
-    @Value("${url.spyware}")
+    @Value("${spyware.url}")
     private String spywareUrl;
 
     @Value("${spyware.username}")
