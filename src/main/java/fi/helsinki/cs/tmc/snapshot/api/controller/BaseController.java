@@ -18,7 +18,7 @@ public final class BaseController {
     @ResponseBody
     public String getRoot() throws Exception {
 
-        spywareService.findAll("/peliohjelmointi/", "Miklu04");
+        spywareService.findWithRange("/peliohjelmointi/", "Miklu04");
 
         return "Hello!";
     }

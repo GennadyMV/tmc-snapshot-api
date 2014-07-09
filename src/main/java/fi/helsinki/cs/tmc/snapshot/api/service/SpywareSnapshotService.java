@@ -71,12 +71,9 @@ public final class SpywareSnapshotService implements SnapshotService {
         httpFactory.setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private InputStream fetchFile(final ClientHttpRequest request) throws IOException {
+    private ClientHttpResponse fetchFile(final ClientHttpRequest request) throws IOException {
 
-        final ClientHttpResponse response = request.execute();
-
-        // Response body
-        return response.getBody();
+        return request.execute();
     }
 
     private ClientHttpRequest createRequest(final String instance,
@@ -93,14 +90,15 @@ public final class SpywareSnapshotService implements SnapshotService {
         return httpFactory.createRequest(url, HttpMethod.GET);
     }
 
-    private List<byte[]> findRange(final InputStream index,
-                                   final String instance,
-                                   final String username) throws IOException, URISyntaxException {
+    private List<byte[]> findWithRange(final InputStream index,
+                                       final String instance,
+                                       final String username) throws IOException, URISyntaxException {
 
         final List<byte[]> byteData = new ArrayList<>();
 
         // Convert to string
         final String indexData = IOUtils.toString(index);
+        index.close();
 
         // Split on newlines
         for (String event : indexData.split("\\n")) {
@@ -112,22 +110,26 @@ public final class SpywareSnapshotService implements SnapshotService {
             final ClientHttpRequest request = createRequest(instance, username, ".dat");
             request.getHeaders().add("Range", String.format("bytes=%d-%d", start, start + length));
 
-            final InputStream content = fetchFile(request);
-            byteData.add(IOUtils.toByteArray(content));
+            final ClientHttpResponse response = fetchFile(request);
+            byteData.add(IOUtils.toByteArray(response.getBody()));
+
+            response.close();
         }
 
         return byteData;
     }
 
     @Override
-    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException,
-                                                                                                  URISyntaxException {
+    public Collection<SnapshotEvent> findWithRange(final String instance, final String username) throws IOException,
+                                                                                                   URISyntaxException {
 
-        // Fetch index and data file
-        final InputStream index = fetchFile(createRequest(instance, username, ".idx"));
+        // Fetch index file
+        final ClientHttpResponse response = fetchFile(createRequest(instance, username, ".idx"));
+        final InputStream index = response.getBody();
 
-        // Find the byte range for reading .dat file
-        final List<byte[]> content = findRange(index, instance, username);
+        // Fetch data file
+        final List<byte[]> content = findWithRange(index, instance, username);
+        response.close();
 
         return patchService.patch(content);
     }
