@@ -8,7 +8,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -125,62 +124,16 @@ public final class SpywareSnapshotService implements SnapshotService {
         return byteData;
     }
 
-    private List<byte[]> findAll(final InputStream index,
-                                final String instance,
-                                final String username) throws IOException, URISyntaxException {
-
-        final List<byte[]> byteData = new ArrayList<>();
-
-        // Convert to string
-        final String indexData = IOUtils.toString(index);
-        index.close();
-
-        // Fetch whole .dat file
-        final ClientHttpRequest request = createRequest(instance, username, ".dat");
-        final ClientHttpResponse response = fetchFile(request);
-
-        final byte[] content = IOUtils.toByteArray(response.getBody());
-        response.close();
-
-        for (String event : indexData.split("\\n")) {
-
-            final String[] indexes = event.split("\\s+");
-            final int start = Integer.parseInt(indexes[0]);
-            final int length = Integer.parseInt(indexes[1]);
-
-            final byte[] compressed = Arrays.copyOfRange(content, start, start + length);
-
-            byteData.add(compressed);
-        }
-
-        return byteData;
-    }
-
     @Override
     public Collection<SnapshotEvent> findWithRange(final String instance, final String username) throws IOException,
-                                                                                                  URISyntaxException {
+                                                                                                   URISyntaxException {
 
-        // Fetch index and data file
+        // Fetch index file
         final ClientHttpResponse response = fetchFile(createRequest(instance, username, ".idx"));
         final InputStream index = response.getBody();
 
-        // Find the byte range for reading .dat file
+        // Fetch data file
         final List<byte[]> content = findWithRange(index, instance, username);
-        response.close();
-
-        return patchService.patch(content);
-    }
-
-    @Override
-    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException,
-                                                                                                  URISyntaxException {
-
-        // Fetch index and data file
-        final ClientHttpResponse response = fetchFile(createRequest(instance, username, ".idx"));
-        final InputStream index = response.getBody();
-
-        // Find the byte range for reading .dat file
-        final List<byte[]> content = findAll(index, instance, username);
         response.close();
 
         return patchService.patch(content);
