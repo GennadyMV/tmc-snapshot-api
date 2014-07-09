@@ -1,28 +1,22 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collection;
-
 import javax.annotation.PostConstruct;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScheme;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
@@ -31,19 +25,19 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SpywareSnapshotService implements SnapshotService {
+public class TmcService implements TmcServiceInterface {
 
-    @Autowired
-    private SnapshotPatchService patchService;
+    @Value("${tmc.url}")
+    private String tmcUrl;
 
-    @Value("${spyware.url}")
-    private String spywareUrl;
+    @Value("${tmc.username}")
+    private String tmcUsername;
 
-    @Value("${spyware.username}")
-    private String spywareUsername;
+    @Value("${tmc.password}")
+    private String tmcPassword;
 
-    @Value("${spyware.password}")
-    private String spywarePassword;
+    @Value("${tmc.version}")
+    private String tmcVersion;
 
     private final HttpComponentsClientHttpRequestFactory httpFactory = new HttpComponentsClientHttpRequestFactory();
 
@@ -54,13 +48,13 @@ public final class SpywareSnapshotService implements SnapshotService {
 
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
-        final HttpHost host = new HttpHost(spywareUrl, 80, "http");
+        final HttpHost host = new HttpHost(tmcUrl, 8888, "http");
 
         cache.put(host, scheme);
 
         // Set credentials
 
-        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(spywareUsername, spywarePassword);
+        final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(tmcUsername, tmcPassword);
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 
         credentialsProvider.setCredentials(new AuthScope(host), credentials);
@@ -68,17 +62,19 @@ public final class SpywareSnapshotService implements SnapshotService {
         httpFactory.setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private InputStream fetchFile(final String instance,
-                                  final String username,
-                                  final String extension) throws IOException, URISyntaxException {
+    private InputStream fetchJson(final String instance) throws IOException, URISyntaxException {
 
         final StringBuilder builder = new StringBuilder();
 
         builder.append(instance)
-               .append(username)
-               .append(extension);
+               .append("/participants.json");
 
-        final URI url = new URL("http", spywareUrl, builder.toString()).toURI();
+        final URI url = new URIBuilder().setScheme("http")
+                                        .setHost(tmcUrl)
+                                        .setPort(8888)
+                                        .setPath(builder.toString())
+                                        .setParameter("api_version", tmcVersion).build();
+
         final ClientHttpRequest request = httpFactory.createRequest(url, HttpMethod.GET);
         final ClientHttpResponse response = request.execute();
 
@@ -87,13 +83,9 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException,
-                                                                                                  URISyntaxException {
+    public String findUsername(final int userId) throws Exception {
 
-        // Fetch index and data file
-        final InputStream index = fetchFile(instance, username, ".idx");
-        final InputStream content = fetchFile(instance, username, ".dat");
-
-        return patchService.patch(index, content);
+        return IOUtils.toString(fetchJson(""), "UTF-8");
     }
+
 }
