@@ -1,5 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -48,7 +52,7 @@ public class TmcService implements TmcServiceInterface {
 
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
-        final HttpHost host = new HttpHost(tmcUrl, 8888, "http");
+        final HttpHost host = new HttpHost(tmcUrl, 80, "http");
 
         cache.put(host, scheme);
 
@@ -71,21 +75,40 @@ public class TmcService implements TmcServiceInterface {
 
         final URI url = new URIBuilder().setScheme("http")
                                         .setHost(tmcUrl)
-                                        .setPort(8888)
+                                        .setPort(80)
                                         .setPath(builder.toString())
                                         .setParameter("api_version", tmcVersion).build();
 
         final ClientHttpRequest request = httpFactory.createRequest(url, HttpMethod.GET);
         final ClientHttpResponse response = request.execute();
 
+        final InputStream responseBody = response.getBody();
+
+        //response.
+
         // Response body
-        return response.getBody();
+        return responseBody;
     }
 
     @Override
-    public String findUsername(final int userId) throws Exception {
+    public String findUsername(final String instance, final int userId) throws Exception {
 
-        return IOUtils.toString(fetchJson(""), "UTF-8");
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        final JsonNode rootNode = mapper.readTree(IOUtils.toString(fetchJson(instance), "UTF-8"));
+
+        // No Checkstyle-configuration found, use default
+        if (rootNode.findValue("participants") == null) {
+            throw new Exception("Couldn't fetch participants");
+        }
+
+        for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
+            if (participant.getId() == userId) {
+                return participant.getUsername();
+            }
+        }
+        throw new Exception("User with id " + userId + " not found");
     }
 
 }
