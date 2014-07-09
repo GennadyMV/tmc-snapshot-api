@@ -3,11 +3,15 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScheme;
@@ -20,6 +24,7 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
@@ -83,7 +88,6 @@ public class TmcService implements TmcServiceInterface {
 
         final String responseBody = IOUtils.toString(response.getBody(), "UTF-8");
 
-        //response.
         response.close();
 
         // Response body
@@ -98,17 +102,12 @@ public class TmcService implements TmcServiceInterface {
 
         final JsonNode rootNode = mapper.readTree(fetchJson(instance));
 
-        // No Checkstyle-configuration found, use default
-        if (rootNode.findValue("participants") == null) {
-            throw new Exception("Couldn't fetch participants");
-        }
-
         for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
             if (participant.getId() == userId) {
                 return participant.getUsername();
             }
         }
+
         throw new Exception("User with id " + userId + " not found");
     }
-
 }
