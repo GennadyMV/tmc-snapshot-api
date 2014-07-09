@@ -1,2 +1,4 @@
-spyware.username = 
-spyware.password = 
+# Spyware
+
+spyware.username = username
+spyware.password = password
