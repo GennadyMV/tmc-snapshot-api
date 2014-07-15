@@ -22,7 +22,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -108,7 +111,9 @@ public final class SnapshotDiffMatchPatchService implements SnapshotPatchService
     }
 
     @Override
+    @Cacheable("EventList")
     public Collection<SnapshotEvent> patch(final List<byte[]> content) throws IOException {
+        Logger.getLogger(SnapshotDiffMatchPatchService.class).log(Level.INFO, "Patching events from raw bytes.");
 
         // Get events
         final Collection<SnapshotEvent> events = readEvents(content);

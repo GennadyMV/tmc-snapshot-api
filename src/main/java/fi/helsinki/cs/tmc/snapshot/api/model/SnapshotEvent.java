@@ -1,17 +1,34 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import fi.helsinki.cs.tmc.snapshot.api.model.views.Views;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
+    @JsonView(Views.Summary.class)
     private String exerciseName;
+
+    @JsonView(Views.Summary.class)
     private String eventType;
-    private String data;
+
+    @JsonView(Views.Summary.class)
     private String happenedAt;
+
+    @JsonView(Views.Complete.class)
     private String systemNanotime;
+
+    @JsonView(Views.Complete.class)
     private String metadata;
+
+    @JsonView(Views.Complete.class)
     private final Map<String, String> files = new HashMap<>();
+
+    @JsonView(Views.Complete.class)
+    private String data;
 
     public boolean isProjectActionEvent() {
 
@@ -72,9 +89,16 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     public int compareTo(final SnapshotEvent event) {
 
         if (!happenedAt.equals(event.happenedAt)) {
-            return new Long(Long.parseLong(happenedAt)).compareTo(Long.parseLong(event.happenedAt));
+            return new Long(Long.parseLong(getHappenedAt())).compareTo(Long.parseLong(event.getHappenedAt()));
         }
 
         return systemNanotime.compareTo(event.systemNanotime);
+    }
+
+    /**
+     * @return the happenedAt
+     */
+    public String getHappenedAt() {
+        return happenedAt;
     }
 }
