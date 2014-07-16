@@ -31,6 +31,7 @@ public final class SnapshotController {
     public String list(@PathVariable final Long participant) {
 
         final Collection<SnapshotEvent> events;
+
         try {
             final String username = tmcService.findUsername("", participant);
             events = spywareService.findAll("/hy/", username);
@@ -46,6 +47,7 @@ public final class SnapshotController {
     public String read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
         final SnapshotEvent event;
+
         try {
             final String username = tmcService.findUsername("", participant);
             event = spywareService.find("/hy/", username, snapshot);

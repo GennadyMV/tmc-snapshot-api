@@ -1,4 +1,3 @@
-
 package fi.helsinki.cs.tmc.snapshot.api.model.views;
 
 public class Views {
