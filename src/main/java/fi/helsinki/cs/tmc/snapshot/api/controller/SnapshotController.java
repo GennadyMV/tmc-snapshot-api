@@ -1,16 +1,13 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
+import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.model.views.Views;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
 import fi.helsinki.cs.tmc.snapshot.api.utilities.JsonViewWriter;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,23 +24,50 @@ public final class SnapshotController {
     @Autowired
     private SnapshotService spywareService;
 
+    @Autowired
+    private TmcDataService tmcService;
+
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public String list(@PathVariable final Long participant) {
 
-        final Collection<SnapshotEvent> events;
+        final String username;
         try {
-            events = spywareService.findWithRange("/hy/", participant.toString());
-        } catch (IOException | URISyntaxException ex) {
+            username = tmcService.findUsername("", participant);
+        } catch (ApiException ex) {
             Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
 
-        return JsonViewWriter.getView(events, Views.Summary.class);
+        final Collection<SnapshotEvent> events;
+        try {
+            events = spywareService.findAll("/hy/", username);
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+        return JsonViewWriter.getView(events, Views.IdOnly.class);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
-    public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public String read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
-        return new Snapshot(1L, new HashMap<String, SnapshotFile>());
+        final String username;
+        try {
+            username = tmcService.findUsername("", participant);
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+        SnapshotEvent event;
+        try {
+            event = spywareService.find("/hy/", username, snapshot);
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+        return JsonViewWriter.getView(event, Views.Complete.class);
     }
 }

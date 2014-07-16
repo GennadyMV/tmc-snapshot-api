@@ -15,7 +15,7 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     @JsonView(Views.Summary.class)
     private String eventType;
 
-    @JsonView(Views.Summary.class)
+    @JsonView(Views.IdOnly.class)
     private String happenedAt;
 
     @JsonView(Views.Complete.class)
@@ -30,6 +30,7 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     @JsonView(Views.Complete.class)
     private String data;
 
+    @JsonView(Views.Complete.class)
     public boolean isProjectActionEvent() {
 
         return eventType.contains("project_action");
@@ -70,6 +71,11 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         this.systemNanotime = systemNanotime;
     }
 
+    public String getHappenedAt() {
+
+        return happenedAt;
+    }
+
     public void setMetadata(final String metadata) {
 
         this.metadata = metadata;
@@ -93,12 +99,5 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         }
 
         return systemNanotime.compareTo(event.systemNanotime);
-    }
-
-    /**
-     * @return the happenedAt
-     */
-    public String getHappenedAt() {
-        return happenedAt;
     }
 }

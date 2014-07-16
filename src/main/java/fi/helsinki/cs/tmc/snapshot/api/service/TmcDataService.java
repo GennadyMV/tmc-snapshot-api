@@ -1,7 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-public interface TmcServiceInterface {
+import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 
-    String findUsername(String instance, int id) throws Exception;
+public interface TmcDataService {
+
+    String findUsername(String instance, long id) throws ApiException;
 
 }
