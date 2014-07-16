@@ -147,7 +147,10 @@
 
         <!--- Naming Conventions -->
 
-        <module name='AbstractClassName' />
+        <module name='AbstractClassName' >
+            <!-- Default requires all classes ending in "Factory" to be abstract -->
+            <property name="format" value="^Abstract.*$"/>
+        </module>
         <module name='ClassTypeParameterName' />
         <module name='ConstantName' />
         <module name='LocalFinalVariableName' />
