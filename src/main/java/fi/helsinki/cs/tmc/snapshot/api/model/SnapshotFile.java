@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+
 import fi.helsinki.cs.tmc.snapshot.api.model.views.Views;
 
 public final class SnapshotFile {
