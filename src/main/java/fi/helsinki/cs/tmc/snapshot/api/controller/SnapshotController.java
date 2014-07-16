@@ -30,16 +30,9 @@ public final class SnapshotController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public String list(@PathVariable final Long participant) {
 
-        final String username;
-        try {
-            username = tmcService.findUsername("", participant);
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-
         final Collection<SnapshotEvent> events;
         try {
+            final String username = tmcService.findUsername("", participant);
             events = spywareService.findAll("/hy/", username);
         } catch (ApiException ex) {
             Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
@@ -52,16 +45,9 @@ public final class SnapshotController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
     public String read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
-        final String username;
+        final SnapshotEvent event;
         try {
-            username = tmcService.findUsername("", participant);
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-
-        SnapshotEvent event;
-        try {
+            final String username = tmcService.findUsername("", participant);
             event = spywareService.find("/hy/", username, snapshot);
         } catch (ApiException ex) {
             Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
