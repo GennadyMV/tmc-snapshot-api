@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.snapshot.api.utilities;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -3,10 +3,10 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.model.views.Views;
+import fi.helsinki.cs.tmc.snapshot.api.model.view.View;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
-import fi.helsinki.cs.tmc.snapshot.api.utilities.JsonViewWriter;
+import fi.helsinki.cs.tmc.snapshot.api.util.JsonViewWriter;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public final class SnapshotFileController {
             files.add(new SnapshotFile(entry.getKey(), entry.getValue()));
         }
 
-        return JsonViewWriter.getView(files, Views.Summary.class);
+        return JsonViewWriter.getView(files, View.Summary.class);
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -78,7 +78,7 @@ public final class SnapshotFileController {
         for (Entry<String, String> entry : event.getFiles().entrySet()) {
             if (entry.getKey().equals(path) || entry.getKey().equals("/" + path)) {
                 final SnapshotFile file = new SnapshotFile(entry.getKey(), entry.getValue());
-                return JsonViewWriter.getView(file, Views.Complete.class);
+                return JsonViewWriter.getView(file, View.Complete.class);
             }
         }
 

@@ -1,6 +1,6 @@
-package fi.helsinki.cs.tmc.snapshot.api.model.views;
+package fi.helsinki.cs.tmc.snapshot.api.model.view;
 
-public class Views {
+public class View {
 
     public static class IdOnly { }
     public static class Summary extends IdOnly { }

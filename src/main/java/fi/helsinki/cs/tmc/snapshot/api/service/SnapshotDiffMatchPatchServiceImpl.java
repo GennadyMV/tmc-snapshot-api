@@ -8,7 +8,7 @@ import com.google.DiffMatchPatch.Patch;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
-import fi.helsinki.cs.tmc.snapshot.api.utilities.GZip;
+import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

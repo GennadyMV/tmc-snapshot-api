@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.snapshot.api.utilities;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
