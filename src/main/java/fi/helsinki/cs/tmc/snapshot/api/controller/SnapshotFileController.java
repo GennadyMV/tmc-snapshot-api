@@ -1,13 +1,23 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.views.Views;
+import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
+import fi.helsinki.cs.tmc.snapshot.api.utilities.JsonViewWriter;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,13 +27,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/participants", produces = "application/json")
 public final class SnapshotFileController {
 
+    @Autowired
+    private SnapshotService snapshots;
+
+    @Autowired
+    private TmcDataService tmcData;
+
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public String list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+
+        final SnapshotEvent event;
+        try {
+            final String username = tmcData.findUsername("", participant);
+            event = snapshots.find("/hy/", username, snapshot);
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
 
         final List<SnapshotFile> files = new ArrayList<>();
-        files.add(new SnapshotFile("Example.java", "content"));
+        for (Entry<String, String> entry : event.getFiles().entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+            files.add(new SnapshotFile(entry.getKey(), entry.getValue()));
+        }
 
-        return files;
+        return JsonViewWriter.getView(files, Views.Summary.class);
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -37,6 +65,23 @@ public final class SnapshotFileController {
         final String separator = "/files/";
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
-        return new SnapshotFile("Example.java", "Content for: " + path).getContent();
+        final SnapshotEvent event;
+        try {
+            final String username = tmcData.findUsername("", participant);
+            event = snapshots.find("/hy/", username, snapshot);
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+        final List<SnapshotFile> files = new ArrayList<>();
+        for (Entry<String, String> entry : event.getFiles().entrySet()) {
+            if (entry.getKey().equals(path) || entry.getKey().equals("/" + path)) {
+                final SnapshotFile file = new SnapshotFile(entry.getKey(), entry.getValue());
+                return JsonViewWriter.getView(file, Views.Complete.class);
+            }
+        }
+
+        return null;
     }
 }
