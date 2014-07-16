@@ -35,6 +35,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
         final List<Cache> caches = new ArrayList<>();
         caches.add(new ConcurrentMapCache("EventList"));
         caches.add(new ConcurrentMapCache("RawSpywareData"));
+        caches.add(new ConcurrentMapCache("tmcUsername"));
         cacheManager.setCaches(caches);
         return cacheManager;
     }

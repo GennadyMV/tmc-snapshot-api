@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,7 @@ public class TmcDataServiceImpl implements TmcDataService {
         return responseBody;
     }
 
+    @Cacheable("tmcUsername")
     @Override
     public String findUsername(final String instance, final long userId) throws ApiException {
 
