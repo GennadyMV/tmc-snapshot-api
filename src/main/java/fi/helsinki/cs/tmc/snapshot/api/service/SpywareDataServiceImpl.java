@@ -32,9 +32,9 @@ public class SpywareDataServiceImpl implements SpywareDataService {
     private HttpRequestBuilder requestBuilder;
 
     @PostConstruct
-    private void initilise() {
+    private void initialise() {
         requestBuilder = new HttpRequestBuilder(spywareUrl, 80, "http")
-                      .auth(spywareUsername, spywarePassword);
+                        .auth(spywareUsername, spywarePassword);
     }
 
     @Cacheable("RawSpywareData")
@@ -46,16 +46,16 @@ public class SpywareDataServiceImpl implements SpywareDataService {
         final int length = Integer.parseInt(indexes[1]);
 
         try {
-            final ClientHttpRequest request = requestBuilder.setPath(instance + username + ".dat").build();
 
+            final ClientHttpRequest request = requestBuilder.setPath(instance + username + ".dat").build();
             request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
 
             final ClientHttpResponse response = request.execute();
 
             final byte[] bytes = IOUtils.toByteArray(response.getBody());
-
             response.close();
             return bytes;
+
         } catch (IOException | URISyntaxException ex) {
             throw new ApiException(ex);
         }
@@ -65,10 +65,12 @@ public class SpywareDataServiceImpl implements SpywareDataService {
     public InputStream getIndex(final String instance, final String username) throws ApiException {
 
         try {
+
             return requestBuilder.setPath(instance + username + ".idx")
                                  .build()
                                  .execute()
                                  .getBody();
+
         } catch (URISyntaxException | IOException ex) {
             throw new ApiException(ex);
         }

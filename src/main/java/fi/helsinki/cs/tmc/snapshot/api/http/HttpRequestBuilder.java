@@ -37,6 +37,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
     private Map<String, String> parameters;
 
     public HttpRequestBuilder(final String host, final int port, final String protocol) {
+
         this.host = host;
         this.port = port;
         this.protocol = protocol;
@@ -82,6 +83,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
     }
 
     public HttpRequestBuilder addHeader(final String key, final String value) {
+
         if (extraHeaders == null) {
             extraHeaders = new HashMap<>();
         }
@@ -97,6 +99,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
     }
 
     public HttpRequestBuilder addParameter(final String key, final String value) {
+
         if (parameters == null) {
             parameters = new HashMap<>();
         }
@@ -121,6 +124,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
     }
 
     private void setupBasicAuth() {
+
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
         final HttpHost httpHost = new HttpHost(this.host, this.port, this.protocol);
@@ -135,6 +139,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
     }
 
     private URI buildURI() throws URISyntaxException {
+
         final URIBuilder builder = new URIBuilder();
 
         builder.setHost(host)

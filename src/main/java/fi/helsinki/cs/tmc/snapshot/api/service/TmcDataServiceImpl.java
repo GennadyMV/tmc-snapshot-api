@@ -41,8 +41,8 @@ public class TmcDataServiceImpl implements TmcDataService {
     @PostConstruct
     private void initialise() {
         requestBuilder = new HttpRequestBuilder(tmcUrl, 80, "http")
-                      .auth(tmcUsername, tmcPassword)
-                      .addParameter("api_version", tmcVersion);
+                        .auth(tmcUsername, tmcPassword)
+                        .addParameter("api_version", tmcVersion);
     }
 
     private String fetchJson(final String instance) throws IOException, URISyntaxException {
@@ -59,7 +59,7 @@ public class TmcDataServiceImpl implements TmcDataService {
         return responseBody;
     }
 
-    @Cacheable("tmcUsername")
+    @Cacheable("TmcUsername")
     @Override
     public String findUsername(final String instance, final long userId) throws ApiException {
 
@@ -67,6 +67,7 @@ public class TmcDataServiceImpl implements TmcDataService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         final JsonNode rootNode;
+
         try {
             rootNode = mapper.readTree(fetchJson(instance));
         } catch (IOException | URISyntaxException ex) {

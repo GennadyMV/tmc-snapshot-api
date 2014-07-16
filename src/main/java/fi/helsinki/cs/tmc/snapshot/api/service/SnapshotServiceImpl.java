@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public final class SnapshotServiceImpl implements SnapshotService {
 
     @Autowired
-    private SnapshotPatchService patchService;
+    private SnapshotDiffMatchPatchService patchService;
 
     @Autowired
     private SpywareDataService spywareServer;
@@ -30,6 +30,7 @@ public final class SnapshotServiceImpl implements SnapshotService {
 
         // Convert to string
         final String indexData;
+
         try {
             indexData = IOUtils.toString(index);
             index.close();
@@ -64,12 +65,15 @@ public final class SnapshotServiceImpl implements SnapshotService {
 
     @Override
     public SnapshotEvent find(final String instance, final String username, final Long id) throws ApiException {
+
         final Collection<SnapshotEvent> events = findAll(instance, username);
+
         for (SnapshotEvent event : events) {
             if (event.getHappenedAt().equals(id.toString())) {
                 return event;
             }
         }
+
         return null;
     }
 }
