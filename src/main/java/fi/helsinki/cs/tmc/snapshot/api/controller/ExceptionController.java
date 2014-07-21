@@ -4,7 +4,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.ErrorMessage;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +18,9 @@ public class ExceptionController {
     @ResponseBody
     public ErrorMessage handleIOException(final IOException ex) {
 
-        Logger.getLogger(ExceptionController.class).error(ex);
+        Logger logger = LoggerFactory.getLogger(ExceptionController.class);
+        logger.error(ex.getMessage());
+
         return new ErrorMessage("Something went wrong.");
     }
 }
