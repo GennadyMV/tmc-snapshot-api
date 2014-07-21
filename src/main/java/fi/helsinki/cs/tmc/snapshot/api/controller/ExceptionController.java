@@ -18,7 +18,7 @@ public class ExceptionController {
     @ResponseBody
     public ErrorMessage handleIOException(final IOException ex) {
 
-        Logger logger = LoggerFactory.getLogger(ExceptionController.class);
+        final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
         logger.error(ex.getMessage());
 
         return new ErrorMessage("Something went wrong.");
