@@ -68,13 +68,6 @@
         <module name='EmptyStatement' />
         <module name='EqualsHashCode' />
         <module name='FinalLocalVariable' />
-
-        <module name='HiddenField'>
-            <property name='ignoreConstructorParameter' value='true' />
-            <property name='ignoreSetter' value='true' />
-            <property name='ignoreAbstractMethods' value='true' />
-        </module>
-
         <module name='InnerAssignment' />
         <module name='MissingSwitchDefault' />
         <module name='ModifiedControlVariable' />
