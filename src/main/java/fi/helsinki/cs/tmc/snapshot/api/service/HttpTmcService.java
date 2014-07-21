@@ -22,7 +22,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TmcDataServiceImpl implements TmcDataService {
+public final class HttpTmcService implements TmcService {
 
     @Value("${tmc.url}")
     private String tmcUrl;
@@ -40,8 +40,9 @@ public class TmcDataServiceImpl implements TmcDataService {
 
     @PostConstruct
     private void initialise() {
+
         requestBuilder = new HttpRequestBuilder(tmcUrl, 80, "http")
-                        .auth(tmcUsername, tmcPassword)
+                        .authenticate(tmcUsername, tmcPassword)
                         .addParameter("api_version", tmcVersion);
     }
 
@@ -80,8 +81,8 @@ public class TmcDataServiceImpl implements TmcDataService {
                     return participant.getUsername();
                 }
             }
-        } catch (JsonProcessingException ex) {
-            throw new ApiException(ex);
+        } catch (JsonProcessingException exception) {
+            throw new ApiException(exception);
         }
 
         throw new ApiException("User with id " + userId + " not found");

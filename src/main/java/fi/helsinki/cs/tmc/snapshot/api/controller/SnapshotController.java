@@ -3,7 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -23,7 +23,7 @@ public final class SnapshotController {
     private SnapshotService snapshotService;
 
     @Autowired
-    private TmcDataService tmcService;
+    private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public List<Snapshot> list(@PathVariable final Long participant) {

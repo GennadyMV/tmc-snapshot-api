@@ -3,7 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class ParticipantController {
 
     @Autowired
-    private TmcDataService tmcDataService;
+    private TmcService tmcDataService;
 
     @Autowired
     private SnapshotService snapshotService;

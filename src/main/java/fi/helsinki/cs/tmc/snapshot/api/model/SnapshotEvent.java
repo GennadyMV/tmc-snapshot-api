@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-
 import java.util.HashMap;
 import java.util.Map;
 

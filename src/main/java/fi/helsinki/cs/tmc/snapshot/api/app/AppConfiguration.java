@@ -33,10 +33,13 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
         // Configure and return an implementation of Spring's CacheManager SPI
         final SimpleCacheManager cacheManager = new SimpleCacheManager();
         final List<Cache> caches = new ArrayList<>();
+
         caches.add(new ConcurrentMapCache("Snapshots"));
         caches.add(new ConcurrentMapCache("RawSpywareData"));
         caches.add(new ConcurrentMapCache("TmcUsername"));
+
         cacheManager.setCaches(caches);
+
         return cacheManager;
     }
 }

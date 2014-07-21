@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class SpywareDataServiceImpl implements SpywareDataService {
+@Service
+public final class HttpSpywareService implements SpywareService {
 
     @Value("${spyware.url}")
     private String spywareUrl;
@@ -33,8 +33,9 @@ public class SpywareDataServiceImpl implements SpywareDataService {
 
     @PostConstruct
     private void initialise() {
+
         requestBuilder = new HttpRequestBuilder(spywareUrl, 80, "http")
-                        .auth(spywareUsername, spywarePassword);
+                             .authenticate(spywareUsername, spywarePassword);
     }
 
     @Cacheable("RawSpywareData")
@@ -56,8 +57,8 @@ public class SpywareDataServiceImpl implements SpywareDataService {
             response.close();
             return bytes;
 
-        } catch (IOException | URISyntaxException ex) {
-            throw new ApiException(ex);
+        } catch (IOException | URISyntaxException exception) {
+            throw new ApiException(exception);
         }
     }
 
@@ -71,8 +72,8 @@ public class SpywareDataServiceImpl implements SpywareDataService {
                                  .execute()
                                  .getBody();
 
-        } catch (URISyntaxException | IOException ex) {
-            throw new ApiException(ex);
+        } catch (URISyntaxException | IOException exception) {
+            throw new ApiException(exception);
         }
     }
 }
