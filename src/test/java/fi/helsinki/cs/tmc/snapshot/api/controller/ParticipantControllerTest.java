@@ -1,20 +1,25 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,16 +30,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.Assert.*;
+
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @IntegrationTest
 @ActiveProfiles("test")
-public class ParticipantsControllerTest {
+public class ParticipantControllerTest {
 
     @Mock
     private TmcService tmcDataService;
@@ -83,7 +90,6 @@ public class ParticipantsControllerTest {
 
         when(tmcDataService.findUsername("", 0)).thenReturn(null);
 
-        final MvcResult result = mockMvc.perform(get("/participants/0")).andReturn();
-        assertEquals(404, result.getResponse().getStatus());
+        mockMvc.perform(get("/participants/0")).andExpect(status().is(404));
     }
 }
