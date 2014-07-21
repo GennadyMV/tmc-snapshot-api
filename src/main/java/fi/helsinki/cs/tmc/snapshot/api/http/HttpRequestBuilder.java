@@ -23,18 +23,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
-public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
+public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
 
-    private String host;
+    private final String host;
+    private final int port;
+    private final String protocol;
+    private final Map<String, String> parameters = new HashMap<>();
+
     private String path;
-    private int port;
-    private String protocol;
-
-    private String username;
-    private String password;
-
-    private Map<String, String> extraHeaders;
-    private Map<String, String> parameters;
 
     public HttpRequestBuilder(final String host, final int port, final String protocol) {
 
@@ -43,87 +39,7 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
         this.protocol = protocol;
     }
 
-    public HttpRequestBuilder auth(final String user, final String pass) {
-
-        this.username = user;
-        this.password = pass;
-
-        setupBasicAuth();
-        return this;
-    }
-
-    public HttpRequestBuilder setHost(final String newHost) {
-
-        this.host = newHost;
-        return this;
-    }
-
-    public HttpRequestBuilder setPath(final String newPath) {
-
-        this.path = newPath;
-        return this;
-    }
-
-    public HttpRequestBuilder setPort(final int newPort) {
-
-        this.port = newPort;
-        return this;
-    }
-
-    public HttpRequestBuilder setProtocol(final String newProtocol) {
-
-        this.protocol = newProtocol;
-        return this;
-    }
-
-    public HttpRequestBuilder setHeaders(final Map<String, String> headers) {
-
-        this.extraHeaders = headers;
-        return this;
-    }
-
-    public HttpRequestBuilder addHeader(final String key, final String value) {
-
-        if (extraHeaders == null) {
-            extraHeaders = new HashMap<>();
-        }
-
-        extraHeaders.put(key, value);
-        return this;
-    }
-
-    public HttpRequestBuilder setParameters(final Map<String, String> params) {
-
-        this.parameters = params;
-        return this;
-    }
-
-    public HttpRequestBuilder addParameter(final String key, final String value) {
-
-        if (parameters == null) {
-            parameters = new HashMap<>();
-        }
-
-        parameters.put(key, value);
-        return this;
-    }
-
-    public ClientHttpRequest build() throws IOException, URISyntaxException {
-
-        final URI uri = buildURI();
-
-        final ClientHttpRequest request = createRequest(uri, HttpMethod.GET);
-
-        if (extraHeaders != null) {
-            for (Entry<String, String> header : extraHeaders.entrySet()) {
-                request.getHeaders().add(header.getKey(), header.getValue());
-            }
-        }
-
-        return request;
-    }
-
-    private void setupBasicAuth() {
+    private void initialiseBasicAuthentication(final String username, final String password) {
 
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
@@ -143,9 +59,9 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
         final URIBuilder builder = new URIBuilder();
 
         builder.setHost(host)
-                .setPath(path)
-                .setPort(port)
-                .setScheme(protocol);
+               .setPath(path)
+               .setPort(port)
+               .setScheme(protocol);
 
         if (parameters != null) {
             for (Entry<String, String> parameter : parameters.entrySet()) {
@@ -156,4 +72,29 @@ public class HttpRequestBuilder extends HttpComponentsClientHttpRequestFactory {
         return builder.build();
     }
 
+    public HttpRequestBuilder auth(final String username, final String password) {
+
+        initialiseBasicAuthentication(username, password);
+        return this;
+    }
+
+    public HttpRequestBuilder setPath(final String newPath) {
+
+        this.path = newPath;
+        return this;
+    }
+
+    public HttpRequestBuilder addParameter(final String key, final String value) {
+
+        parameters.put(key, value);
+        return this;
+    }
+
+    public ClientHttpRequest build() throws IOException, URISyntaxException {
+
+        final URI uri = buildURI();
+        final ClientHttpRequest request = createRequest(uri, HttpMethod.GET);
+
+        return request;
+    }
 }

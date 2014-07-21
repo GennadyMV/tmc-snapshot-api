@@ -1,36 +1,19 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
-import fi.helsinki.cs.tmc.snapshot.api.model.view.View;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
-    @JsonView(View.Summary.class)
+    private String data;
     private String exerciseName;
-
-    @JsonView(View.Summary.class)
     private String eventType;
-
-    @JsonView(View.IdOnly.class)
+    private final Map<String, String> files = new HashMap<>();
     private String happenedAt;
-
-    @JsonView(View.Complete.class)
+    private String metadata;
     private String systemNanotime;
 
-    @JsonView(View.Complete.class)
-    private String metadata;
-
-    @JsonView(View.Complete.class)
-    private final Map<String, String> files = new HashMap<>();
-
-    @JsonView(View.Complete.class)
-    private String data;
-
-    @JsonView(View.Complete.class)
     public boolean isProjectActionEvent() {
 
         return eventType.contains("project_action");
