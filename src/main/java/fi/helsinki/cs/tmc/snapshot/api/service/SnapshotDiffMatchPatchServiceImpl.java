@@ -116,13 +116,16 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
     @Override
     @Cacheable("Snapshots")
     public List<Snapshot> patch(final List<byte[]> content) throws IOException {
+        
         Logger.getLogger(SnapshotDiffMatchPatchServiceImpl.class).log(Level.INFO, "Patching events from raw bytes.");
 
-        for (SnapshotEvent event : readEvents(content)) {
+        Collection<SnapshotEvent> events = readEvents(content);
+
+        for (SnapshotEvent event : events ) {
             patchFile(event);
         }
 
-        return toSnapshotCollection(readEvents(content));
+        return toSnapshotCollection(events);
     }
 
     private List<Snapshot> toSnapshotCollection(final Collection<SnapshotEvent> events) {
@@ -130,7 +133,6 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (SnapshotEvent event : events) {
-
             final List<SnapshotFile> files = new ArrayList<>();
 
             for (Entry<String, String> entry : event.getFiles().entrySet()) {
@@ -139,6 +141,7 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
 
             snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), files));
         }
+
         return snapshots;
     }
 }
