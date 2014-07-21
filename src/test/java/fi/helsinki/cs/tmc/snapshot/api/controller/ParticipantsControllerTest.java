@@ -1,7 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
@@ -10,7 +9,6 @@ import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.Assert.*;
@@ -83,11 +79,11 @@ public class ParticipantsControllerTest {
     }
 
     @Test
-    public void shouldReturnNullOnFalseParticipantId() throws Exception {
+    public void shouldReturn404OnNonExistantParticipantId() throws Exception {
 
-        when(tmcDataService.findUsername("", 0)).thenThrow(new ApiException("False id"));
+        when(tmcDataService.findUsername("", 0)).thenReturn(null);
 
         final MvcResult result = mockMvc.perform(get("/participants/0")).andReturn();
-        assertTrue(result.getResponse().getContentAsString().isEmpty());
+        assertEquals(404, result.getResponse().getStatus());
     }
 }

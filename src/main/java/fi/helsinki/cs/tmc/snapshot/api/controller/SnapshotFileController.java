@@ -1,10 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
-import java.io.IOException;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,11 @@ public final class SnapshotFileController {
     public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
         final String username = tmcService.findUsername("", participant);
+
+        if (username == null) {
+            throw new NotFoundException();
+        }
+
         return snapshotService.find("/hy/", username, snapshot).getFiles();
     }
 
@@ -44,12 +50,17 @@ public final class SnapshotFileController {
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
         final String username = tmcService.findUsername("", participant);
+
+        if (username == null) {
+            throw new NotFoundException();
+        }
+
         for (SnapshotFile file : snapshotService.find("/hy/", username, snapshot).getFiles()) {
             if (file.getPath().equals("/" + path)) {
                 return file.getContent();
             }
         }
 
-        return null;
+        throw new NotFoundException();
     }
 }

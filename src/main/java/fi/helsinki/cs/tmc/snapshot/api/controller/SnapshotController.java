@@ -1,10 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
-import java.io.IOException;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public final class SnapshotController {
     public List<Snapshot> list(@PathVariable final Long participant) throws IOException {
 
         final String username = tmcService.findUsername("", participant);
+
+        if (username == null) {
+            throw new NotFoundException();
+        }
+
         return snapshotService.findAll("/hy/", username);
     }
 
@@ -34,6 +40,17 @@ public final class SnapshotController {
     public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
         final String username = tmcService.findUsername("", participant);
-        return  snapshotService.find("/hy/", username, snapshot);
+
+        if (username == null) {
+            throw new NotFoundException();
+        }
+
+        final Snapshot result = snapshotService.find("/hy/", username, snapshot);
+
+        if (result == null) {
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 }
