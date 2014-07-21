@@ -1,13 +1,13 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import java.util.Map;
+import java.util.List;
 
 public final class Snapshot {
 
     private final Long id;
-    private final Map<String, SnapshotFile> files;
+    private final List<SnapshotFile> files;
 
-    public Snapshot(final Long id, final Map<String, SnapshotFile> files) {
+    public Snapshot(final Long id, final List<SnapshotFile> files) {
 
         this.id = id;
         this.files = files;
@@ -18,7 +18,7 @@ public final class Snapshot {
         return id;
     }
 
-    public Map<String, SnapshotFile> getFiles() {
+    public List<SnapshotFile> getFiles() {
 
         return files;
     }
