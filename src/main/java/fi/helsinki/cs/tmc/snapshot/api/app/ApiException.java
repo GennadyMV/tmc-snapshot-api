@@ -1,12 +1,14 @@
 package fi.helsinki.cs.tmc.snapshot.api.app;
 
-public class ApiException extends Exception {
+public final class ApiException extends Exception {
 
-    public ApiException(final Throwable t) {
-        super(t);
+    public ApiException(final Throwable throwable) {
+
+        super(throwable);
     }
 
-    public ApiException(final String msg) {
-        super(msg);
+    public ApiException(final String message) {
+
+        super(message);
     }
 }

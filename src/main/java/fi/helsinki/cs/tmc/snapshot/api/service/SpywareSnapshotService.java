@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SnapshotServiceImpl implements SnapshotService {
+public final class SpywareSnapshotService implements SnapshotService {
 
     @Autowired
-    private SnapshotDiffMatchPatchService patchService;
+    private SnapshotDiffPatchService patchService;
 
     @Autowired
-    private SpywareDataService spywareServer;
+    private SpywareService spywareServer;
 
     private List<byte[]> findWithRange(final InputStream index,
                                        final String instance,
@@ -59,8 +59,8 @@ public final class SnapshotServiceImpl implements SnapshotService {
 
         try {
             return patchService.patch(content);
-        } catch (IOException ex) {
-            throw new ApiException(ex);
+        } catch (IOException exception) {
+            throw new ApiException(exception);
         }
     }
 

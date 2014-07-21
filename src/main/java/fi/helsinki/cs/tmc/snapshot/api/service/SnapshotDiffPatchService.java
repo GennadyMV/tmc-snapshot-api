@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-public interface SnapshotDiffMatchPatchService {
+public interface SnapshotDiffPatchService {
 
     Collection<SnapshotEvent> patch(List<byte[]> content) throws IOException;
 

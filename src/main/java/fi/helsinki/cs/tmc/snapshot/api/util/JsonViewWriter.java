@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JsonViewWriter {
+public final class JsonViewWriter {
+
+    private JsonViewWriter() {}
 
     public static String getView(final Object object, final Object view) {
 

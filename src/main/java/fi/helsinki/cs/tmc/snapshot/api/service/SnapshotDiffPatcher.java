@@ -29,7 +29,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatchPatchService {
+public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final Map<String, String> fileCache = new TreeMap<>();
@@ -113,7 +113,7 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
     @Override
     @Cacheable("EventList")
     public Collection<SnapshotEvent> patch(final List<byte[]> content) throws IOException {
-        Logger.getLogger(SnapshotDiffMatchPatchServiceImpl.class).log(Level.INFO, "Patching events from raw bytes.");
+        Logger.getLogger(SnapshotDiffPatcher.class).log(Level.INFO, "Patching events from raw bytes.");
 
         // Get events
         final Collection<SnapshotEvent> events = readEvents(content);

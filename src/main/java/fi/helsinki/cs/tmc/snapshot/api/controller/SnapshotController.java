@@ -4,7 +4,7 @@ import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.view.View;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 import fi.helsinki.cs.tmc.snapshot.api.util.JsonViewWriter;
 
 import java.util.Collection;
@@ -25,7 +25,7 @@ public final class SnapshotController {
     private SnapshotService spywareService;
 
     @Autowired
-    private TmcDataService tmcService;
+    private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public String list(@PathVariable final Long participant) {

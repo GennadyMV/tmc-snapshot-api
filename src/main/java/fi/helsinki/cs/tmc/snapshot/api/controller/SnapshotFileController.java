@@ -5,7 +5,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.model.view.View;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 import fi.helsinki.cs.tmc.snapshot.api.util.JsonViewWriter;
 
 import java.io.UnsupportedEncodingException;
@@ -31,7 +31,7 @@ public final class SnapshotFileController {
     private SnapshotService snapshots;
 
     @Autowired
-    private TmcDataService tmcData;
+    private TmcService tmcData;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
     public String list(@PathVariable final Long participant, @PathVariable final Long snapshot) {

@@ -72,7 +72,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
         return builder.build();
     }
 
-    public HttpRequestBuilder auth(final String username, final String password) {
+    public HttpRequestBuilder authenticate(final String username, final String password) {
 
         initialiseBasicAuthentication(username, password);
         return this;
