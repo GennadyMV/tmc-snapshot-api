@@ -1,6 +1,8 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class SnapshotFile {
 
@@ -9,7 +11,8 @@ public final class SnapshotFile {
     @JsonIgnore
     private final String content;
 
-    public SnapshotFile(final String path, final String content) {
+    @JsonCreator
+    public SnapshotFile(@JsonProperty("path") final String path, @JsonProperty("content") final String content) {
 
         this.path = path;
         this.content = content;
