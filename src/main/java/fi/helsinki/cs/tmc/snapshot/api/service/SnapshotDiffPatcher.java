@@ -10,8 +10,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-
 import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -140,6 +140,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
             snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), files));
         }
+
         return snapshots;
     }
 }

@@ -5,7 +5,6 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 
 import java.util.List;
 
-
 public interface SnapshotService {
 
     List<Snapshot> findAll(String instance, String username) throws ApiException;

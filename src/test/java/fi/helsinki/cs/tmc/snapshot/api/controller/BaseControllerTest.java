@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebAppConfiguration
 @IntegrationTest
 @ActiveProfiles("test")
-public class BaseControllerTest {
+public final class BaseControllerTest {
 
     @Mock
     private SnapshotService spywareService;
