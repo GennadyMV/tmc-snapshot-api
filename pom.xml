@@ -107,6 +107,14 @@
                 <version>2.6</version>
 
                 <configuration>
+                    <instrumentation>
+                        <ignores>
+                            <ignore>com.google*</ignore>
+                        </ignores>
+                        <excludes>
+                            <exclude>com/google/*</exclude>
+                        </excludes>
+                    </instrumentation>
                     <formats>
                         <format>xml</format>
                         <format>html</format>
