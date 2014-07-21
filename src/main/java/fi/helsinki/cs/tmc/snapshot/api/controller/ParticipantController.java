@@ -1,11 +1,14 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
-
-import java.util.ArrayList;
+import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,18 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/participants", produces = "application/json")
 public final class ParticipantController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Participant> list() {
+    @Autowired
+    private TmcDataService tmcDataService;
 
-        final List<Participant> participants = new ArrayList<>();
-        participants.add(new Participant(1L, new ArrayList<Snapshot>()));
-
-        return participants;
-    }
+    @Autowired
+    private SnapshotService snapshotService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
     public Participant read(@PathVariable final Long participant) {
 
-        return new Participant(1L, new ArrayList<Snapshot>());
+        try {
+            final String username = tmcDataService.findUsername("", participant);
+            return new Participant(participant, (List<Snapshot>) snapshotService.findAll("/hy/", username));
+        } catch (ApiException ex) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }
