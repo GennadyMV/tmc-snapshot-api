@@ -10,8 +10,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-
 import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -119,9 +119,9 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
         Logger.getLogger(SnapshotDiffPatcher.class).log(Level.INFO, "Patching events from raw bytes.");
 
-        Collection<SnapshotEvent> events = readEvents(content);
+        final Collection<SnapshotEvent> events = readEvents(content);
 
-        for (SnapshotEvent event : events ) {
+        for (SnapshotEvent event : events) {
             patchFile(event);
         }
 
