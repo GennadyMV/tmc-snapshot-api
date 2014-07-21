@@ -63,10 +63,8 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
                .setPort(port)
                .setScheme(protocol);
 
-        if (parameters != null) {
-            for (Entry<String, String> parameter : parameters.entrySet()) {
-                builder.addParameter(parameter.getKey(), parameter.getValue());
-            }
+        for (Entry<String, String> parameter : parameters.entrySet()) {
+            builder.addParameter(parameter.getKey(), parameter.getValue());
         }
 
         return builder.build();
