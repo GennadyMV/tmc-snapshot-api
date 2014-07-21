@@ -31,8 +31,8 @@ public final class SnapshotController {
         try {
             final String username = tmcService.findUsername("", participant);
             return snapshotService.findAll("/hy/", username);
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ApiException exception) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, exception);
             return null;
         }
     }
@@ -43,8 +43,8 @@ public final class SnapshotController {
         try {
             final String username = tmcService.findUsername("", participant);
             return  snapshotService.find("/hy/", username, snapshot);
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ApiException exception) {
+            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, exception);
             return null;
         }
     }

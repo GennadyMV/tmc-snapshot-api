@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 public final class SnapshotFileController {
 
     @Autowired
-    private SnapshotService snapshots;
+    private SnapshotService snapshotService;
 
     @Autowired
-    private TmcService tmcData;
+    private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
     public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
         try {
-            final String username = tmcData.findUsername("", participant);
-            return snapshots.find("/hy/", username, snapshot).getFiles();
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
+            final String username = tmcService.findUsername("", participant);
+            return snapshotService.find("/hy/", username, snapshot).getFiles();
+        } catch (ApiException exception) {
+            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, exception);
             return null;
         }
     }
@@ -54,14 +54,14 @@ public final class SnapshotFileController {
 
         final SnapshotEvent event;
         try {
-            final String username = tmcData.findUsername("", participant);
-            for (SnapshotFile file : snapshots.find("/hy/", username, snapshot).getFiles()) {
+            final String username = tmcService.findUsername("", participant);
+            for (SnapshotFile file : snapshotService.find("/hy/", username, snapshot).getFiles()) {
                 if (file.getPath().equals("/" + path)) {
                     return file.getContent();
                 }
             }
-        } catch (ApiException ex) {
-            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ApiException exception) {
+            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, exception);
             return null;
         }
 
