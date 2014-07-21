@@ -7,7 +7,7 @@ import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,7 +30,7 @@ public final class SnapshotFileController {
     private TmcDataService tmcData;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public Collection<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
         try {
             final String username = tmcData.findUsername("", participant);

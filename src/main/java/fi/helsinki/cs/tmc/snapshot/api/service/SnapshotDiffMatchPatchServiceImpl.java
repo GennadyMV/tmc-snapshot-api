@@ -2,12 +2,15 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.DiffMatchPatch;
 import com.google.DiffMatchPatch.Patch;
+
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+
 import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,9 +23,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +37,7 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
     private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final Map<String, String> fileCache = new TreeMap<>();
 
-    private Collection<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
+    private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
         try {
 
@@ -110,23 +115,19 @@ public final class SnapshotDiffMatchPatchServiceImpl implements SnapshotDiffMatc
 
     @Override
     @Cacheable("Snapshots")
-    public Collection<Snapshot> patch(final List<byte[]> content) throws IOException {
+    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
         Logger.getLogger(SnapshotDiffMatchPatchServiceImpl.class).log(Level.INFO, "Patching events from raw bytes.");
 
-        // Get events
-        final Collection<SnapshotEvent> events = readEvents(content);
-
-        // Patch files
-        for (SnapshotEvent event : events) {
+        for (SnapshotEvent event : readEvents(content)) {
             patchFile(event);
         }
 
-        return toSnapshotCollection(events);
+        return toSnapshotCollection(readEvents(content));
     }
 
-    private Collection<Snapshot> toSnapshotCollection(final Collection<SnapshotEvent> events) {
+    private List<Snapshot> toSnapshotCollection(final Collection<SnapshotEvent> events) {
 
-        final Collection<Snapshot> snapshots = new ArrayList<>();
+        final List<Snapshot> snapshots = new ArrayList<>();
 
         for (SnapshotEvent event : events) {
 

@@ -2,12 +2,15 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +49,7 @@ public final class SnapshotServiceImpl implements SnapshotService {
     }
 
     @Override
-    public Collection<Snapshot> findAll(final String instance, final String username) throws ApiException {
+    public List<Snapshot> findAll(final String instance, final String username) throws ApiException {
 
         // Fetch index
         final InputStream index = spywareServer.getIndex(instance, username);

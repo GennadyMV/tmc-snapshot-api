@@ -5,7 +5,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +26,7 @@ public final class SnapshotController {
     private TmcDataService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
-    public Collection<Snapshot> list(@PathVariable final Long participant) {
+    public List<Snapshot> list(@PathVariable final Long participant) {
 
         try {
             final String username = tmcService.findUsername("", participant);

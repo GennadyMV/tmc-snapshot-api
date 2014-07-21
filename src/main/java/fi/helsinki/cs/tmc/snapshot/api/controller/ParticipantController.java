@@ -2,10 +2,8 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
-import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcDataService;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,7 @@ public final class ParticipantController {
 
         try {
             final String username = tmcDataService.findUsername("", participant);
-            return new Participant(participant, (List<Snapshot>) snapshotService.findAll("/hy/", username));
+            return new Participant(participant, snapshotService.findAll("/hy/", username));
         } catch (ApiException ex) {
             Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
