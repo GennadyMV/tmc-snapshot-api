@@ -1,10 +1,8 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @IntegrationTest
+@ActiveProfiles("test")
 public class ParticipantControllerTest {
 
     @Autowired

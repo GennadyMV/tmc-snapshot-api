@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @IntegrationTest
+@ActiveProfiles("test")
 public class BaseControllerTest {
 
     @Mock
