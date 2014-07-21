@@ -1,13 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
+import java.io.IOException;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,26 +24,16 @@ public final class SnapshotController {
     private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
-    public List<Snapshot> list(@PathVariable final Long participant) {
+    public List<Snapshot> list(@PathVariable final Long participant) throws IOException {
 
-        try {
-            final String username = tmcService.findUsername("", participant);
-            return snapshotService.findAll("/hy/", username);
-        } catch (ApiException exception) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, exception);
-            return null;
-        }
+        final String username = tmcService.findUsername("", participant);
+        return snapshotService.findAll("/hy/", username);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
-    public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
-        try {
-            final String username = tmcService.findUsername("", participant);
-            return  snapshotService.find("/hy/", username, snapshot);
-        } catch (ApiException exception) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, exception);
-            return null;
-        }
+        final String username = tmcService.findUsername("", participant);
+        return  snapshotService.find("/hy/", username, snapshot);
     }
 }

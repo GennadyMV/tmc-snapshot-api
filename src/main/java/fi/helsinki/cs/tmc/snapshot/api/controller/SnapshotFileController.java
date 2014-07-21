@@ -1,15 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
+import java.io.IOException;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,15 +26,10 @@ public final class SnapshotFileController {
     private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
-        try {
-            final String username = tmcService.findUsername("", participant);
-            return snapshotService.find("/hy/", username, snapshot).getFiles();
-        } catch (ApiException exception) {
-            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, exception);
-            return null;
-        }
+        final String username = tmcService.findUsername("", participant);
+        return snapshotService.find("/hy/", username, snapshot).getFiles();
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -46,23 +37,17 @@ public final class SnapshotFileController {
                     produces = "text/plain")
     public String read(final HttpServletRequest request,
                        @PathVariable final Long participant,
-                       @PathVariable final Long snapshot) throws UnsupportedEncodingException {
+                       @PathVariable final Long snapshot) throws IOException {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
-        final SnapshotEvent event;
-        try {
-            final String username = tmcService.findUsername("", participant);
-            for (SnapshotFile file : snapshotService.find("/hy/", username, snapshot).getFiles()) {
-                if (file.getPath().equals("/" + path)) {
-                    return file.getContent();
-                }
+        final String username = tmcService.findUsername("", participant);
+        for (SnapshotFile file : snapshotService.find("/hy/", username, snapshot).getFiles()) {
+            if (file.getPath().equals("/" + path)) {
+                return file.getContent();
             }
-        } catch (ApiException exception) {
-            Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, exception);
-            return null;
         }
 
         return null;

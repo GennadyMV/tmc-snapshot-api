@@ -54,7 +54,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
         setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private URI buildURI() throws URISyntaxException {
+    private URI buildURI() {
 
         final URIBuilder builder = new URIBuilder();
 
@@ -67,7 +67,11 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
             builder.addParameter(parameter.getKey(), parameter.getValue());
         }
 
-        return builder.build();
+        try {
+            return builder.build();
+        } catch (URISyntaxException ex) {
+            return null;
+        }
     }
 
     public HttpRequestBuilder authenticate(final String username, final String password) {
@@ -88,7 +92,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
         return this;
     }
 
-    public ClientHttpRequest build() throws IOException, URISyntaxException {
+    public ClientHttpRequest build() throws IOException {
 
         final URI uri = buildURI();
         final ClientHttpRequest request = createRequest(uri, HttpMethod.GET);

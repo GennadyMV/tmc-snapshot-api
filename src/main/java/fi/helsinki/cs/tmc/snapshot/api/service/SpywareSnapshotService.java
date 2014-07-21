@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 
 import java.io.IOException;
@@ -25,20 +24,15 @@ public final class SpywareSnapshotService implements SnapshotService {
 
     private List<byte[]> findWithRange(final InputStream index,
                                        final String instance,
-                                       final String username) throws ApiException {
+                                       final String username) throws IOException  {
 
         final List<byte[]> byteData = new ArrayList<>();
 
         // Convert to string
         final String indexData;
 
-        try {
-            indexData = IOUtils.toString(index);
-            index.close();
-        } catch (IOException ex) {
-            throw new ApiException(ex);
-        }
-
+        indexData = IOUtils.toString(index);
+        index.close();
 
         // Split on newlines
         for (String event : indexData.split("\\n")) {
@@ -49,7 +43,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public List<Snapshot> findAll(final String instance, final String username) throws ApiException {
+    public List<Snapshot> findAll(final String instance, final String username) throws IOException {
 
         // Fetch index
         final InputStream index = spywareServer.getIndex(instance, username);
@@ -57,15 +51,11 @@ public final class SpywareSnapshotService implements SnapshotService {
         // Fetch data
         final List<byte[]> content = findWithRange(index, instance, username);
 
-        try {
-            return patchService.patch(content);
-        } catch (IOException exception) {
-            throw new ApiException(exception);
-        }
+        return patchService.patch(content);
     }
 
     @Override
-    public Snapshot find(final String instance, final String username, final Long id) throws ApiException {
+    public Snapshot find(final String instance, final String username, final Long id) throws IOException {
 
         final Collection<Snapshot> events = findAll(instance, username);
 

@@ -1,12 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +22,9 @@ public final class ParticipantController {
     private SnapshotService snapshotService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
-    public Participant read(@PathVariable final Long participant) {
+    public Participant read(@PathVariable final Long participant) throws IOException {
 
-        try {
-            final String username = tmcService.findUsername("", participant);
-            return new Participant(participant, snapshotService.findAll("/hy/", username));
-        } catch (ApiException exception) {
-            Logger.getLogger(SnapshotController.class.getName()).log(Level.SEVERE, null, exception);
-            return null;
-        }
+        final String username = tmcService.findUsername("", participant);
+        return new Participant(participant, snapshotService.findAll("/hy/", username));
     }
 }

@@ -1,11 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 
 import javax.annotation.PostConstruct;
 
@@ -40,40 +38,39 @@ public final class HttpSpywareService implements SpywareService {
 
     @Cacheable("RawSpywareData")
     @Override
-    public byte[] getData(final String event, final String instance, final String username) throws ApiException {
+    public byte[] getData(final String event, final String instance, final String username) throws IOException {
 
         final String[] indexes = event.split("\\s+");
+
         final int start = Integer.parseInt(indexes[0]);
         final int length = Integer.parseInt(indexes[1]);
 
-        try {
+        final ClientHttpRequest request = requestBuilder.setPath(instance + username + ".dat").build();
+        request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
 
-            final ClientHttpRequest request = requestBuilder.setPath(instance + username + ".dat").build();
-            request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
+        final ClientHttpResponse response = request.execute();
 
-            final ClientHttpResponse response = request.execute();
-
-            final byte[] bytes = IOUtils.toByteArray(response.getBody());
-            response.close();
-            return bytes;
-
-        } catch (IOException | URISyntaxException exception) {
-            throw new ApiException(exception);
+        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
+
+        final byte[] bytes = IOUtils.toByteArray(response.getBody());
+        response.close();
+
+        return bytes;
     }
 
     @Override
-    public InputStream getIndex(final String instance, final String username) throws ApiException {
+    public InputStream getIndex(final String instance, final String username) throws IOException {
 
-        try {
+        final ClientHttpResponse response = requestBuilder.setPath(instance + username + ".idx")
+                                                          .build()
+                                                          .execute();
 
-            return requestBuilder.setPath(instance + username + ".idx")
-                                 .build()
-                                 .execute()
-                                 .getBody();
-
-        } catch (URISyntaxException | IOException exception) {
-            throw new ApiException(exception);
+        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
+
+        return response.getBody();
     }
 }

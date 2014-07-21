@@ -1,16 +1,13 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.annotation.PostConstruct;
 
@@ -46,7 +43,7 @@ public final class HttpTmcService implements TmcService {
                         .addParameter("api_version", tmcVersion);
     }
 
-    private String fetchJson(final String instance) throws IOException, URISyntaxException {
+    private String fetchJson(final String instance) throws IOException {
 
         final ClientHttpResponse response = requestBuilder.setPath(instance + "/participants.json")
                                                           .build()
@@ -62,29 +59,21 @@ public final class HttpTmcService implements TmcService {
 
     @Cacheable("TmcUsername")
     @Override
-    public String findUsername(final String instance, final long userId) throws ApiException {
+    public String findUsername(final String instance, final long userId) throws IOException {
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         final JsonNode rootNode;
 
-        try {
-            rootNode = mapper.readTree(fetchJson(instance));
-        } catch (IOException | URISyntaxException ex) {
-            throw new ApiException(ex);
-        }
+        rootNode = mapper.readTree(fetchJson(instance));
 
-        try {
-            for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
-                if (participant.getId() == userId) {
-                    return participant.getUsername();
-                }
+        for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
+            if (participant.getId() == userId) {
+                return participant.getUsername();
             }
-        } catch (JsonProcessingException exception) {
-            throw new ApiException(exception);
         }
 
-        throw new ApiException("User with id " + userId + " not found");
+        return null;
     }
 }
