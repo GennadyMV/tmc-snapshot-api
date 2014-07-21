@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.DiffMatchPatch;
 import com.google.DiffMatchPatch.Patch;
 
+import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
-import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 
+import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -34,7 +37,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final Map<String, String> fileCache = new TreeMap<>();
 
-    private Collection<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
+    private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
         try {
 
@@ -111,18 +114,32 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     }
 
     @Override
-    @Cacheable("EventList")
-    public Collection<SnapshotEvent> patch(final List<byte[]> content) throws IOException {
+    @Cacheable("Snapshots")
+    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
+
         Logger.getLogger(SnapshotDiffPatcher.class).log(Level.INFO, "Patching events from raw bytes.");
 
-        // Get events
-        final Collection<SnapshotEvent> events = readEvents(content);
-
-        // Patch files
-        for (SnapshotEvent event : events) {
+        for (SnapshotEvent event : readEvents(content)) {
             patchFile(event);
         }
 
-        return events;
+        return toSnapshotCollection(readEvents(content));
+    }
+
+    private List<Snapshot> toSnapshotCollection(final Collection<SnapshotEvent> events) {
+
+        final List<Snapshot> snapshots = new ArrayList<>();
+
+        for (SnapshotEvent event : events) {
+
+            final List<SnapshotFile> files = new ArrayList<>();
+
+            for (Entry<String, String> entry : event.getFiles().entrySet()) {
+                files.add(new SnapshotFile(entry.getKey(), entry.getValue()));
+            }
+
+            snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), files));
+        }
+        return snapshots;
     }
 }

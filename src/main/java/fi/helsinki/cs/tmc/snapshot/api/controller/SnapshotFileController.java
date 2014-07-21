@@ -3,15 +3,11 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.model.view.View;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
-import fi.helsinki.cs.tmc.snapshot.api.util.JsonViewWriter;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,24 +30,15 @@ public final class SnapshotFileController {
     private TmcService tmcData;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public String list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
+    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) {
 
-        final SnapshotEvent event;
         try {
             final String username = tmcData.findUsername("", participant);
-            event = snapshots.find("/hy/", username, snapshot);
+            return snapshots.find("/hy/", username, snapshot).getFiles();
         } catch (ApiException ex) {
             Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-
-        final List<SnapshotFile> files = new ArrayList<>();
-        for (Entry<String, String> entry : event.getFiles().entrySet()) {
-            System.out.println(entry.getKey() + ":" + entry.getValue());
-            files.add(new SnapshotFile(entry.getKey(), entry.getValue()));
-        }
-
-        return JsonViewWriter.getView(files, View.Summary.class);
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -68,18 +55,14 @@ public final class SnapshotFileController {
         final SnapshotEvent event;
         try {
             final String username = tmcData.findUsername("", participant);
-            event = snapshots.find("/hy/", username, snapshot);
+            for (SnapshotFile file : snapshots.find("/hy/", username, snapshot).getFiles()) {
+                if (file.getPath().equals("/" + path)) {
+                    return file.getContent();
+                }
+            }
         } catch (ApiException ex) {
             Logger.getLogger(SnapshotFileController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }
-
-        final List<SnapshotFile> files = new ArrayList<>();
-        for (Entry<String, String> entry : event.getFiles().entrySet()) {
-            if (entry.getKey().equals(path) || entry.getKey().equals("/" + path)) {
-                final SnapshotFile file = new SnapshotFile(entry.getKey(), entry.getValue());
-                return JsonViewWriter.getView(file, View.Complete.class);
-            }
         }
 
         return null;

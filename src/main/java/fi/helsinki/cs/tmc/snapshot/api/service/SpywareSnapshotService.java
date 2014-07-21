@@ -1,7 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.ApiException;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws ApiException {
+    public List<Snapshot> findAll(final String instance, final String username) throws ApiException {
 
         // Fetch index
         final InputStream index = spywareServer.getIndex(instance, username);
@@ -65,12 +65,12 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public SnapshotEvent find(final String instance, final String username, final Long id) throws ApiException {
+    public Snapshot find(final String instance, final String username, final Long id) throws ApiException {
 
-        final Collection<SnapshotEvent> events = findAll(instance, username);
+        final Collection<Snapshot> events = findAll(instance, username);
 
-        for (SnapshotEvent event : events) {
-            if (event.getHappenedAt().equals(id.toString())) {
+        for (Snapshot event : events) {
+            if (event.getId().equals(id)) {
                 return event;
             }
         }
