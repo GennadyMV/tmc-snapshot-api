@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-public class Error {
+public final class Error {
 
     private final String error;
 

@@ -29,7 +29,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({HttpTmcService.class, LoggerFactory.class })
-public class HttpTmcServiceTest {
+public final class HttpTmcServiceTest {
 
     private Logger logger;
 

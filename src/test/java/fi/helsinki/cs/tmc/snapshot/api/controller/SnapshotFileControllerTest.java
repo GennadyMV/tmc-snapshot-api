@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest
 @ActiveProfiles("test")
-public class SnapshotFileControllerTest {
+public final class SnapshotFileControllerTest {
 
     @Mock
     private TmcService tmcService;
