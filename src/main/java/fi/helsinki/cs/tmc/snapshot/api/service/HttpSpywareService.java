@@ -53,10 +53,12 @@ public final class HttpSpywareService implements SpywareService {
         final ClientHttpResponse response = request.execute();
 
         if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            response.close();
             throw new NotFoundException();
         }
 
         if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            response.close();
             throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
 
@@ -74,10 +76,12 @@ public final class HttpSpywareService implements SpywareService {
                                                           .execute();
 
         if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            response.close();
             throw new NotFoundException();
         }
 
         if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            response.close();
             throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
 
