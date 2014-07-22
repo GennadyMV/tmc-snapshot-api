@@ -1,15 +1,16 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-public class ErrorMessage {
+public class Error {
 
     private final String error;
 
-    public ErrorMessage(final String error) {
+    public Error(final String error) {
+
         this.error = error;
     }
 
     public String getError() {
-        return this.error;
-    }
 
+        return error;
+    }
 }

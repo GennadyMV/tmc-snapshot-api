@@ -69,7 +69,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
 
         try {
             return builder.build();
-        } catch (URISyntaxException ex) {
+        } catch (URISyntaxException exception) {
             return null;
         }
     }
