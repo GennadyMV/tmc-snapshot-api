@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(HttpTmcService.class)
-public class HttpTmcServiceTest {
+public final class HttpTmcServiceTest {
 
     @Mock
     private HttpTmcService tmcService;

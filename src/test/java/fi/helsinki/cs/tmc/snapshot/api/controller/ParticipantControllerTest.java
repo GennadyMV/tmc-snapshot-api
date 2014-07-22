@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest
 @ActiveProfiles("test")
-public class ParticipantControllerTest {
+public final class ParticipantControllerTest {
 
     @Mock
     private TmcService tmcDataService;

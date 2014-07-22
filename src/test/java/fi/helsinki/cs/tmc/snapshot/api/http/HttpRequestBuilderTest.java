@@ -10,7 +10,8 @@ import org.springframework.http.client.ClientHttpRequest;
 
 import static org.junit.Assert.*;
 
-public class HttpRequestBuilderTest {
+public final class HttpRequestBuilderTest {
+
     private HttpRequestBuilder builder;
 
     @Before

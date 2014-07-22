@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class GZipTest {
+public final class GZipTest {
 
     @Test
     public void testDecompressTestString() {
