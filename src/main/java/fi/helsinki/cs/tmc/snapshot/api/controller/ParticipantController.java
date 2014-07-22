@@ -2,10 +2,12 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
+import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,12 @@ public final class ParticipantController {
 
     @Autowired
     private SnapshotService snapshotService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<TmcParticipant> all() throws IOException {
+
+        return tmcService.all("");
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
     public Participant read(@PathVariable final Long participant) throws IOException {
