@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -14,20 +15,33 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static org.junit.Assert.*;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(HttpTmcService.class)
+@PrepareForTest({HttpTmcService.class, LoggerFactory.class })
 public class HttpTmcServiceTest {
+
+    private Logger logger;
 
     @Mock
     private HttpTmcService tmcService;
 
     @Before
     public void setUp() {
+
+        mockStatic(LoggerFactory.class);
+        logger = mock(Logger.class);
+        when(LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
 
         MockitoAnnotations.initMocks(this);
     }

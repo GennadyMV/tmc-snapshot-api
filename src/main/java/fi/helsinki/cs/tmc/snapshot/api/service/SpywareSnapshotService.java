@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public final class SpywareSnapshotService implements SnapshotService {
 
-    private final Logger logger = LoggerFactory.getLogger(SpywareSnapshotService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpywareSnapshotService.class);
 
     @Autowired
     private SnapshotDiffPatchService patchService;
@@ -50,7 +50,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     @Override
     public List<Snapshot> findAll(final String instance, final String username) throws IOException {
 
-        logger.info("Finding snapshots for {} from instance {}...", username, instance);
+        LOG.info("Finding snapshots for {} from instance {}...", username, instance);
 
         // Fetch index
         final InputStream index = spywareServer.fetchIndex(instance, username);
@@ -64,7 +64,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     @Override
     public Snapshot find(final String instance, final String username, final Long id) throws IOException {
 
-        logger.info("Finding snapshot for {} with id {} from instance {}...", username, id, instance);
+        LOG.info("Finding snapshot for {} with id {} from instance {}...", username, id, instance);
 
         final Collection<Snapshot> events = findAll(instance, username);
 
