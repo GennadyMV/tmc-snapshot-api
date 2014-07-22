@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/participants", produces = "application/json")
+@RequestMapping(value = "{instance}/participants", produces = "application/json")
 public final class SnapshotController {
 
     @Autowired
@@ -25,27 +25,29 @@ public final class SnapshotController {
     private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
-    public List<Snapshot> list(@PathVariable final Long participant) throws IOException {
+    public List<Snapshot> list(@PathVariable final String instance, @PathVariable final Long participant) throws IOException {
 
-        final String username = tmcService.findUsernameById("", participant);
+        final String username = tmcService.findUsernameById(instance, participant);
 
         if (username == null) {
             throw new NotFoundException();
         }
 
-        return snapshotService.findAll("/hy/", username);
+        return snapshotService.findAll(instance, username);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
-    public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
+    public Snapshot read(@PathVariable final String instance,
+                         @PathVariable final Long participant,
+                         @PathVariable final Long snapshot) throws IOException {
 
-        final String username = tmcService.findUsernameById("", participant);
+        final String username = tmcService.findUsernameById(instance, participant);
 
         if (username == null) {
             throw new NotFoundException();
         }
 
-        final Snapshot result = snapshotService.find("/hy/", username, snapshot);
+        final Snapshot result = snapshotService.find(instance, username, snapshot);
 
         if (result == null) {
             throw new NotFoundException();

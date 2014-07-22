@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/participants", produces = "application/json")
+@RequestMapping(value = "{instance}/participants", produces = "application/json")
 public final class ParticipantController {
 
     @Autowired
@@ -26,20 +26,20 @@ public final class ParticipantController {
     private SnapshotService snapshotService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<TmcParticipant> all() throws IOException {
+    public List<TmcParticipant> list(@PathVariable final String instance) throws IOException {
 
-        return tmcService.findAll("");
+        return tmcService.findAll(instance);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
-    public Participant read(@PathVariable final Long participant) throws IOException {
+    public Participant read(@PathVariable final String instance, @PathVariable final Long participant) throws IOException {
 
-        final String username = tmcService.findUsernameById("", participant);
+        final String username = tmcService.findUsernameById(instance, participant);
 
         if (username == null) {
             throw new NotFoundException();
         }
 
-        return new Participant(participant, snapshotService.findAll("/hy/", username));
+        return new Participant(participant, snapshotService.findAll(instance, username));
     }
 }

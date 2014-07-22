@@ -58,7 +58,7 @@ public final class HttpSpywareService implements SpywareService {
                     start,
                     start + length);
 
-        final ClientHttpRequest request = requestBuilder.setPath(instance + username + ".dat").build();
+        final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).build();
         request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
 
         final ClientHttpResponse response = request.execute();
@@ -88,7 +88,7 @@ public final class HttpSpywareService implements SpywareService {
                     username,
                     instance);
 
-        final ClientHttpResponse response = requestBuilder.setPath(instance + username + ".idx")
+        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/%s.idx", instance, username))
                                                           .build()
                                                           .execute();
 

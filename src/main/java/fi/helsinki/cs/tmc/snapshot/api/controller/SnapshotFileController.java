@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/participants", produces = "application/json")
+@RequestMapping(value = "{instance}/participants", produces = "application/json")
 public final class SnapshotFileController {
 
     @Autowired
@@ -27,9 +27,11 @@ public final class SnapshotFileController {
     private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
+    public List<SnapshotFile> list(@PathVariable final String instance,
+                                   @PathVariable final Long participant,
+                                   @PathVariable final Long snapshot) throws IOException {
 
-        final String username = tmcService.findUsernameById("", participant);
+        final String username = tmcService.findUsernameById(instance, participant);
 
         if (username == null) {
             throw new NotFoundException();
@@ -42,6 +44,7 @@ public final class SnapshotFileController {
                     value = "{participant}/snapshots/{snapshot}/files/**",
                     produces = "text/plain")
     public String read(final HttpServletRequest request,
+                       @PathVariable final String instance,
                        @PathVariable final Long participant,
                        @PathVariable final Long snapshot) throws IOException {
 
@@ -49,13 +52,13 @@ public final class SnapshotFileController {
         final String separator = "/files/";
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
-        final String username = tmcService.findUsernameById("", participant);
+        final String username = tmcService.findUsernameById(instance, participant);
 
         if (username == null) {
             throw new NotFoundException();
         }
 
-        for (SnapshotFile file : snapshotService.find("/hy/", username, snapshot).getFiles()) {
+        for (SnapshotFile file : snapshotService.find(instance, username, snapshot).getFiles()) {
             if (file.getPath().equals("/" + path)) {
                 return file.getContent();
             }
