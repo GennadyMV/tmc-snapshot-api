@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.ErrorMessage;
+import fi.helsinki.cs.tmc.snapshot.api.model.Error;
 
 import java.io.IOException;
 
@@ -16,11 +16,11 @@ public class ExceptionController {
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
-    public ErrorMessage handleIOException(final IOException exception) {
+    public Error handleIOException(final IOException exception) {
 
         final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
         logger.error(exception.getMessage());
 
-        return new ErrorMessage("Something went wrong.");
+        return new Error("Something went wrong.");
     }
 }
