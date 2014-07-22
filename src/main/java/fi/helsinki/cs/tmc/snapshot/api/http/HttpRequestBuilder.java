@@ -54,7 +54,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
         setHttpClient(HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build());
     }
 
-    private URI buildURI() {
+    public URI buildURI() {
 
         final URIBuilder builder = new URIBuilder();
 
