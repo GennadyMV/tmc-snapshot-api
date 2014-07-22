@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.util.Date;
 import java.util.List;
 
 public final class Snapshot {
@@ -25,5 +25,10 @@ public final class Snapshot {
     public List<SnapshotFile> getFiles() {
 
         return files;
+    }
+
+    public Date getTimestamp() {
+
+        return new Date(id);
     }
 }
