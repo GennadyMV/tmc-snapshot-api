@@ -17,7 +17,7 @@ public class GZipTest {
                                 (byte) 0x04, (byte) 0x00, (byte) 0x00, (byte) 0x00};
 
 
-        final byte[] expResult = {(byte) 't', (byte) 'e', (byte) 's', (byte) 't'};
+        final byte[] expResult = stringToByteArray("test");
 
         assertArrayEquals(expResult, GZip.decompress(content));
     }
@@ -37,12 +37,14 @@ public class GZipTest {
                                 (byte) 0x00, (byte) 0x00, (byte) 0x00};
 
 
-        final byte[] expResult = {(byte) '{', (byte) '"', (byte) 'j', (byte) 's',
-                                  (byte) 'o', (byte) 'n', (byte) '"', (byte) ':',
-                                  (byte) '"', (byte) 't', (byte) 'e', (byte) 's',
-                                  (byte) 't', (byte) '"', (byte) '}'};
+        final byte[] expResult = stringToByteArray("{\"json\":\"test\"}");
 
         assertArrayEquals(expResult, GZip.decompress(content));
+    }
+
+    private byte[] stringToByteArray(final String data) {
+
+        return data.getBytes();
     }
 
 }
