@@ -40,7 +40,7 @@ public final class HttpSpywareService implements SpywareService {
 
     @Cacheable("RawSpywareData")
     @Override
-    public byte[] getData(final String event, final String instance, final String username) throws IOException {
+    public byte[] fetchData(final String event, final String instance, final String username) throws IOException {
 
         final String[] indexes = event.split("\\s+");
 
@@ -67,7 +67,7 @@ public final class HttpSpywareService implements SpywareService {
     }
 
     @Override
-    public InputStream getIndex(final String instance, final String username) throws IOException {
+    public InputStream fetchIndex(final String instance, final String username) throws IOException {
 
         final ClientHttpResponse response = requestBuilder.setPath(instance + username + ".idx")
                                                           .build()

@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 public interface SpywareService {
 
-    byte[] getData(final String event, final String instance, final String username) throws IOException;
-    InputStream getIndex(final String instance, final String username) throws IOException;
+    byte[] fetchData(final String event, final String instance, final String username) throws IOException;
+    InputStream fetchIndex(final String instance, final String username) throws IOException;
 
 }

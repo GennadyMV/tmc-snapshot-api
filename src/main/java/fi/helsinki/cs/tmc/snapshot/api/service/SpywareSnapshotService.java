@@ -36,7 +36,7 @@ public final class SpywareSnapshotService implements SnapshotService {
 
         // Split on newlines
         for (String event : indexData.split("\\n")) {
-            byteData.add(spywareServer.getData(event, instance, username));
+            byteData.add(spywareServer.fetchData(event, instance, username));
         }
 
         return byteData;
@@ -46,7 +46,7 @@ public final class SpywareSnapshotService implements SnapshotService {
     public List<Snapshot> findAll(final String instance, final String username) throws IOException {
 
         // Fetch index
-        final InputStream index = spywareServer.getIndex(instance, username);
+        final InputStream index = spywareServer.fetchIndex(instance, username);
 
         // Fetch data
         final List<byte[]> content = findWithRange(index, instance, username);
