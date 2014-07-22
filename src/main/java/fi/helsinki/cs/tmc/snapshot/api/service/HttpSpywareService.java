@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,10 @@ public final class HttpSpywareService implements SpywareService {
 
         final ClientHttpResponse response = request.execute();
 
+        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            throw new NotFoundException();
+        }
+
         if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
             throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
@@ -66,6 +72,10 @@ public final class HttpSpywareService implements SpywareService {
         final ClientHttpResponse response = requestBuilder.setPath(instance + username + ".idx")
                                                           .build()
                                                           .execute();
+
+        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            throw new NotFoundException();
+        }
 
         if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
             throw new IOException("Remote server returned status " + response.getRawStatusCode());
