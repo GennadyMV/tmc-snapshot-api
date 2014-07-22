@@ -45,6 +45,8 @@ public final class HttpTmcService implements TmcService {
         requestBuilder = new HttpRequestBuilder(tmcUrl, 80, "http")
                         .authenticate(tmcUsername, tmcPassword)
                         .addParameter("api_version", tmcVersion);
+
+        restTemplate = new RestTemplate(requestBuilder);
     }
 
     protected String fetchJson(final String instance) throws IOException {
