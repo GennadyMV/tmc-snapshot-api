@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 @Service
 public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
-    private final Logger logger = LoggerFactory.getLogger(SnapshotDiffPatcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SnapshotDiffPatcher.class);
 
     private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final Map<String, String> fileCache = new TreeMap<>();
@@ -138,7 +138,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     @Cacheable("Snapshots")
     public List<Snapshot> patch(final List<byte[]> content) throws IOException {
 
-        logger.info("Patching events...");
+        LOG.info("Patching events...");
 
         final Collection<SnapshotEvent> events = readEvents(content);
 
@@ -146,7 +146,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
             patchFile(event);
         }
 
-        logger.info("Events patched.");
+        LOG.info("Events patched.");
 
         return asSnapshotCollection(events);
     }

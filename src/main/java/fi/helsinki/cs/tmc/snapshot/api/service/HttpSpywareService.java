@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 public final class HttpSpywareService implements SpywareService {
 
-    private final Logger logger = LoggerFactory.getLogger(HttpSpywareService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HttpSpywareService.class);
 
     @Value("${spyware.url}")
     private String spywareUrl;
@@ -52,7 +52,7 @@ public final class HttpSpywareService implements SpywareService {
         final int start = Integer.parseInt(indexes[0]);
         final int length = Integer.parseInt(indexes[1]);
 
-        logger.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
+        LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
                     username,
                     instance,
                     start,
@@ -76,7 +76,7 @@ public final class HttpSpywareService implements SpywareService {
         final byte[] bytes = IOUtils.toByteArray(response.getBody());
         response.close();
 
-        logger.info("Spyware-data fetched.");
+        LOG.info("Spyware-data fetched.");
 
         return bytes;
     }
@@ -84,7 +84,7 @@ public final class HttpSpywareService implements SpywareService {
     @Override
     public InputStream fetchIndex(final String instance, final String username) throws IOException {
 
-        logger.info("Fetching Spyware-index for {} from instance {}...",
+        LOG.info("Fetching Spyware-index for {} from instance {}...",
                     username,
                     instance);
 
@@ -102,7 +102,7 @@ public final class HttpSpywareService implements SpywareService {
             throw new IOException("Remote server returned status " + response.getRawStatusCode());
         }
 
-        logger.info("Spyware-index fetched.");
+        LOG.info("Spyware-index fetched.");
 
         return response.getBody();
     }

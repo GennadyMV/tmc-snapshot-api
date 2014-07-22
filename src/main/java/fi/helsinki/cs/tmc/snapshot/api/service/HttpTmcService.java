@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public final class HttpTmcService implements TmcService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(HttpTmcService.class);
+
     @Value("${tmc.url}")
     private String tmcUrl;
 
@@ -51,8 +53,7 @@ public final class HttpTmcService implements TmcService {
 
     protected String fetchJson(final String instance) throws IOException {
 
-        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
-        logger.info("Fetching TMC-participants as JSON from instance {}...", instance);
+        LOG.info("Fetching TMC-participants as JSON from instance {}...", instance);
 
         //requestBuilder.setPath(String.format("/%s/participants.json", instance));
         requestBuilder.setPath("/participants.json");
@@ -63,8 +64,7 @@ public final class HttpTmcService implements TmcService {
     @Override
     public List<TmcParticipant> findAll(final String instance) throws IOException {
 
-        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
-        logger.info("Finding participants from instance {}...", instance);
+        LOG.info("Finding participants from instance {}...", instance);
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -80,8 +80,7 @@ public final class HttpTmcService implements TmcService {
     @Override
     public String findUsernameById(final String instance, final long id) throws IOException {
 
-        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
-        logger.info("Finding username for id {} from instance {}...", id, instance);
+        LOG.info("Finding username for id {} from instance {}...", id, instance);
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -90,14 +89,14 @@ public final class HttpTmcService implements TmcService {
 
         for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
 
-            logger.info("Found username {} for id {}.", participant.getUsername(), id);
+            LOG.info("Found username {} for id {}.", participant.getUsername(), id);
 
             if (participant.getId() == id) {
                 return participant.getUsername();
             }
         }
 
-        logger.info("No username found for id {}.", id);
+        LOG.info("No username found for id {}.", id);
 
         return null;
     }
