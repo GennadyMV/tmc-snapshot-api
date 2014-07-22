@@ -71,7 +71,7 @@ public class SnapshotFileControllerTest {
 
         final Snapshot snapshotData = new Snapshot(1L, new ArrayList<>(Arrays.asList(file)));
 
-        when(tmcService.findByUsername("", 2064)).thenReturn("jones");
+        when(tmcService.findUsernameById("", 2064)).thenReturn("jones");
         when(snapshotService.find("/hy/", "jones", 1L)).thenReturn(snapshotData);
 
         final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots/1/files")).andReturn();
@@ -90,7 +90,7 @@ public class SnapshotFileControllerTest {
 
         final Snapshot snapshotData = new Snapshot(1L, new ArrayList<>(Arrays.asList(file)));
 
-        when(tmcService.findByUsername("", 2064)).thenReturn("jones");
+        when(tmcService.findUsernameById("", 2064)).thenReturn("jones");
         when(snapshotService.find("/hy/", "jones", 1L)).thenReturn(snapshotData);
 
         final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots/1/files/src/HeiMaailma.java")).andReturn();
@@ -103,7 +103,7 @@ public class SnapshotFileControllerTest {
     @Test
     public void shouldReturn404OnNonExistantParticipantId() throws Exception {
 
-        when(tmcService.findByUsername("", 0)).thenReturn(null);
+        when(tmcService.findUsernameById("", 0)).thenReturn(null);
 
         mockMvc.perform(get("/participants/0/snapshots/1/files")).andExpect(status().is(404));
     }
@@ -111,7 +111,7 @@ public class SnapshotFileControllerTest {
     @Test
     public void shouldReturn404OnNonExistantParticipantIdForSpecificFile() throws Exception {
 
-        when(tmcService.findByUsername("", 0)).thenReturn(null);
+        when(tmcService.findUsernameById("", 0)).thenReturn(null);
 
         mockMvc.perform(get("/participants/0/snapshots/1/files/src/Legit.java")).andExpect(status().is(404));
     }
@@ -119,7 +119,7 @@ public class SnapshotFileControllerTest {
     @Test
     public void shouldReturn404OnNonExistantSnapshotFile() throws Exception {
 
-        when(tmcService.findByUsername("", 1)).thenReturn("jack");
+        when(tmcService.findUsernameById("", 1)).thenReturn("jack");
         when(snapshotService.find("/hy/", "jack", 1L)).thenReturn(new Snapshot(1L, new ArrayList<SnapshotFile>()));
 
         mockMvc.perform(get("/participants/1/snapshots/1/files/src/404.java")).andExpect(status().is(404));

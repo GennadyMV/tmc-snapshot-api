@@ -8,6 +8,6 @@ import java.util.List;
 public interface TmcService {
 
     List<TmcParticipant> findAll(String instance) throws IOException;
-    String findByUsername(String instance, long id) throws IOException;
+    String findUsernameById(String instance, long id) throws IOException;
 
 }

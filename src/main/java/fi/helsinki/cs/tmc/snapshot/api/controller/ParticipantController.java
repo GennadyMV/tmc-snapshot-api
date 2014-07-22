@@ -34,7 +34,7 @@ public final class ParticipantController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
     public Participant read(@PathVariable final Long participant) throws IOException {
 
-        final String username = tmcService.findByUsername("", participant);
+        final String username = tmcService.findUsernameById("", participant);
 
         if (username == null) {
             throw new NotFoundException();

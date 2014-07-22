@@ -74,7 +74,7 @@ public class SnapshotControllerTest {
             snapshotData.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
         }
 
-        when(tmcDataService.findByUsername("", 2064)).thenReturn("smith");
+        when(tmcDataService.findUsernameById("", 2064)).thenReturn("smith");
         when(snapshotService.findAll("/hy/", "smith")).thenReturn(snapshotData);
 
         final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots")).andReturn();
@@ -94,7 +94,7 @@ public class SnapshotControllerTest {
 
         final Snapshot snapshotData = new Snapshot(1L, new ArrayList<>(Arrays.asList(file)));
 
-        when(tmcDataService.findByUsername("", 2064)).thenReturn("jones");
+        when(tmcDataService.findUsernameById("", 2064)).thenReturn("jones");
         when(snapshotService.find("/hy/", "jones", 1L)).thenReturn(snapshotData);
 
         final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots/1")).andReturn();
@@ -110,7 +110,7 @@ public class SnapshotControllerTest {
     @Test
     public void shouldReturnNullOnFalseParticipantId() throws Exception {
 
-        when(tmcDataService.findByUsername("", 0)).thenReturn(null);
+        when(tmcDataService.findUsernameById("", 0)).thenReturn(null);
 
         mockMvc.perform(get("/participants/0/snapshots")).andExpect(status().is(404));
     }
@@ -118,7 +118,7 @@ public class SnapshotControllerTest {
     @Test
     public void shouldReturnNullOnInvalidParticipantIdAndValidSnapshotId() throws Exception {
 
-        when(tmcDataService.findByUsername("", 0)).thenReturn(null);
+        when(tmcDataService.findUsernameById("", 0)).thenReturn(null);
 
         mockMvc.perform(get("/participants/0/snapshots/1")).andExpect(status().is(404));
     }
@@ -126,7 +126,7 @@ public class SnapshotControllerTest {
     @Test
     public void shouldReturnNullOnFalseSnapshotId() throws Exception {
 
-        when(tmcDataService.findByUsername("", 1)).thenReturn("smith");
+        when(tmcDataService.findUsernameById("", 1)).thenReturn("smith");
         when(snapshotService.find("/hy/", "smith", 1L)).thenReturn(null);
 
         mockMvc.perform(get("/participants/1/snapshots/0")).andExpect(status().is(404));

@@ -27,7 +27,7 @@ public final class SnapshotController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots")
     public List<Snapshot> list(@PathVariable final Long participant) throws IOException {
 
-        final String username = tmcService.findByUsername("", participant);
+        final String username = tmcService.findUsernameById("", participant);
 
         if (username == null) {
             throw new NotFoundException();
@@ -39,7 +39,7 @@ public final class SnapshotController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}")
     public Snapshot read(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
-        final String username = tmcService.findByUsername("", participant);
+        final String username = tmcService.findUsernameById("", participant);
 
         if (username == null) {
             throw new NotFoundException();
