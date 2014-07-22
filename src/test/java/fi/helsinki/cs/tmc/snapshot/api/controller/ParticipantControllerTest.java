@@ -45,6 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public final class ParticipantControllerTest {
 
+    private static final String HY_INSTANCE = "hy";
+
     @Mock
     private TmcService tmcDataService;
 
@@ -78,9 +80,9 @@ public final class ParticipantControllerTest {
             tmcParticipants.add(newParticipant);
         }
 
-        when(tmcDataService.findAll("")).thenReturn(tmcParticipants);
+        when(tmcDataService.findAll(HY_INSTANCE)).thenReturn(tmcParticipants);
 
-        final MvcResult result = mockMvc.perform(get("/participants")).andReturn();
+        final MvcResult result = mockMvc.perform(get("/hy/participants")).andReturn();
         final String participantsJson = result.getResponse().getContentAsString();
 
         final List<TmcParticipant> participants = Arrays.asList(mapper.readValue(participantsJson, TmcParticipant[].class));
@@ -102,10 +104,10 @@ public final class ParticipantControllerTest {
             snapshots.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
         }
 
-        when(tmcDataService.findUsernameById("", 2064)).thenReturn("hiphei");
-        when(snapshotService.findAll("/hy/", "hiphei")).thenReturn(snapshots);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("hiphei");
+        when(snapshotService.findAll(HY_INSTANCE, "hiphei")).thenReturn(snapshots);
 
-        final MvcResult result = mockMvc.perform(get("/participants/2064")).andReturn();
+        final MvcResult result = mockMvc.perform(get("/hy/participants/2064")).andReturn();
         final String participantJson = result.getResponse().getContentAsString();
 
         final Participant participant = mapper.readValue(participantJson, Participant.class);
@@ -117,8 +119,8 @@ public final class ParticipantControllerTest {
     @Test
     public void shouldReturn404OnNonExistantParticipantId() throws Exception {
 
-        when(tmcDataService.findUsernameById("", 0)).thenReturn(null);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
 
-        mockMvc.perform(get("/participants/0")).andExpect(status().is(404));
+        mockMvc.perform(get("/hy/participants/0")).andExpect(status().is(404));
     }
 }

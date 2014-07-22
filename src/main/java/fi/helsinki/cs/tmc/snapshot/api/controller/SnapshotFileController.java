@@ -37,7 +37,7 @@ public final class SnapshotFileController {
             throw new NotFoundException();
         }
 
-        return snapshotService.find("/hy/", username, snapshot).getFiles();
+        return snapshotService.find(instance, username, snapshot).getFiles();
     }
 
     @RequestMapping(method = RequestMethod.GET,

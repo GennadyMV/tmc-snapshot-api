@@ -43,6 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public final class SnapshotControllerTest {
 
+    private static final String HY_INSTANCE = "hy";
+
     @Mock
     private TmcService tmcDataService;
 
@@ -73,10 +75,10 @@ public final class SnapshotControllerTest {
             snapshotData.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
         }
 
-        when(tmcDataService.findUsernameById("", 2064)).thenReturn("smith");
-        when(snapshotService.findAll("/hy/", "smith")).thenReturn(snapshotData);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("smith");
+        when(snapshotService.findAll(HY_INSTANCE, "smith")).thenReturn(snapshotData);
 
-        final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots")).andReturn();
+        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots")).andReturn();
         final String snapshotJson = result.getResponse().getContentAsString();
 
         final List<Snapshot> snapshots = Arrays.asList(mapper.readValue(snapshotJson, Snapshot[].class));
@@ -93,10 +95,10 @@ public final class SnapshotControllerTest {
 
         final Snapshot snapshotData = new Snapshot(1L, new ArrayList<>(Arrays.asList(file)));
 
-        when(tmcDataService.findUsernameById("", 2064)).thenReturn("jones");
-        when(snapshotService.find("/hy/", "jones", 1L)).thenReturn(snapshotData);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
+        when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
 
-        final MvcResult result = mockMvc.perform(get("/participants/2064/snapshots/1")).andReturn();
+        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots/1")).andReturn();
         final String snapshotJson = result.getResponse().getContentAsString();
 
         final Snapshot snapshot = mapper.readValue(snapshotJson, Snapshot.class);
@@ -109,25 +111,25 @@ public final class SnapshotControllerTest {
     @Test
     public void shouldReturnNullOnFalseParticipantId() throws Exception {
 
-        when(tmcDataService.findUsernameById("", 0)).thenReturn(null);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
 
-        mockMvc.perform(get("/participants/0/snapshots")).andExpect(status().is(404));
+        mockMvc.perform(get("/hy/participants/0/snapshots")).andExpect(status().is(404));
     }
 
     @Test
     public void shouldReturnNullOnInvalidParticipantIdAndValidSnapshotId() throws Exception {
 
-        when(tmcDataService.findUsernameById("", 0)).thenReturn(null);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
 
-        mockMvc.perform(get("/participants/0/snapshots/1")).andExpect(status().is(404));
+        mockMvc.perform(get("/hy/participants/0/snapshots/1")).andExpect(status().is(404));
     }
 
     @Test
     public void shouldReturnNullOnFalseSnapshotId() throws Exception {
 
-        when(tmcDataService.findUsernameById("", 1)).thenReturn("smith");
-        when(snapshotService.find("/hy/", "smith", 1L)).thenReturn(null);
+        when(tmcDataService.findUsernameById(HY_INSTANCE, 1)).thenReturn("smith");
+        when(snapshotService.find(HY_INSTANCE, "smith", 1L)).thenReturn(null);
 
-        mockMvc.perform(get("/participants/1/snapshots/0")).andExpect(status().is(404));
+        mockMvc.perform(get("/hy/participants/1/snapshots/0")).andExpect(status().is(404));
     }
 }
