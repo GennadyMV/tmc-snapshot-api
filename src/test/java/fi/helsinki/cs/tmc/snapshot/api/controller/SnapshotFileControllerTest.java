@@ -108,4 +108,21 @@ public class SnapshotFileControllerTest {
 
         mockMvc.perform(get("/participants/0/snapshots/1/files")).andExpect(status().is(404));
     }
+
+    @Test
+    public void shouldReturn404OnNonExistantParticipantIdForSpecificFile() throws Exception {
+
+        when(tmcService.findUsername("", 0)).thenReturn(null);
+
+        mockMvc.perform(get("/participants/0/snapshots/1/files/src/Legit.java")).andExpect(status().is(404));
+    }
+
+    @Test
+    public void shouldReturn404OnNonExistantSnapshotFile() throws Exception {
+
+        when(tmcService.findUsername("", 1)).thenReturn("jack");
+        when(snapshotService.find("/hy/", "jack", 1L)).thenReturn(new Snapshot(1L, new ArrayList<SnapshotFile>()));
+
+        mockMvc.perform(get("/participants/1/snapshots/1/files/src/404.java")).andExpect(status().is(404));
+    }
 }
