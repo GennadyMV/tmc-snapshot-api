@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public final class ExceptionController {
 
-    private final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExceptionController.class);
 
     @ExceptionHandler(Exception.class)
     public Error handleException(final Exception exception) {
 
-        logger.error(exception.getMessage());
+        LOG.error(exception.getMessage());
 
         return new Error("Something went wrong.");
     }
