@@ -11,12 +11,10 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.io.IOUtils;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public final class HttpTmcService implements TmcService {
@@ -34,6 +32,7 @@ public final class HttpTmcService implements TmcService {
     private String tmcVersion;
 
     private HttpRequestBuilder requestBuilder;
+    private RestTemplate restTemplate;
 
     @PostConstruct
     private void initialise() {
@@ -41,20 +40,15 @@ public final class HttpTmcService implements TmcService {
         requestBuilder = new HttpRequestBuilder(tmcUrl, 80, "http")
                         .authenticate(tmcUsername, tmcPassword)
                         .addParameter("api_version", tmcVersion);
+
+        restTemplate = new RestTemplate(requestBuilder);
     }
 
-    private String fetchJson(final String instance) throws IOException {
+    protected String fetchJson(final String instance) throws IOException {
 
-        final ClientHttpResponse response = requestBuilder.setPath(instance + "/participants.json")
-                                                          .build()
-                                                          .execute();
+        requestBuilder.setPath(instance + "/participants.json");
 
-        final String responseBody = IOUtils.toString(response.getBody(), "UTF-8");
-
-        response.close();
-
-        // Response body
-        return responseBody;
+        return restTemplate.getForObject(requestBuilder.buildURI(), String.class);
     }
 
     @Cacheable("TmcUsername")
