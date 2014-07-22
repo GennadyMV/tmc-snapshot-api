@@ -3,13 +3,18 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.client.ClientHttpResponse;
