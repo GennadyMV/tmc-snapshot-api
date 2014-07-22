@@ -81,7 +81,6 @@ public class SnapshotFileControllerTest {
 
         assertEquals(1, snapshotFiles.size());
         assertEquals("/src/HeiMaailma.java", snapshotFiles.get(0).getPath());
-        assertEquals("public class HeiMaailma { }", snapshotFiles.get(0).getContent());
     }
 
     @Test
