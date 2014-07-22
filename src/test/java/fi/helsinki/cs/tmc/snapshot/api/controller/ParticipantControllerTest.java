@@ -6,10 +6,12 @@ import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -60,6 +62,33 @@ public class ParticipantControllerTest {
         MockitoAnnotations.initMocks(this);
 
         mockMvc = MockMvcBuilders.standaloneSetup(participantController).build();
+    }
+
+    @Test
+    public void shouldReturnParticipants() throws Exception {
+
+        final ObjectMapper mapper = new ObjectMapper();
+
+        final List<TmcParticipant> tmcParticipants = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            final TmcParticipant newParticipant = new TmcParticipant();
+            newParticipant.setId((long) i);
+            tmcParticipants.add(newParticipant);
+        }
+
+        when(tmcDataService.findAll("")).thenReturn(tmcParticipants);
+
+        final MvcResult result = mockMvc.perform(get("/participants")).andReturn();
+        final String participantsJson = result.getResponse().getContentAsString();
+
+        final List<TmcParticipant> participants = Arrays.asList(mapper.readValue(participantsJson, TmcParticipant[].class));
+
+        assertEquals(3, participants.size());
+        assertEquals(0, (long) participants.get(0).getId());
+        assertEquals(1, (long) participants.get(1).getId());
+        assertEquals(2, (long) participants.get(2).getId());
     }
 
     @Test
