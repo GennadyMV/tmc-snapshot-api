@@ -10,11 +10,16 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public final class SpywareSnapshotService implements SnapshotService {
+
+    private final Logger logger = LoggerFactory.getLogger(SpywareSnapshotService.class);
 
     @Autowired
     private SnapshotDiffPatchService patchService;
@@ -36,7 +41,7 @@ public final class SpywareSnapshotService implements SnapshotService {
 
         // Split on newlines
         for (String event : indexData.split("\\n")) {
-            byteData.add(spywareServer.getData(event, instance, username));
+            byteData.add(spywareServer.fetchData(event, instance, username));
         }
 
         return byteData;
@@ -45,8 +50,10 @@ public final class SpywareSnapshotService implements SnapshotService {
     @Override
     public List<Snapshot> findAll(final String instance, final String username) throws IOException {
 
+        logger.info("Finding snapshots for {} from instance {}...", username, instance);
+
         // Fetch index
-        final InputStream index = spywareServer.getIndex(instance, username);
+        final InputStream index = spywareServer.fetchIndex(instance, username);
 
         // Fetch data
         final List<byte[]> content = findWithRange(index, instance, username);
@@ -56,6 +63,8 @@ public final class SpywareSnapshotService implements SnapshotService {
 
     @Override
     public Snapshot find(final String instance, final String username, final Long id) throws IOException {
+
+        logger.info("Finding snapshot for {} with id {} from instance {}...", username, id, instance);
 
         final Collection<Snapshot> events = findAll(instance, username);
 

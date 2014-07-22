@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class GZipTest {
@@ -52,5 +53,4 @@ public class GZipTest {
 
         return data.getBytes();
     }
-
 }

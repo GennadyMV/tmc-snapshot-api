@@ -26,11 +26,16 @@ import java.util.TreeSet;
 
 import org.apache.commons.codec.binary.Base64;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
+
+    private final Logger logger = LoggerFactory.getLogger(SnapshotDiffPatcher.class);
 
     private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final Map<String, String> fileCache = new TreeMap<>();
@@ -111,24 +116,12 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
-    @Override
-    @Cacheable("Snapshots")
-    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
-
-        final Collection<SnapshotEvent> events = readEvents(content);
-
-        for (SnapshotEvent event : events) {
-            patchFile(event);
-        }
-
-        return toSnapshotCollection(events);
-    }
-
-    private List<Snapshot> toSnapshotCollection(final Collection<SnapshotEvent> events) {
+    private List<Snapshot> asSnapshotCollection(final Collection<SnapshotEvent> events) {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (SnapshotEvent event : events) {
+
             final List<SnapshotFile> files = new ArrayList<>();
 
             for (Entry<String, String> entry : event.getFiles().entrySet()) {
@@ -139,5 +132,22 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         }
 
         return snapshots;
+    }
+
+    @Override
+    @Cacheable("Snapshots")
+    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
+
+        logger.info("Patching events...");
+
+        final Collection<SnapshotEvent> events = readEvents(content);
+
+        for (SnapshotEvent event : events) {
+            patchFile(event);
+        }
+
+        logger.info("Events patched.");
+
+        return asSnapshotCollection(events);
     }
 }
