@@ -32,9 +32,9 @@ public class HttpTmcServiceTest {
     public void shouldFindUsernameWithValidUserId() throws IOException {
 
         when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
-        when(tmcService.findUsername("", 42)).thenCallRealMethod();
+        when(tmcService.findByUsername("", 42)).thenCallRealMethod();
 
-        final String username = tmcService.findUsername("", 42);
+        final String username = tmcService.findByUsername("", 42);
 
         verify(tmcService).fetchJson("");
         assertEquals("admin", username);
@@ -44,9 +44,9 @@ public class HttpTmcServiceTest {
     public void shouldReturnNullOnNonExistantUserId() throws IOException {
 
         when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
-        when(tmcService.findUsername("", 404)).thenCallRealMethod();
+        when(tmcService.findByUsername("", 404)).thenCallRealMethod();
 
-        final String username = tmcService.findUsername("", 404);
+        final String username = tmcService.findByUsername("", 404);
 
         verify(tmcService).fetchJson("");
         assertNull(username);
