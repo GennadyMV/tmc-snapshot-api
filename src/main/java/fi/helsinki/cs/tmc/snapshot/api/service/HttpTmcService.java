@@ -59,9 +59,22 @@ public final class HttpTmcService implements TmcService {
         return responseBody;
     }
 
+    @Override
+    public List<TmcParticipant> findAll(final String instance) throws IOException {
+
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        final String json = fetchJson(instance);
+        final JsonNode rootNode = mapper.readTree(json);
+        final TmcParticipant[] participants = mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class);
+
+        return Arrays.asList(participants);
+    }
+
     @Cacheable("TmcUsername")
     @Override
-    public String findUsername(final String instance, final long userId) throws IOException {
+    public String findByUsername(final String instance, final long userId) throws IOException {
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -75,19 +88,5 @@ public final class HttpTmcService implements TmcService {
         }
 
         return null;
-    }
-
-    @Override
-    public List<TmcParticipant> all(final String instance) throws IOException {
-
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        final String json = fetchJson(instance);
-
-        final JsonNode rootNode = mapper.readTree(json);
-
-        final TmcParticipant[] participants = mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class);
-        return Arrays.asList(participants);
     }
 }

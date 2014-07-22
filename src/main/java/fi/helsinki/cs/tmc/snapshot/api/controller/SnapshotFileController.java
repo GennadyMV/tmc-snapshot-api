@@ -29,7 +29,7 @@ public final class SnapshotFileController {
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
     public List<SnapshotFile> list(@PathVariable final Long participant, @PathVariable final Long snapshot) throws IOException {
 
-        final String username = tmcService.findUsername("", participant);
+        final String username = tmcService.findByUsername("", participant);
 
         if (username == null) {
             throw new NotFoundException();
@@ -49,7 +49,7 @@ public final class SnapshotFileController {
         final String separator = "/files/";
         final String path = url.substring(url.indexOf(separator) + separator.length());
 
-        final String username = tmcService.findUsername("", participant);
+        final String username = tmcService.findByUsername("", participant);
 
         if (username == null) {
             throw new NotFoundException();

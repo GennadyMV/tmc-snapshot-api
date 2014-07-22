@@ -28,13 +28,13 @@ public final class ParticipantController {
     @RequestMapping(method = RequestMethod.GET)
     public List<TmcParticipant> all() throws IOException {
 
-        return tmcService.all("");
+        return tmcService.findAll("");
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}")
     public Participant read(@PathVariable final Long participant) throws IOException {
 
-        final String username = tmcService.findUsername("", participant);
+        final String username = tmcService.findByUsername("", participant);
 
         if (username == null) {
             throw new NotFoundException();
