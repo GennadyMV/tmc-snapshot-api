@@ -24,8 +24,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public final class HttpTmcService implements TmcService {
 
-    private final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
-
     @Value("${tmc.url}")
     private String tmcUrl;
 
@@ -51,6 +49,7 @@ public final class HttpTmcService implements TmcService {
 
     protected String fetchJson(final String instance) throws IOException {
 
+        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
         logger.info("Fetching TMC-participants as JSON from instance {}...", instance);
 
         requestBuilder.setPath(instance + "/participants.json");
@@ -61,6 +60,7 @@ public final class HttpTmcService implements TmcService {
     @Override
     public List<TmcParticipant> findAll(final String instance) throws IOException {
 
+        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
         logger.info("Finding participants from instance {}...", instance);
 
         final ObjectMapper mapper = new ObjectMapper();
@@ -77,6 +77,7 @@ public final class HttpTmcService implements TmcService {
     @Override
     public String findUsernameById(final String instance, final long id) throws IOException {
 
+        final Logger logger = LoggerFactory.getLogger(HttpTmcService.class);
         logger.info("Finding username for id {} from instance {}...", id, instance);
 
         final ObjectMapper mapper = new ObjectMapper();
