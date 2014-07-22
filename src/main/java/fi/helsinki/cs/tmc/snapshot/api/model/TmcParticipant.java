@@ -1,5 +1,8 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class TmcParticipant {
 
     private Long id;
@@ -10,6 +13,7 @@ public final class TmcParticipant {
         this.id = id;
     }
 
+    @JsonProperty
     public void setUsername(final String username) {
 
         this.username = username;
@@ -20,6 +24,7 @@ public final class TmcParticipant {
         return id;
     }
 
+    @JsonIgnore
     public String getUsername() {
 
         return username;
