@@ -16,10 +16,10 @@ public class ExceptionController {
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
-    public ErrorMessage handleIOException(final IOException ex) {
+    public ErrorMessage handleIOException(final IOException exception) {
 
         final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
-        logger.error(ex.getMessage());
+        logger.error(exception.getMessage());
 
         return new ErrorMessage("Something went wrong.");
     }
