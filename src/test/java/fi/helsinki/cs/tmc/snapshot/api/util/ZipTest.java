@@ -117,6 +117,11 @@ public class ZipTest {
         checkZipContainsFileWithContents(result, "Doge.java", stringToByteArray("wuff"));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testDecompressFailsWithInvalidInput() {
+
+        Zip.decompress(null);
+    }
 
     private void checkZipContainsFileWithContents(final Map<String, byte[]> zip, final String filename, final byte[] content) {
 

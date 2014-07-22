@@ -42,6 +42,12 @@ public class GZipTest {
         assertArrayEquals(expResult, GZip.decompress(content));
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testDecompressFailsWithInvalidInput() {
+
+        GZip.decompress(null);
+    }
+
     private byte[] stringToByteArray(final String data) {
 
         return data.getBytes();
