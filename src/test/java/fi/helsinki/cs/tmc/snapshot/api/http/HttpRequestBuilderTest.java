@@ -64,5 +64,4 @@ public class HttpRequestBuilderTest {
 
         assertEquals(builder, builder.addParameter("foo", "bar"));
     }
-
 }
