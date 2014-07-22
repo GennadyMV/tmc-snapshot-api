@@ -73,7 +73,7 @@ public class ParticipantControllerTest {
             snapshots.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
         }
 
-        when(tmcDataService.findUsername("", 2064)).thenReturn("hiphei");
+        when(tmcDataService.findByUsername("", 2064)).thenReturn("hiphei");
         when(snapshotService.findAll("/hy/", "hiphei")).thenReturn(snapshots);
 
         final MvcResult result = mockMvc.perform(get("/participants/2064")).andReturn();
@@ -88,7 +88,7 @@ public class ParticipantControllerTest {
     @Test
     public void shouldReturn404OnNonExistantParticipantId() throws Exception {
 
-        when(tmcDataService.findUsername("", 0)).thenReturn(null);
+        when(tmcDataService.findByUsername("", 0)).thenReturn(null);
 
         mockMvc.perform(get("/participants/0")).andExpect(status().is(404));
     }

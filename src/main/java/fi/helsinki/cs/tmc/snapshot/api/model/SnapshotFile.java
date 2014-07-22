@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class SnapshotFile {
 
     private final String path;
-
-    @JsonIgnore
     private final String content;
 
     @JsonCreator
@@ -23,6 +21,7 @@ public final class SnapshotFile {
         return path;
     }
 
+    @JsonIgnore
     public String getContent() {
 
         return content;

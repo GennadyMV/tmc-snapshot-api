@@ -1,8 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.ErrorMessage;
-
-import java.io.IOException;
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
+import fi.helsinki.cs.tmc.snapshot.api.model.Error;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +11,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
+@ResponseBody
 public class ExceptionController {
 
-    @ExceptionHandler(IOException.class)
-    @ResponseBody
-    public ErrorMessage handleIOException(final IOException ex) {
+    private final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
-        final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
-        logger.error(ex.getMessage());
+    @ExceptionHandler(Exception.class)
+    public Error handleException(final Exception exception) {
 
-        return new ErrorMessage("Something went wrong.");
+        logger.error(exception.getMessage());
+
+        return new Error("Something went wrong.");
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public Error handleNotFoundException() {
+
+        return new Error("Not found.");
     }
 }

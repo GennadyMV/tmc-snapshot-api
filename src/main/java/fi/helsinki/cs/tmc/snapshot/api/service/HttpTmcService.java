@@ -8,6 +8,8 @@ import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -57,16 +59,27 @@ public final class HttpTmcService implements TmcService {
         return responseBody;
     }
 
-    @Cacheable("TmcUsername")
     @Override
-    public String findUsername(final String instance, final long userId) throws IOException {
+    public List<TmcParticipant> findAll(final String instance) throws IOException {
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        final JsonNode rootNode;
+        final String json = fetchJson(instance);
+        final JsonNode rootNode = mapper.readTree(json);
+        final TmcParticipant[] participants = mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class);
 
-        rootNode = mapper.readTree(fetchJson(instance));
+        return Arrays.asList(participants);
+    }
+
+    @Cacheable("TmcUsername")
+    @Override
+    public String findByUsername(final String instance, final long userId) throws IOException {
+
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        final JsonNode rootNode = mapper.readTree(fetchJson(instance));
 
         for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
             if (participant.getId() == userId) {
