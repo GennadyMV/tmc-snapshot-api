@@ -1,36 +1,83 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import com.google.DiffMatchPatch;
+
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
+
+import org.apache.commons.io.FileUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.*;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(SpywareSnapshotService.class)
+@PrepareForTest({ SnapshotDiffPatcher.class, SpywareSnapshotService.class })
 public class SpywareSnapshotServiceTest {
 
     @Mock
+    private SpywareService spywareService;
+
+    @Mock
+    private SnapshotDiffPatcher patchService;
+
+    @Mock
     private SpywareSnapshotService spywareSnapshotService;
+
+    @InjectMocks
+    private SpywareSnapshotService injectedSpywareSnapshotService;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void shouldFindAllSnapshots() throws Exception {
+
+        final File indexFile = new File("test-data/test.idx");
+        final FileInputStream indexInputStream = new FileInputStream(indexFile);
+
+        final File dataFile = new File("test-data/test.dat");
+
+        final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
+
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
+        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
+
+        when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
+        when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
+                            .thenReturn(Arrays.copyOfRange(bytes, 0, 11683))
+                            .thenReturn(Arrays.copyOfRange(bytes, 11683, 12945))
+                            .thenReturn(Arrays.copyOfRange(bytes, 12945, 14557));
+
+        when(patchService.patch(any(List.class))).thenCallRealMethod();
+
+        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
+
+        assertNotNull(snapshots);
+        assertEquals(64, snapshots.size());
     }
 
     @Test
