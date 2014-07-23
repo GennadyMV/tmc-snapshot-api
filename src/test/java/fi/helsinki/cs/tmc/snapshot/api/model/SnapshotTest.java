@@ -14,10 +14,14 @@ public final class SnapshotTest {
     public void constructorSetsValuesCorrectly() {
 
         final List<SnapshotFile> files = new ArrayList<>();
+
+        final SnapshotFile file = new SnapshotFile("path", "content");
+        files.add(file);
+
         final Snapshot snapshot = new Snapshot(13L, files);
 
         assertEquals(Long.valueOf(13L), snapshot.getId());
-        assertEquals(files, snapshot.getFiles());
+        assertEquals(file, snapshot.getFiles().iterator().next());
         assertEquals(new Date(13L), snapshot.getTimestamp());
     }
 }

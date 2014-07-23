@@ -6,7 +6,7 @@ import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +27,7 @@ public final class SnapshotFileController {
     private TmcService tmcService;
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
-    public List<SnapshotFile> list(@PathVariable final String instance,
+    public Collection<SnapshotFile> list(@PathVariable final String instance,
                                    @PathVariable final Long participant,
                                    @PathVariable final Long snapshot) throws IOException {
 
@@ -50,20 +50,18 @@ public final class SnapshotFileController {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";
-        final String path = url.substring(url.indexOf(separator) + separator.length());
+        final String path = "/" + url.substring(url.indexOf(separator) + separator.length());
 
         final String username = tmcService.findUsernameById(instance, participant);
-
         if (username == null) {
             throw new NotFoundException();
         }
 
-        for (SnapshotFile file : snapshotService.find(instance, username, snapshot).getFiles()) {
-            if (file.getPath().equals("/" + path)) {
-                return file.getContent();
-            }
+        final SnapshotFile file = snapshotService.find(instance, username, snapshot).getFile(path);
+        if (file == null) {
+            throw new NotFoundException();
         }
 
-        throw new NotFoundException();
+        return file.getContent();
     }
 }

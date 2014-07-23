@@ -88,9 +88,8 @@ public final class HttpTmcService implements TmcService {
 
         for (TmcParticipant participant : mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class)) {
 
-            LOG.info("Found username {} for id {}.", participant.getUsername(), id);
-
             if (participant.getId() == id) {
+                LOG.info("Found username {} for id {}.", participant.getUsername(), id);
                 return participant.getUsername();
             }
         }
