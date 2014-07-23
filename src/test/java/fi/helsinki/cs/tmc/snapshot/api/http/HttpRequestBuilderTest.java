@@ -1,11 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.http;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.springframework.http.client.ClientHttpRequest;
 
 import static org.junit.Assert.*;
@@ -69,5 +69,14 @@ public final class HttpRequestBuilderTest {
     public void addParameterReturnsCorrectBuilder() {
 
         assertEquals(builder, builder.addParameter("foo", "bar"));
+    }
+
+    @Test
+    public void shouldReturnNullOnFalseURI() {
+
+        builder = new HttpRequestBuilder("C:\"", 404, null);
+        final URI uri = builder.buildURI();
+
+        assertNull(uri);
     }
 }
