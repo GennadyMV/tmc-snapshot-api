@@ -11,15 +11,10 @@ public final class GZip {
 
     private GZip() {}
 
-    public static byte[] decompress(final byte[] content) {
+    public static byte[] decompress(final byte[] content) throws IOException {
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        try {
-            IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(content)), output);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(content)), output);
 
         return output.toByteArray();
     }
