@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +123,10 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
         for (SnapshotEvent event : events) {
 
-            final List<SnapshotFile> files = new ArrayList<>();
+            final Map<String, SnapshotFile> files = new HashMap<>();
 
             for (Entry<String, String> entry : event.getFiles().entrySet()) {
-                files.add(new SnapshotFile(entry.getKey(), entry.getValue()));
+                files.put(entry.getKey(), new SnapshotFile(entry.getKey(), entry.getValue()));
             }
 
             snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), files));

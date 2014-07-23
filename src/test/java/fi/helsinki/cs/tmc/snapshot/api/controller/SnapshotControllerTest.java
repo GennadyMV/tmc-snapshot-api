@@ -93,7 +93,7 @@ public final class SnapshotControllerTest {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
 
-        final Snapshot snapshotData = new Snapshot(1L, new ArrayList<>(Arrays.asList(file)));
+        final Snapshot snapshotData = new Snapshot(1L, Arrays.asList(file));
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
         when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
@@ -105,7 +105,7 @@ public final class SnapshotControllerTest {
 
         assertEquals(1, (long) snapshot.getId());
         assertEquals(1, snapshot.getFiles().size());
-        assertEquals("/src/HeiMaailma.java", snapshot.getFiles().get(0).getPath());
+        assertEquals("/src/HeiMaailma.java", snapshot.getFiles().iterator().next().getPath());
     }
 
     @Test
