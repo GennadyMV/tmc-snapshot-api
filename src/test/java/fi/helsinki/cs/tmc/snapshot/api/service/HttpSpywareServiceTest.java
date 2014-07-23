@@ -76,7 +76,7 @@ public final class HttpSpywareServiceTest {
     @Test
     public void shouldReturnDataFile() throws IOException {
 
-        final byte[] content = {(byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00};
+        final byte[] content = { (byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00 };
 
         prepareRequestResponse(content, HttpStatus.OK);
 
@@ -105,7 +105,7 @@ public final class HttpSpywareServiceTest {
     @Test
     public void shouldReturnIndexFile() throws IOException {
 
-        final byte[] content = {(byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00};
+        final byte[] content = { (byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00 };
 
         prepareRequestResponse(content, HttpStatus.OK);
 
