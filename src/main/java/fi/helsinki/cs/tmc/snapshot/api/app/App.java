@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "fi.helsinki.cs.tmc.snapshot.api" })
-public class App {
+public final class App {
 
     public static void main(final String[] args) throws Exception {
 
