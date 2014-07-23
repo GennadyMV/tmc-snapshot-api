@@ -39,5 +39,4 @@ public final class SnapshotEventInformationTest {
 
         assertTrue(info.isFullDocument());
     }
-
 }

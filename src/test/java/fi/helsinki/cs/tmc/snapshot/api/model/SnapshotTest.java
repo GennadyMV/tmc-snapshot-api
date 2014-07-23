@@ -20,5 +20,4 @@ public final class SnapshotTest {
         assertEquals(files, snapshot.getFiles());
         assertEquals(new Date(13L), snapshot.getTimestamp());
     }
-
 }

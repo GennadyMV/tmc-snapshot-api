@@ -14,5 +14,4 @@ public final class SnapshotFileTest {
         assertEquals("myPath", file.getPath());
         assertEquals("myContent", file.getContent());
     }
-
 }

@@ -55,7 +55,6 @@ public final class HttpTmcService implements TmcService {
 
         LOG.info("Fetching TMC-participants as JSON from instance {}...", instance);
 
-        //requestBuilder.setPath(String.format("/%s/participants.json", instance));
         requestBuilder.setPath("/participants.json");
 
         return restTemplate.getForObject(requestBuilder.buildURI(), String.class);

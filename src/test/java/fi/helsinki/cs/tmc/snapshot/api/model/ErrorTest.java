@@ -13,5 +13,4 @@ public final class ErrorTest {
 
         assertEquals("message", error.getError());
     }
-
 }

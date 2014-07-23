@@ -18,5 +18,4 @@ public final class ParticipantTest {
         assertEquals(Long.valueOf(123), participant.getId());
         assertEquals(snapshots, participant.getSnapshots());
     }
-
 }

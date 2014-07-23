@@ -30,6 +30,4 @@ public final class TmcParticipantTest {
 
         assertEquals("user123", participant.getUsername());
     }
-
-
 }
