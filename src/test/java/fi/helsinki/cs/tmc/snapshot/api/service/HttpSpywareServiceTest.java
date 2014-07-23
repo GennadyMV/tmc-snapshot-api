@@ -48,14 +48,19 @@ public final class HttpSpywareServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void shouldThrowExceptionWhenDataFileIsNotfound() throws IOException {
+    private void prepareRequestResponse(final byte[] content, final HttpStatus status) throws IOException {
 
-        final MockClientHttpResponse response = new MockClientHttpResponse((byte[]) null, HttpStatus.NOT_FOUND);
+        final MockClientHttpResponse response = new MockClientHttpResponse(content, status);
         spy(response);
 
         when(requestBuilder.build()).thenReturn(request);
         when(request.execute()).thenReturn(response);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowExceptionWhenDataFileIsNotfound() throws IOException {
+
+        prepareRequestResponse(null, HttpStatus.NOT_FOUND);
 
         spywareService.fetchData("404 100", "test", "notfound");
     }
@@ -63,11 +68,7 @@ public final class HttpSpywareServiceTest {
     @Test(expected = IOException.class)
     public void shouldThrowExceptionOnDataServerError() throws IOException {
 
-        final MockClientHttpResponse response = new MockClientHttpResponse((byte[]) null, HttpStatus.INTERNAL_SERVER_ERROR);
-        spy(response);
-
-        when(requestBuilder.build()).thenReturn(request);
-        when(request.execute()).thenReturn(response);
+        prepareRequestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         spywareService.fetchData("500 100", "test", "error");
     }
@@ -75,13 +76,9 @@ public final class HttpSpywareServiceTest {
     @Test
     public void shouldReturnDataFile() throws IOException {
 
-        final byte[] content = {(byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00};
+        final byte[] content = { (byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00 };
 
-        final MockClientHttpResponse response = new MockClientHttpResponse(content, HttpStatus.OK);
-        spy(response);
-
-        when(requestBuilder.build()).thenReturn(request);
-        when(request.execute()).thenReturn(response);
+        prepareRequestResponse(content, HttpStatus.OK);
 
         final byte[] byteData = spywareService.fetchData("200 100", "test", "ok");
 
@@ -92,11 +89,7 @@ public final class HttpSpywareServiceTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionWhenIndexFileIsNotFound() throws IOException {
 
-        final MockClientHttpResponse response = new MockClientHttpResponse((byte[]) null, HttpStatus.NOT_FOUND);
-        spy(response);
-
-        when(requestBuilder.build()).thenReturn(request);
-        when(request.execute()).thenReturn(response);
+        prepareRequestResponse(null, HttpStatus.NOT_FOUND);
 
         spywareService.fetchIndex("not", "found");
     }
@@ -104,11 +97,7 @@ public final class HttpSpywareServiceTest {
     @Test(expected = IOException.class)
     public void shouldThrowExceptionOnIndexServerError() throws IOException {
 
-        final MockClientHttpResponse response = new MockClientHttpResponse((byte[]) null, HttpStatus.INTERNAL_SERVER_ERROR);
-        spy(response);
-
-        when(requestBuilder.build()).thenReturn(request);
-        when(request.execute()).thenReturn(response);
+        prepareRequestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         spywareService.fetchIndex("server", "error");
     }
@@ -116,16 +105,11 @@ public final class HttpSpywareServiceTest {
     @Test
     public void shouldReturnIndexFile() throws IOException {
 
-        final byte[] content = {(byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00};
+        final byte[] content = { (byte) 0x1f, (byte) 0x8b, (byte) 0x08, (byte) 0x00 };
 
-        final MockClientHttpResponse response = new MockClientHttpResponse(content, HttpStatus.OK);
-        spy(response);
-
-        when(requestBuilder.build()).thenReturn(request);
-        when(request.execute()).thenReturn(response);
+        prepareRequestResponse(content, HttpStatus.OK);
 
         final InputStream data = spywareService.fetchIndex("server", "ok");
-
         final byte[] byteData = IOUtils.toByteArray(data);
 
         assertNotNull(data);
