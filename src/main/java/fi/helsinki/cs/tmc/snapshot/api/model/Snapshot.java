@@ -22,7 +22,7 @@ public final class Snapshot {
         this.timestamp = new Date(id);
 
         this.files = new HashMap<>();
-        
+
         for (SnapshotFile file : files) {
             this.files.put(file.getPath(), file);
         }

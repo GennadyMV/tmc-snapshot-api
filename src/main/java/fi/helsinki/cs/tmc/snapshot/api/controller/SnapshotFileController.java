@@ -59,7 +59,7 @@ public final class SnapshotFileController {
         }
 
         final SnapshotFile file = snapshotService.find(instance, username, snapshot).getFile(path);
-        
+
         if (file == null) {
             throw new NotFoundException();
         }

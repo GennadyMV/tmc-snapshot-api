@@ -30,15 +30,20 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
 
         // Caches
         final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 1000));
-        final Cache rawSpywareData = new Cache(new CacheConfiguration("RawSpywareData", 1000));
-        final Cache snapshots = new Cache(new CacheConfiguration("Snapshots", 1000));
+
+        final CacheConfiguration spywareConfig = new CacheConfiguration();
+        spywareConfig.setName("RawSpywareData");
+
+        // 1 GB
+        spywareConfig.setMaxBytesLocalHeap(1073741824L);
+
+        final Cache rawSpywareData = new Cache(spywareConfig);
 
         // Ehcache Manager
         final net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.newInstance();
 
         cacheManager.addCache(tmcUsername);
         cacheManager.addCache(rawSpywareData);
-        cacheManager.addCache(snapshots);
 
         return new EhCacheCacheManager(cacheManager);
     }
