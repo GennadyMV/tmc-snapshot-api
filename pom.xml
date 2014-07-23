@@ -124,11 +124,12 @@
 
                 <configuration>
                     <instrumentation>
-                        <ignores>
-                            <ignore>com.google*</ignore>
-                        </ignores>
                         <excludes>
                             <exclude>com/google/*</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotDiffPatchService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SpywareService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/TmcService.class</exclude>
                         </excludes>
                     </instrumentation>
                     <formats>
