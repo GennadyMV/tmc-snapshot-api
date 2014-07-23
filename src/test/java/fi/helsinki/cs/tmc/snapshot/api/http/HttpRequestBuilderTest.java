@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.springframework.http.client.ClientHttpRequest;
 
 import static org.junit.Assert.*;
