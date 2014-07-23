@@ -53,11 +53,13 @@ public final class SnapshotFileController {
         final String path = "/" + url.substring(url.indexOf(separator) + separator.length());
 
         final String username = tmcService.findUsernameById(instance, participant);
+
         if (username == null) {
             throw new NotFoundException();
         }
 
         final SnapshotFile file = snapshotService.find(instance, username, snapshot).getFile(path);
+        
         if (file == null) {
             throw new NotFoundException();
         }
