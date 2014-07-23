@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SnapshotDiffPatcher.class, SpywareSnapshotService.class })
-public class SpywareSnapshotServiceTest {
+public final class SpywareSnapshotServiceTest {
 
     @Mock
     private SpywareService spywareService;
