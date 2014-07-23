@@ -8,6 +8,17 @@ import static org.junit.Assert.*;
 
 public final class ZipTest {
 
+    private void checkZipContainsFileWithContents(final Map<String, byte[]> zip, final String filename, final byte[] content) {
+
+        assertTrue(zip.containsKey(filename));
+        assertArrayEquals(content, zip.get(filename));
+    }
+
+    private byte[] stringToByteArray(final String data) {
+
+        return data.getBytes();
+    }
+
     @Test
     public void testDecompressZipContainingOneFile() {
 
@@ -123,16 +134,5 @@ public final class ZipTest {
     public void testDecompressFailsWithInvalidInput() {
 
         Zip.decompress(null);
-    }
-
-    private void checkZipContainsFileWithContents(final Map<String, byte[]> zip, final String filename, final byte[] content) {
-
-        assertTrue(zip.containsKey(filename));
-        assertArrayEquals(content, zip.get(filename));
-    }
-
-    private byte[] stringToByteArray(final String data) {
-
-        return data.getBytes();
     }
 }

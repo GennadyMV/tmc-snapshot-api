@@ -6,6 +6,11 @@ import static org.junit.Assert.*;
 
 public final class GZipTest {
 
+    private byte[] stringToByteArray(final String data) {
+
+        return data.getBytes();
+    }
+
     @Test
     public void testDecompressTestString() {
 
@@ -47,10 +52,5 @@ public final class GZipTest {
     public void testDecompressFailsWithInvalidInput() {
 
         GZip.decompress(null);
-    }
-
-    private byte[] stringToByteArray(final String data) {
-
-        return data.getBytes();
     }
 }
