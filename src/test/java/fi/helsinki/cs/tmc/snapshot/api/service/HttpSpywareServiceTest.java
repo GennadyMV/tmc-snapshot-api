@@ -48,7 +48,7 @@ public final class HttpSpywareServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private void prepareRequestResponse(final byte[] content, HttpStatus status) throws IOException {
+    private void prepareRequestResponse(final byte[] content, final HttpStatus status) throws IOException {
 
         final MockClientHttpResponse response = new MockClientHttpResponse(content, status);
         spy(response);
