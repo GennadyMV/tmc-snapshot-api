@@ -126,6 +126,7 @@
                     <instrumentation>
                         <excludes>
                             <exclude>com/google/*</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/app/App.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotDiffPatchService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SpywareService.class</exclude>
