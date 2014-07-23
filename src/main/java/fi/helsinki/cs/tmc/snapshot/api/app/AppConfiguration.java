@@ -1,13 +1,8 @@
 package fi.helsinki.cs.tmc.snapshot.api.app;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -30,16 +25,13 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public CacheManager cacheManager() {
 
-        // Configure and return an implementation of Spring's CacheManager SPI
-        final SimpleCacheManager cacheManager = new SimpleCacheManager();
-        final List<Cache> caches = new ArrayList<>();
+        // Ehcache
+        final net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.newInstance();
 
-        caches.add(new ConcurrentMapCache("Snapshots"));
-        caches.add(new ConcurrentMapCache("RawSpywareData"));
-        caches.add(new ConcurrentMapCache("TmcUsername"));
+        cacheManager.addCache("TmcUsername");
+        cacheManager.addCache("RawSpywareData");
+        cacheManager.addCache("Snapshots");
 
-        cacheManager.setCaches(caches);
-
-        return cacheManager;
+        return new EhCacheCacheManager(cacheManager);
     }
 }
