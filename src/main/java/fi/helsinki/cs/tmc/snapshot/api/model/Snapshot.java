@@ -2,6 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public final class Snapshot {
         this.timestamp = new Date(id);
 
         this.files = new HashMap<>();
+        
         for (SnapshotFile file : files) {
             this.files.put(file.getPath(), file);
         }
