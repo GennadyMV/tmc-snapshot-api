@@ -35,7 +35,9 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
         spywareConfig.setName("RawSpywareData");
 
         // 1 GB
-        spywareConfig.setMaxBytesLocalHeap(1073741824L);
+        final Long maxMemory = Runtime.getRuntime().maxMemory();
+        final Long cacheMemory = (long) (maxMemory.doubleValue() * 0.25);
+        spywareConfig.setMaxBytesLocalHeap(cacheMemory);
 
         final Cache rawSpywareData = new Cache(spywareConfig);
 
