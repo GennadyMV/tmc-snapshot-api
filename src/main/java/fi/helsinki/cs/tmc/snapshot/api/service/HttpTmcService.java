@@ -76,6 +76,7 @@ public final class HttpTmcService implements TmcService {
         final String json = fetchJson(instance);
         final JsonNode rootNode = mapper.readTree(json);
         final TmcParticipant[] participants = mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class);
+
         Arrays.sort(participants);
         cacheAllUsernames(instance, participants);
 
