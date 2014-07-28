@@ -1,9 +1,5 @@
 language: java
 
-env:
-    global:
-        MAVEN_OPTS="-Xmx3g -XX:MaxPermSize=300M"
-
 notifications:
 
     email: false
