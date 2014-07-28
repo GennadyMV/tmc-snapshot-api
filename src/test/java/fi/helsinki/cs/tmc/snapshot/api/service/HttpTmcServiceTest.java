@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
+import fi.helsinki.cs.tmc.snapshot.api.util.CacheHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,8 @@ public final class HttpTmcServiceTest {
         when(LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
 
         MockitoAnnotations.initMocks(this);
+
+        Whitebox.setInternalState(tmcService, new CacheHelper());
     }
 
     @Test
@@ -67,12 +71,12 @@ public final class HttpTmcServiceTest {
         final List<TmcParticipant> participants = tmcService.findAll("");
 
         assertEquals(3, participants.size());
-        assertEquals(1948, (long) participants.get(0).getId());
-        assertEquals("who", participants.get(0).getUsername());
+        assertEquals(343, (long) participants.get(0).getId());
+        assertEquals("i", participants.get(0).getUsername());
         assertEquals(726, (long) participants.get(1).getId());
         assertEquals("am", participants.get(1).getUsername());
-        assertEquals(343, (long) participants.get(2).getId());
-        assertEquals("i", participants.get(2).getUsername());
+        assertEquals(1948, (long) participants.get(2).getId());
+        assertEquals("who", participants.get(2).getUsername());
     }
 
     @Test

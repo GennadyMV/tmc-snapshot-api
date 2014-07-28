@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
+import fi.helsinki.cs.tmc.snapshot.api.util.CacheHelper;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ import org.springframework.web.client.RestTemplate;
 public final class HttpTmcService implements TmcService {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpTmcService.class);
+
+    @Autowired
+    private CacheHelper cacheHelper;
 
     @Value("${tmc.url}")
     private String tmcUrl;
@@ -72,11 +77,12 @@ public final class HttpTmcService implements TmcService {
         final JsonNode rootNode = mapper.readTree(json);
         final TmcParticipant[] participants = mapper.treeToValue(rootNode.path("participants"), TmcParticipant[].class);
         Arrays.sort(participants);
+        cacheAllUsernames(instance, participants);
 
         return Arrays.asList(participants);
     }
 
-    @Cacheable("TmcUsername")
+    @Cacheable(value = "TmcUsername", key = "#p0.concat('-').concat(#p1)")
     @Override
     public String findUsernameById(final String instance, final long id) throws IOException {
 
@@ -98,5 +104,12 @@ public final class HttpTmcService implements TmcService {
         LOG.info("No username found for id {}.", id);
 
         return null;
+    }
+
+    private void cacheAllUsernames(final String instance, final TmcParticipant[] participants) {
+
+        for (TmcParticipant participant : participants) {
+            cacheHelper.cacheUsername(instance, participant.getId(), participant.getUsername());
+        }
     }
 }
