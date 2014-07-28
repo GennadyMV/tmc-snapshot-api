@@ -2,7 +2,7 @@ language: java
 
 env:
     global:
-        JAVA_OPTS=-Xmx2g
+        JAVA_OPTS="-Xmx2g"
         MAVEN_OPTS="-Xmx2g"
 
 notifications:
