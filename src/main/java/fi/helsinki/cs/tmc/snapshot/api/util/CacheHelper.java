@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CacheHelper {
+public final class CacheHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheHelper.class);
 
@@ -15,6 +15,7 @@ public class CacheHelper {
     public String cacheUsername(final String instance, final Long id, final String username) {
 
         LOG.info("Caching username {} for id {} of instance {}...", username, id, instance);
+
         return username;
     }
 }

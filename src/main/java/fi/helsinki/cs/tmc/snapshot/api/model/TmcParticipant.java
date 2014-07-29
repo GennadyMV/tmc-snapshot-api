@@ -37,6 +37,6 @@ public final class TmcParticipant implements Comparable<TmcParticipant> {
             return -1;
         }
 
-        return this.id.compareTo(other.id);
+        return id.compareTo(other.id);
     }
 }
