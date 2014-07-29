@@ -29,14 +29,14 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     public CacheManager cacheManager() {
 
         // Caches
-        final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 1000));
+        final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 5000));
 
         final CacheConfiguration spywareConfig = new CacheConfiguration();
         spywareConfig.setName("RawSpywareData");
 
         // 50% of max heap size
         final Long maxMemory = Runtime.getRuntime().maxMemory();
-        final Long cacheMemory = (long) (maxMemory.doubleValue() * 0.5);
+        final Long cacheMemory = (long) (maxMemory * 0.5);
         spywareConfig.setMaxBytesLocalHeap(cacheMemory);
 
         final Cache rawSpywareData = new Cache(spywareConfig);
