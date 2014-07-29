@@ -29,7 +29,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     public CacheManager cacheManager() {
 
         // Caches
-        final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 1000));
+        final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 5000));
 
         final CacheConfiguration spywareConfig = new CacheConfiguration();
         spywareConfig.setName("RawSpywareData");
