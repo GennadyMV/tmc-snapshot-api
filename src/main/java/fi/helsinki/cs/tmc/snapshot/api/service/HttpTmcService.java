@@ -65,6 +65,13 @@ public final class HttpTmcService implements TmcService {
         return restTemplate.getForObject(requestBuilder.buildURI(), String.class);
     }
 
+    private void cacheAllUsernames(final String instance, final TmcParticipant[] participants) {
+
+        for (TmcParticipant participant : participants) {
+            cacheHelper.cacheUsername(instance, participant.getId(), participant.getUsername());
+        }
+    }
+
     @Override
     public List<TmcParticipant> findAll(final String instance) throws IOException {
 
@@ -105,12 +112,5 @@ public final class HttpTmcService implements TmcService {
         LOG.info("No username found for id {}.", id);
 
         return null;
-    }
-
-    private void cacheAllUsernames(final String instance, final TmcParticipant[] participants) {
-
-        for (TmcParticipant participant : participants) {
-            cacheHelper.cacheUsername(instance, participant.getId(), participant.getUsername());
-        }
     }
 }

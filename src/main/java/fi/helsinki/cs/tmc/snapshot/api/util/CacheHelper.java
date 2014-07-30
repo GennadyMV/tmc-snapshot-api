@@ -15,6 +15,7 @@ public class CacheHelper {
     public String cacheUsername(final String instance, final Long id, final String username) {
 
         LOG.info("Caching username {} for id {} of instance {}...", username, id, instance);
+
         return username;
     }
 }
