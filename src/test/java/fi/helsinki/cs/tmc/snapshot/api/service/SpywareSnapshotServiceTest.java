@@ -77,7 +77,9 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
 
         assertNotNull(snapshots);
-        assertEquals(64, snapshots.size());
+
+        //64 total, 44 of which are folder_create, file_change or file_create -> 20
+        assertEquals(20, snapshots.size());
     }
 
     @Test
@@ -87,7 +89,7 @@ public final class SpywareSnapshotServiceTest {
 
         for (int i = 0; i < 3; i++) {
 
-            snapshots.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
         when(spywareSnapshotService.findAll("test", "jack")).thenReturn(snapshots);
@@ -106,7 +108,7 @@ public final class SpywareSnapshotServiceTest {
 
         for (int i = 0; i < 3; i++) {
 
-            snapshots.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
         when(spywareSnapshotService.findAll("data", "user")).thenReturn(snapshots);

@@ -72,7 +72,7 @@ public final class SnapshotControllerTest {
         final List<Snapshot> snapshotData = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            snapshotData.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
+            snapshotData.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("smith");
@@ -93,7 +93,7 @@ public final class SnapshotControllerTest {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
 
-        final Snapshot snapshotData = new Snapshot(1L, Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L, "course", "exercise", Arrays.asList(file));
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
         when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);

@@ -101,7 +101,7 @@ public final class ParticipantControllerTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            snapshots.add(new Snapshot((long) i, new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("hiphei");

@@ -18,10 +18,12 @@ public final class SnapshotTest {
         final SnapshotFile file = new SnapshotFile("path", "content");
         files.add(file);
 
-        final Snapshot snapshot = new Snapshot(13L, files);
+        final Snapshot snapshot = new Snapshot(13L, "course", "exercise", files);
 
         assertEquals(Long.valueOf(13L), snapshot.getId());
         assertEquals(file, snapshot.getFiles().iterator().next());
         assertEquals(new Date(13L), snapshot.getTimestamp());
+        assertEquals("course", snapshot.getCourse());
+        assertEquals("exercise", snapshot.getExercise());
     }
 }

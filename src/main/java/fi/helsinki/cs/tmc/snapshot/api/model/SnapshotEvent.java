@@ -5,6 +5,7 @@ import java.util.Map;
 
 public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
+    private String courseName;
     private String data;
     private String exerciseName;
     private String eventType;
@@ -16,6 +17,16 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     public boolean isProjectActionEvent() {
 
         return eventType.contains("project_action");
+    }
+
+    public void setCourseName(final String courseName) {
+
+        this.courseName = courseName;
+    }
+
+    public String getCourseName() {
+
+        return courseName;
     }
 
     public void setExerciseName(final String exerciseName) {
@@ -31,6 +42,11 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     public void setEventType(final String eventType) {
 
         this.eventType = eventType;
+    }
+
+    public String getEventType() {
+
+        return eventType;
     }
 
     public void setData(final String data) {
