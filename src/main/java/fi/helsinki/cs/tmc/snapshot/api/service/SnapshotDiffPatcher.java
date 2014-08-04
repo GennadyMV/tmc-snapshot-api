@@ -89,8 +89,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
-        System.out.println(eventsJson);
-
         LOG.info("Parsing events from JSON...");
 
         try {
@@ -180,9 +178,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         } catch (IOException ex) {
             return;
         }
-
-        System.out.println(event.getData());
-        System.out.println(data.toString());
 
         for (String filename : data.keySet()) {
 
