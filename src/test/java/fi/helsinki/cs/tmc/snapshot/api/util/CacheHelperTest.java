@@ -14,5 +14,4 @@ public class CacheHelperTest {
         assertEquals("username", cacheHelper.cacheUsername("hy", 1L, "username"));
         assertEquals("anotherUser", cacheHelper.cacheUsername("hy", 1L, "anotherUser"));
     }
-
 }
