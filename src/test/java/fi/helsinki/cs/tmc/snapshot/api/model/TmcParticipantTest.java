@@ -30,4 +30,22 @@ public final class TmcParticipantTest {
 
         assertEquals("user123", participant.getUsername());
     }
+
+    @Test
+    public void canSortUsersWithId() {
+
+        assertEquals(-1, participant.compareTo(null));
+
+        participant.setId(10L);
+        final TmcParticipant participant2 = new TmcParticipant();
+        assertEquals(-1, participant.compareTo(participant2));
+
+        participant2.setId(10L);
+        assertEquals(0, participant.compareTo(participant2));
+
+        participant2.setId(0L);
+        assertEquals(1, participant.compareTo(participant2));
+        assertEquals(-1, participant2.compareTo(participant));
+        assertEquals(-1, participant.compareTo(null));
+    }
 }
