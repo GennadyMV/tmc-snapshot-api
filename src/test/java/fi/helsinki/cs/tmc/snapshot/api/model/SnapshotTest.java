@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public final class SnapshotTest {
 
@@ -77,5 +78,15 @@ public final class SnapshotTest {
 
         assertEquals("before", snapshots.get(0).getCourse());
         assertEquals("after", snapshots.get(1).getCourse());
+    }
+
+    @Test
+    public void isFromCompleteSnapshotReturnCorrectStatus() {
+
+        final Snapshot s1 = new Snapshot(1L, "11", "11", new HashMap<String, SnapshotFile>(), false);
+        final Snapshot s2 = new Snapshot(1L, "22", "22", new HashMap<String, SnapshotFile>(), true);
+
+        assertFalse(s1.isFromCompleteSnapshot());
+        assertTrue(s2.isFromCompleteSnapshot());
     }
 }

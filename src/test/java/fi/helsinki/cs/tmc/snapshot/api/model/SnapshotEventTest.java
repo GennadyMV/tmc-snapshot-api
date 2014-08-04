@@ -26,6 +26,14 @@ public final class SnapshotEventTest {
     }
 
     @Test
+    public void canSetCourseName() {
+
+        event.setCourseName("courseName");
+
+        assertEquals("courseName", event.getCourseName());
+    }
+
+    @Test
     public void canSetData() {
 
         event.setData("datadata");
