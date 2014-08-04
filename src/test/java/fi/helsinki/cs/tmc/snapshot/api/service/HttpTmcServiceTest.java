@@ -87,7 +87,7 @@ public final class HttpTmcServiceTest {
 
     @Test
     public void shouldCacheAllParticipantsRetrievedFromFindAll() throws IOException {
-        
+
         when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
         when(tmcService.findAll("")).thenCallRealMethod();
 

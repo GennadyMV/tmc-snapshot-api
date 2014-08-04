@@ -89,12 +89,8 @@ public final class SpywareSnapshotServiceTest {
     public void closesInputStream() throws IOException {
 
         final FileInputStream indexInputStream = new FileInputStream(new File("test-data/test.idx"));
-        try {
-            when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
-            injectedSpywareSnapshotService.findAll("hy", "karpo");
-        } catch (IOException ex) {
-            // Do nothing
-        }
+        when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
+        injectedSpywareSnapshotService.findAll("hy", "karpo");
 
         indexInputStream.available();
     }
