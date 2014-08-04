@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,12 +22,16 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.mock.http.client.MockClientHttpRequest;
 import org.springframework.mock.http.client.MockClientHttpResponse;
 
 import static org.junit.Assert.*;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -55,6 +60,19 @@ public final class HttpSpywareServiceTest {
 
         when(requestBuilder.build()).thenReturn(request);
         when(request.execute()).thenReturn(response);
+    }
+
+    private ClientHttpResponse prepareMockResponse(final HttpStatus status) throws IOException {
+
+        final InputStream body = new ByteArrayInputStream("asd".getBytes());
+        final ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
+
+        when(requestBuilder.build()).thenReturn(request);
+        when(request.execute()).thenReturn(mockResponse);
+        when(mockResponse.getBody()).thenReturn(body);
+        when(mockResponse.getStatusCode()).thenReturn(status);
+
+        return mockResponse;
     }
 
     @Test(expected = NotFoundException.class)
@@ -114,5 +132,89 @@ public final class HttpSpywareServiceTest {
 
         assertNotNull(data);
         assertEquals(4, byteData.length);
+    }
+
+    @Test
+    public void shouldSetCorrectRangeHeader() throws IOException {
+
+        final String event = "0     12";
+        final byte[] content = { (byte) 0x11 };
+
+        prepareRequestResponse(content, HttpStatus.OK);
+        spywareService.fetchData(event, "foo", "bar");
+
+        assertEquals("bytes=0-12", request.getHeaders().get("Range").get(0));
+    }
+
+    @Test
+    public void findWithRangeShouldCloseResponseBodyStreamAfterSuccess() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.OK);
+        spywareService.fetchData("1 2", "foo", "bar");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void findWithRangeShouldCloseResponseBodyStreamAfterNotFound() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
+        spywareService.fetchData("1 2", "foo", "bar");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = IOException.class)
+    public void findWithRangeShouldCloseResponseBodyStreamAfterServerError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+        spywareService.fetchData("1 2", "foo", "bar");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = IOException.class)
+    public void findWithRangeShouldCloseResponseBodyStreamAfterClientError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
+        spywareService.fetchData("1 2", "foo", "bar");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void fetchIndexShouldCloseResponseBodyStreamAfterNotFound() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
+        spywareService.fetchIndex("inst", "user");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = IOException.class)
+    public void fetchIndexShouldCloseResponseBodyStreamAfterServerError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+        spywareService.fetchIndex("inst", "user");
+
+        verify(mockResponse).close();
+    }
+
+    @Test(expected = IOException.class)
+    public void fetchIndexShouldCloseResponseBodyStreamAfterClientError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
+        spywareService.fetchIndex("inst", "user");
+
+        verify(mockResponse).close();
+    }
+
+    @Test
+    public void fetchIndexShouldNotCloseResponseBodyStreamAfterSuccess() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.OK);
+        spywareService.fetchIndex("inst", "user");
+
+        verify(mockResponse, times(0)).close();
     }
 }
