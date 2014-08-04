@@ -86,6 +86,33 @@ public final class SpywareSnapshotServiceTest {
     }
 
     @Test
+    public void shouldNotFailForCorruptedJsonData() throws Exception {
+
+        final File indexFile = new File("test-data/error.idx");
+        final FileInputStream indexInputStream = new FileInputStream(indexFile);
+
+        final File dataFile = new File("test-data/error.dat");
+
+        final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
+
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
+        Whitebox.setInternalState(patchService, new ObjectMapper());
+        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
+
+        when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
+        when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
+                            .thenReturn(Arrays.copyOfRange(bytes, 0, 11741));
+
+        when(patchService.patch(any(List.class))).thenCallRealMethod();
+
+        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
+
+        assertNotNull(snapshots);
+
+        assertEquals(0, snapshots.size());
+    }
+
+    @Test
     public void shouldFindSnapshotWithCorrectId() throws IOException {
 
         final List<Snapshot> snapshots = new ArrayList<>();
