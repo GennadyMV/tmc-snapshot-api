@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import static org.junit.Assert.*;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import static org.powermock.api.mockito.PowerMockito.mock;
@@ -38,6 +40,8 @@ public final class HttpTmcServiceTest {
     @Mock
     private HttpTmcService tmcService;
 
+    private CacheHelper cacheHelper;
+
     @Before
     public void setUp() {
 
@@ -47,7 +51,9 @@ public final class HttpTmcServiceTest {
 
         MockitoAnnotations.initMocks(this);
 
-        Whitebox.setInternalState(tmcService, new CacheHelper());
+        this.cacheHelper = mock(CacheHelper.class);
+
+        Whitebox.setInternalState(tmcService, this.cacheHelper);
     }
 
     @Test
@@ -77,6 +83,20 @@ public final class HttpTmcServiceTest {
         assertEquals("am", participants.get(1).getUsername());
         assertEquals(1948, (long) participants.get(2).getId());
         assertEquals("who", participants.get(2).getUsername());
+    }
+
+    @Test
+    public void shouldCacheAllParticipantsRetrievedFromFindAll() throws IOException {
+        
+        when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
+        when(tmcService.findAll("")).thenCallRealMethod();
+
+        final List<TmcParticipant> participants = tmcService.findAll("");
+
+        verify(cacheHelper, times(1)).cacheUsername("", 343L, "i");
+        verify(cacheHelper, times(1)).cacheUsername("", 726L, "am");
+        verify(cacheHelper, times(1)).cacheUsername("", 1948L, "who");
+        verifyNoMoreInteractions(cacheHelper);
     }
 
     @Test
