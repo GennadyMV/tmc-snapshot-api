@@ -98,8 +98,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
-        LOG.info("Parsing events from JSON...");
-
         try {
             final List<SnapshotEvent> eventsList = new ArrayList<>();
             final SnapshotEvent[] events = mapper.readValue(eventsJson, SnapshotEvent[].class);
@@ -110,8 +108,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
                     eventsList.add(event);
                 }
             }
-
-            LOG.info("Done parsing events.");
 
             return eventsList;
 
