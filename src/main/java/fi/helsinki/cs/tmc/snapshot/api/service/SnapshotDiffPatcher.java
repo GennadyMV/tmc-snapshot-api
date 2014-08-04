@@ -45,19 +45,19 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     @Override
     public List<Snapshot> patch(final List<byte[]> content) throws IOException {
 
-        //Reset file cache
+        // Reset file cache
         fileCache = new TreeMap<>();
 
-        //Read events from bytes
+        // Read events from bytes
         final Collection<SnapshotEvent> events = readEvents(content);
 
-        //Build files from patches
+        // Build files from patches
         processEvents(events);
 
-        //Transform to snapshots
+        // Transform to snapshots
         final List<Snapshot> snapshots = asSnapshotList(events);
 
-        //Build file continuums for exercises
+        // Build file continuums for exercises
         buildExerciseContinuum(snapshots);
 
         return snapshots;
@@ -89,6 +89,8 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
+        System.out.println(eventsJson);
+
         LOG.info("Parsing events from JSON...");
 
         try {
@@ -117,6 +119,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     }
 
     private void processEvents(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
+
         LOG.info("Processing {} events", events.size());
 
         for (SnapshotEvent event : events) {
@@ -168,14 +171,21 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     }
 
     private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
+
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         final Map<String, byte[]> data;
+
         try {
             data = Zip.decompress(decodedData);
         } catch (IOException ex) {
             return;
         }
+
+        System.out.println(event.getData());
+        System.out.println(data.toString());
+
         for (String filename : data.keySet()) {
+
             final String fileKey = filename.replaceAll(event.getExerciseName(), "");
             final String fileContent = new String(data.get(filename), "UTF-8");
 
@@ -189,18 +199,21 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     private void processMetadata(final SnapshotEvent event) {
 
         final ObjectMapper mapper = new ObjectMapper();
-
         final Metadata metadata;
+
         try {
             metadata = mapper.readValue(event.getMetadata(), Metadata.class);
         } catch (IOException ex) {
             LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), ex.getMessage());
             return;
         }
+
         if (metadata == null) {
             return;
         }
+
         final String file = metadata.getFile();
+
         if (metadata.getCause().equals("file_delete")) {
             fileCache.remove(file);
         }
@@ -214,7 +227,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
         for (SnapshotEvent event : events) {
 
-            //Only process complete snapshots of type file_delete
+            // Only process complete snapshots of type file_delete
             if (event.getEventType().equals("code_snapshot")) {
                 if (!event.getMetadata().contains("file_delete")) {
 
@@ -247,8 +260,8 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
             final String key = current.getCourse() + "-" + current.getExercise();
 
-            //Complete snapshots are already complete, no need to parse previous.
-            //Also skip if current snapshot is the first from this exercise.
+            // Complete snapshots are already complete, no need to parse previous.
+            // Also skip if current snapshot is the first from this exercise.
             if (!current.isFromCompleteSnapshot() && cache.containsKey(key)) {
                 final Snapshot previous = cache.get(key);
 
