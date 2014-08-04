@@ -132,5 +132,6 @@ public final class HttpTmcServiceTest {
         when(restTemplate.getForObject(any(URI.class), eq(String.class))).thenReturn("json");
 
         assertEquals("json", tmcService.fetchJson("test"));
+        verify(requestBuilder).setPath("/participants.json");
     }
 }

@@ -89,6 +89,7 @@ public final class SpywareSnapshotServiceTest {
     public void closesInputStream() throws IOException {
 
         final FileInputStream indexInputStream = new FileInputStream(new File("test-data/test.idx"));
+
         when(spywareService.fetchIndex("mooc", "coom")).thenReturn(indexInputStream);
         injectedSpywareSnapshotService.findAll("mooc", "coom");
 
@@ -118,7 +119,6 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
 
         assertNotNull(snapshots);
-
         assertEquals(0, snapshots.size());
     }
 
