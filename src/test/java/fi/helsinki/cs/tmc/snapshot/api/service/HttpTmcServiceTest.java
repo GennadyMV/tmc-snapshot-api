@@ -1,15 +1,18 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.util.CacheHelper;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -20,9 +23,12 @@ import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.web.client.RestTemplate;
+
 import static org.junit.Assert.*;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -32,12 +38,21 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpTmcService.class, LoggerFactory.class })
+@PrepareForTest({ HttpRequestBuilder.class, HttpTmcService.class, LoggerFactory.class })
 public final class HttpTmcServiceTest {
 
     private Logger logger;
 
     @Mock
+    private HttpTmcService mockTmcService;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private HttpRequestBuilder requestBuilder;
+
+    @InjectMocks
     private HttpTmcService tmcService;
 
     private CacheHelper cacheHelper;
@@ -53,28 +68,28 @@ public final class HttpTmcServiceTest {
 
         this.cacheHelper = mock(CacheHelper.class);
 
-        Whitebox.setInternalState(tmcService, this.cacheHelper);
+        Whitebox.setInternalState(mockTmcService, this.cacheHelper);
     }
 
     @Test
     public void shouldFindUsernameWithValidUserId() throws IOException {
 
-        when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
-        when(tmcService.findUsernameById("", 42)).thenCallRealMethod();
+        when(mockTmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
+        when(mockTmcService.findUsernameById("", 42)).thenCallRealMethod();
 
-        final String username = tmcService.findUsernameById("", 42);
+        final String username = mockTmcService.findUsernameById("", 42);
 
-        verify(tmcService).fetchJson("");
+        verify(mockTmcService).fetchJson("");
         assertEquals("admin", username);
     }
 
     @Test
     public void shouldFindAllTmcParticipants() throws IOException {
 
-        when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
-        when(tmcService.findAll("")).thenCallRealMethod();
+        when(mockTmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
+        when(mockTmcService.findAll("")).thenCallRealMethod();
 
-        final List<TmcParticipant> participants = tmcService.findAll("");
+        final List<TmcParticipant> participants = mockTmcService.findAll("");
 
         assertEquals(3, participants.size());
         assertEquals(343, (long) participants.get(0).getId());
@@ -88,10 +103,10 @@ public final class HttpTmcServiceTest {
     @Test
     public void shouldCacheAllParticipantsRetrievedFromFindAll() throws IOException {
 
-        when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
-        when(tmcService.findAll("")).thenCallRealMethod();
+        when(mockTmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":1948,\"username\":\"who\",\"email\":\"anonymous@cs.com\"},{\"id\":726,\"username\":\"am\",\"email\":\"anonymous@cs.com\"},{\"id\":343,\"username\":\"i\",\"email\":\"anonymous@cs.com\"}]}");
+        when(mockTmcService.findAll("")).thenCallRealMethod();
 
-        final List<TmcParticipant> participants = tmcService.findAll("");
+        mockTmcService.findAll("");
 
         verify(cacheHelper, times(1)).cacheUsername("", 343L, "i");
         verify(cacheHelper, times(1)).cacheUsername("", 726L, "am");
@@ -102,12 +117,20 @@ public final class HttpTmcServiceTest {
     @Test
     public void shouldReturnNullOnNonExistantUserId() throws IOException {
 
-        when(tmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
-        when(tmcService.findUsernameById("", 404)).thenCallRealMethod();
+        when(mockTmcService.fetchJson("")).thenReturn("{\"api_version\":7,\"participants\":[{\"id\":42,\"username\":\"admin\",\"email\":\"jannebackman@live.fi\"}]}");
+        when(mockTmcService.findUsernameById("", 404)).thenCallRealMethod();
 
-        final String username = tmcService.findUsernameById("", 404);
+        final String username = mockTmcService.findUsernameById("", 404);
 
-        verify(tmcService).fetchJson("");
+        verify(mockTmcService).fetchJson("");
         assertNull(username);
+    }
+
+    @Test
+    public void shouldFetchParticipantsJson() throws IOException {
+
+        when(restTemplate.getForObject(any(URI.class), eq(String.class))).thenReturn("json");
+
+        assertEquals("json", tmcService.fetchJson("test"));
     }
 }
