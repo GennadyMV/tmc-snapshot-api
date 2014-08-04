@@ -10,6 +10,8 @@ import java.util.zip.ZipInputStream;
 
 public final class Zip {
 
+    private Zip() {}
+
     public static Map<String, byte[]> decompress(final byte[] content) throws IOException {
 
         final Map<String, byte[]> entries = new TreeMap<>();

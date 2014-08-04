@@ -9,6 +9,8 @@ import org.apache.commons.io.IOUtils;
 
 public final class GZip {
 
+    private GZip() {}
+
     public static byte[] decompress(final byte[] content) throws IOException {
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
