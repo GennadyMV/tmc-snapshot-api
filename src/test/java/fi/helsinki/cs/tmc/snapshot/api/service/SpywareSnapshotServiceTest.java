@@ -85,6 +85,20 @@ public final class SpywareSnapshotServiceTest {
         assertEquals(20, snapshots.size());
     }
 
+    @Test(expected = IOException.class)
+    public void closesInputStream() throws IOException {
+
+        final FileInputStream indexInputStream = new FileInputStream(new File("test-data/test.idx"));
+        try {
+            when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
+            injectedSpywareSnapshotService.findAll("hy", "karpo");
+        } catch (IOException ex) {
+            // Do nothing
+        }
+
+        indexInputStream.available();
+    }
+
     @Test
     public void shouldNotFailForCorruptedJsonData() throws Exception {
 
