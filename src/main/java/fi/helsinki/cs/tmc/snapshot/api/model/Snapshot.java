@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
@@ -89,6 +90,7 @@ public final class Snapshot implements Comparable<Snapshot> {
         files.put(file.getPath(), file);
     }
 
+    @JsonIgnore
     public boolean isFromCompleteSnapshot() {
 
         return fromCompleteSnapshot;
