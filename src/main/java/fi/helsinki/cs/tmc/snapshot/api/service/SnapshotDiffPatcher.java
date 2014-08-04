@@ -196,7 +196,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
         try {
             metadata = mapper.readValue(event.getMetadata(), Metadata.class);
-        } catch (IOException ex) {
+        } catch (IOException | NullPointerException ex) {
             LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), ex.getMessage());
             return;
         }
@@ -222,7 +222,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
             // Only process complete snapshots of type file_delete
             if (event.getEventType().equals("code_snapshot")) {
-                if (!event.getMetadata().contains("file_delete")) {
+                if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
 
                     continue;
                 }

@@ -123,6 +123,32 @@ public final class SpywareSnapshotServiceTest {
     }
 
     @Test
+    public void shouldNotFailForCorruptedData() throws Exception {
+
+        final File indexFile = new File("test-data/content-error.idx");
+        final FileInputStream indexInputStream = new FileInputStream(indexFile);
+
+        final File dataFile = new File("test-data/content-error.dat");
+
+        final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
+
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
+        Whitebox.setInternalState(patchService, new ObjectMapper());
+        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
+
+        when(spywareService.fetchIndex("mooc", "pekka")).thenReturn(indexInputStream);
+        when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
+                            .thenReturn(Arrays.copyOfRange(bytes, 0, 704));
+
+        when(patchService.patch(any(List.class))).thenCallRealMethod();
+
+        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("mooc", "pekka");
+
+        assertNotNull(snapshots);
+        assertEquals(2, snapshots.size());
+    }
+
+    @Test
     public void shouldFindSnapshotWithCorrectId() throws IOException {
 
         final List<Snapshot> snapshots = new ArrayList<>();
