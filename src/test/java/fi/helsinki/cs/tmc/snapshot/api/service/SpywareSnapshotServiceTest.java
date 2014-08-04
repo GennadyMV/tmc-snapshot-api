@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.DiffMatchPatch;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
@@ -64,6 +66,7 @@ public final class SpywareSnapshotServiceTest {
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
         Whitebox.setInternalState(patchService, new DiffMatchPatch());
+        Whitebox.setInternalState(patchService, new ObjectMapper());
         Whitebox.setInternalState(patchService, new TreeMap<String, String>());
 
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);

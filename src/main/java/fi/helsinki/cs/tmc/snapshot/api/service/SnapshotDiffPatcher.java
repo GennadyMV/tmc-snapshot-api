@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.codec.binary.Base64;
 
 import org.slf4j.Logger;
@@ -40,7 +42,14 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     private static final Logger LOG = LoggerFactory.getLogger(SnapshotDiffPatcher.class);
 
     private final DiffMatchPatch patcher = new DiffMatchPatch();
+    private final ObjectMapper mapper = new ObjectMapper();
     private Map<String, String> fileCache;
+
+    @PostConstruct
+    public void initialise() {
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
 
     @Override
     public List<Snapshot> patch(final List<byte[]> content) throws IOException {
@@ -89,15 +98,8 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
-        LOG.info("Parsing events from JSON...");
-
         try {
-
             final List<SnapshotEvent> eventsList = new ArrayList<>();
-
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
             final SnapshotEvent[] events = mapper.readValue(eventsJson, SnapshotEvent[].class);
 
             for (SnapshotEvent event : events) {
@@ -132,7 +134,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
 
-        final ObjectMapper mapper = new ObjectMapper();
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         SnapshotEventInformation information;
 
@@ -187,8 +188,6 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
     }
 
     private void processMetadata(final SnapshotEvent event) {
-
-        final ObjectMapper mapper = new ObjectMapper();
 
         final Metadata metadata;
         try {
