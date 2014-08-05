@@ -46,6 +46,6 @@ public final class Exercise {
 
         final Exercise other = (Exercise) object;
 
-        return name.equals(other.getName());
+        return id.equals(other.getId());
     }
 }

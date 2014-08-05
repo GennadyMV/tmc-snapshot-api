@@ -46,6 +46,6 @@ public final class Course {
 
         final Course other = (Course) object;
 
-        return name.equals(other.getName());
+        return id.equals(other.getId());
     }
 }
