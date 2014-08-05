@@ -20,7 +20,10 @@ public final class Snapshot implements Comparable<Snapshot> {
     private final boolean fromCompleteSnapshot;
 
     @JsonCreator
-    public Snapshot(@JsonProperty("id") final Long id, @JsonProperty("course") final String course, @JsonProperty("exercise") final String exercise, @JsonProperty("files") final List<SnapshotFile> files) {
+    public Snapshot(@JsonProperty("id") final Long id,
+                    @JsonProperty("course") final String course,
+                    @JsonProperty("exercise") final String exercise,
+                    @JsonProperty("files") final List<SnapshotFile> files) {
 
         this.id = id;
         this.course = course;
@@ -35,12 +38,19 @@ public final class Snapshot implements Comparable<Snapshot> {
         }
     }
 
-    public Snapshot(final Long id, final String course, final String exercise, final Map<String, SnapshotFile> files) {
+    public Snapshot(final Long id,
+                    final String course,
+                    final String exercise,
+                    final Map<String, SnapshotFile> files) {
 
         this(id, course, exercise, files, false);
     }
 
-    public Snapshot(final Long id, final String course, final String exercise, final Map<String, SnapshotFile> files, final boolean fromCompleteSnapshot) {
+    public Snapshot(final Long id,
+                    final String course,
+                    final String exercise,
+                    final Map<String, SnapshotFile> files,
+                    final boolean fromCompleteSnapshot) {
 
         this.id = id;
         this.course = course;
@@ -82,6 +92,7 @@ public final class Snapshot implements Comparable<Snapshot> {
 
     @Override
     public int compareTo(final Snapshot other) {
+
         return this.timestamp.compareTo(other.timestamp);
     }
 

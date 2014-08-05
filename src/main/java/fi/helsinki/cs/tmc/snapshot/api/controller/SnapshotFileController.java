@@ -28,8 +28,8 @@ public final class SnapshotFileController {
 
     @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
     public Collection<SnapshotFile> list(@PathVariable final String instance,
-                                   @PathVariable final Long participant,
-                                   @PathVariable final Long snapshot) throws IOException {
+                                         @PathVariable final Long participant,
+                                         @PathVariable final Long snapshot) throws IOException {
 
         final String username = tmcService.findUsernameById(instance, participant);
 

@@ -8,7 +8,9 @@ public class MetadataTest {
 
     @Test
     public void constructorSetsValuesCorrectly() {
+
         final Metadata metadata = new Metadata("myCause", "myFile");
+
         assertEquals("myCause", metadata.getCause());
         assertEquals("myFile", metadata.getFile());
     }
