@@ -66,9 +66,9 @@ public final class HttpTmcServiceTest {
 
         MockitoAnnotations.initMocks(this);
 
-        this.cacheHelper = mock(CacheHelper.class);
+        cacheHelper = mock(CacheHelper.class);
 
-        Whitebox.setInternalState(mockTmcService, this.cacheHelper);
+        Whitebox.setInternalState(mockTmcService, cacheHelper);
     }
 
     @Test

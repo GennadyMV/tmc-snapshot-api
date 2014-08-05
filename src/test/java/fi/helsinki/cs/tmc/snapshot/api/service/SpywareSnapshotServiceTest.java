@@ -64,8 +64,6 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-
-
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 11683))
@@ -78,7 +76,7 @@ public final class SpywareSnapshotServiceTest {
 
         assertNotNull(snapshots);
 
-        //64 total, 44 of which are folder_create, file_change or file_create -> 20
+        // 64 total, 44 of which are folder_create, file_change or file_create -> 20
         assertEquals(20, snapshots.size());
     }
 
@@ -143,7 +141,6 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-
             snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
@@ -162,7 +159,6 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-
             snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 

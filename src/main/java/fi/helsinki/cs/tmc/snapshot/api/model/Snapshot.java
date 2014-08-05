@@ -17,6 +17,8 @@ public final class Snapshot implements Comparable<Snapshot> {
     private final String exercise;
     private final Map<String, SnapshotFile> files;
     private final Date timestamp;
+
+    @JsonIgnore
     private final boolean fromCompleteSnapshot;
 
     @JsonCreator
@@ -75,9 +77,9 @@ public final class Snapshot implements Comparable<Snapshot> {
         return exercise;
     }
 
-    public Collection<SnapshotFile> getFiles() {
+    public void addFile(final SnapshotFile file) {
 
-        return files.values();
+        files.put(file.getPath(), file);
     }
 
     public SnapshotFile getFile(final String path) {
@@ -85,25 +87,24 @@ public final class Snapshot implements Comparable<Snapshot> {
         return files.get(path);
     }
 
+    public Collection<SnapshotFile> getFiles() {
+
+        return files.values();
+    }
+
     public Date getTimestamp() {
 
         return timestamp;
+    }
+
+    public boolean isFromCompleteSnapshot() {
+
+        return fromCompleteSnapshot;
     }
 
     @Override
     public int compareTo(final Snapshot other) {
 
         return this.timestamp.compareTo(other.timestamp);
-    }
-
-    public void addFile(final SnapshotFile file) {
-
-        files.put(file.getPath(), file);
-    }
-
-    @JsonIgnore
-    public boolean isFromCompleteSnapshot() {
-
-        return fromCompleteSnapshot;
     }
 }
