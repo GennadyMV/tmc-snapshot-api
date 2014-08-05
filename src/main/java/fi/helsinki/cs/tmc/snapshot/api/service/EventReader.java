@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventReader {
+public final class EventReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventReader.class);
 
@@ -32,30 +32,6 @@ public class EventReader {
     private void initialise() {
 
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
-    public Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
-
-        LOG.info("Building events from {} chunks of raw data", data.size());
-
-        final Set<SnapshotEvent> events = new TreeSet<>();
-
-        for (byte[] compressed : data) {
-
-            // Decompress .dat content
-            final byte[] decompressed = GZip.decompress(compressed);
-
-            // Generate events from decompressed string data
-            final Collection<SnapshotEvent> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
-
-            if (generatedEvents != null) {
-                events.addAll(generatedEvents);
-            }
-        }
-
-        LOG.info("Done building events.");
-
-        return events;
     }
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
@@ -78,4 +54,27 @@ public class EventReader {
         }
     }
 
+    public Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
+
+        LOG.info("Building events from {} chunks of raw data...", data.size());
+
+        final Set<SnapshotEvent> events = new TreeSet<>();
+
+        for (byte[] compressed : data) {
+
+            // Decompress .dat content
+            final byte[] decompressed = GZip.decompress(compressed);
+
+            // Generate events from decompressed string data
+            final Collection<SnapshotEvent> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
+
+            if (generatedEvents != null) {
+                events.addAll(generatedEvents);
+            }
+        }
+
+        LOG.info("Done building events.");
+
+        return events;
+    }
 }

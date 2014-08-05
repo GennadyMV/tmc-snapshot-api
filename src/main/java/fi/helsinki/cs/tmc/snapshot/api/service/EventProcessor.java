@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventProcessor {
+public final class EventProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
 
@@ -33,21 +33,55 @@ public class EventProcessor {
     private final ObjectMapper mapper = new ObjectMapper();
     private final DiffMatchPatch patcher = new DiffMatchPatch();
 
-    public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
+    private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
 
-        LOG.info("Processing {} events", events.size());
+        final byte[] decodedData = Base64.decodeBase64(event.getData());
+        final Map<String, byte[]> data;
 
-        fileCache = new HashMap<>();
-
-        for (SnapshotEvent event : events) {
-            if (event.getEventType().equals("code_snapshot")) {
-                processCompleteSnapshot(event);
-            } else {
-                patchFile(event);
-            }
+        try {
+            data = Zip.decompress(decodedData);
+        } catch (IOException ex) {
+            return;
         }
 
-        LOG.info("Events processed.");
+        for (String filename : data.keySet()) {
+
+            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
+            final String fileContent = new String(data.get(filename), "UTF-8");
+
+            if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
+                fileCache.put(fileKey, fileContent);
+                event.getFiles().put(fileKey, fileContent);
+            }
+        }
+    }
+
+    private void processMetadata(final SnapshotEvent event) {
+
+        final Metadata metadata;
+
+        try {
+            metadata = mapper.readValue(event.getMetadata(), Metadata.class);
+        } catch (IOException | NullPointerException exception) {
+            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), exception.getMessage());
+            return;
+        }
+
+        if (metadata == null) {
+            return;
+        }
+
+        final String file = metadata.getFile();
+
+        if (metadata.getCause().equals("file_delete")) {
+            fileCache.remove(file);
+        }
+    }
+
+    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
+
+        processData(event);
+        processMetadata(event);
     }
 
     private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
@@ -80,54 +114,20 @@ public class EventProcessor {
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
-    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
+    public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
 
-        processData(event);
-        processMetadata(event);
-    }
+        LOG.info("Processing {} events...", events.size());
 
-    private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
+        fileCache = new HashMap<>();
 
-        final byte[] decodedData = Base64.decodeBase64(event.getData());
-        final Map<String, byte[]> data;
-
-        try {
-            data = Zip.decompress(decodedData);
-        } catch (IOException ex) {
-            return;
-        }
-
-        for (String filename : data.keySet()) {
-
-            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
-            final String fileContent = new String(data.get(filename), "UTF-8");
-
-            if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
-                fileCache.put(fileKey, fileContent);
-                event.getFiles().put(fileKey, fileContent);
+        for (SnapshotEvent event : events) {
+            if (event.getEventType().equals("code_snapshot")) {
+                processCompleteSnapshot(event);
+            } else {
+                patchFile(event);
             }
         }
-    }
 
-    private void processMetadata(final SnapshotEvent event) {
-
-        final Metadata metadata;
-
-        try {
-            metadata = mapper.readValue(event.getMetadata(), Metadata.class);
-        } catch (IOException | NullPointerException ex) {
-            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), ex.getMessage());
-            return;
-        }
-
-        if (metadata == null) {
-            return;
-        }
-
-        final String file = metadata.getFile();
-
-        if (metadata.getCause().equals("file_delete")) {
-            fileCache.remove(file);
-        }
+        LOG.info("Events processed.");
     }
 }

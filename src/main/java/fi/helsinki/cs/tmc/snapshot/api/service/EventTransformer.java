@@ -16,21 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventTransformer {
+public final class EventTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventTransformer.class);
 
-    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
-
-        final List<Snapshot> snapshots = toFileSnapshots(events);
-        toExerciseSnapshots(snapshots);
-
-        return snapshots;
-    }
-
     private List<Snapshot> toFileSnapshots(final Collection<SnapshotEvent> events) {
 
-        LOG.info("Converting events to snapshots.");
+        LOG.info("Converting events to snapshots...");
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
@@ -39,7 +31,6 @@ public class EventTransformer {
             // Only process complete snapshots of type file_delete
             if (event.getEventType().equals("code_snapshot")) {
                 if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
-
                     continue;
                 }
             }
@@ -88,5 +79,13 @@ public class EventTransformer {
         }
 
         LOG.info("Done building exercise continuums.");
+    }
+
+    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
+
+        final List<Snapshot> snapshots = toFileSnapshots(events);
+        toExerciseSnapshots(snapshots);
+
+        return snapshots;
     }
 }
