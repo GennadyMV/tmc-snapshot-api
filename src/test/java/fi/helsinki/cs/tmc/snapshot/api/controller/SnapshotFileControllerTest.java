@@ -3,6 +3,8 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
+import fi.helsinki.cs.tmc.snapshot.api.model.Course;
+import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
@@ -70,8 +72,10 @@ public final class SnapshotFileControllerTest {
         final ObjectMapper mapper = new ObjectMapper();
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-
-        final Snapshot snapshotData = new Snapshot(1L, "course", "exercise", Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L,
+                                                   new Course(1L, "course"),
+                                                   new Exercise(1L, "exercise"),
+                                                   Arrays.asList(file));
 
         when(tmcService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
         when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
@@ -89,8 +93,10 @@ public final class SnapshotFileControllerTest {
     public void shouldReturnSnapshotFile() throws Exception {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-
-        final Snapshot snapshotData = new Snapshot(1L, "course", "exercise", Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L,
+                                                   new Course(1L, "course"),
+                                                   new Exercise(1L, "exercise"),
+                                                   Arrays.asList(file));
 
         when(tmcService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
         when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
@@ -122,7 +128,10 @@ public final class SnapshotFileControllerTest {
     public void shouldReturn404OnNonExistantSnapshotFile() throws Exception {
 
         when(tmcService.findUsernameById(HY_INSTANCE, 1)).thenReturn("jack");
-        when(snapshotService.find(HY_INSTANCE, "jack", 1L)).thenReturn(new Snapshot(1L, "course", "exercise", new ArrayList<SnapshotFile>()));
+        when(snapshotService.find(HY_INSTANCE, "jack", 1L)).thenReturn(new Snapshot(1L,
+                                                                                    new Course(1L, "course"),
+                                                                                    new Exercise(1L, "exercise"),
+                                                                                    new ArrayList<SnapshotFile>()));
 
         mockMvc.perform(get("/hy/participants/1/snapshots/1/files/src/404.java")).andExpect(status().is(404));
     }

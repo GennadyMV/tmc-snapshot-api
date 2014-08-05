@@ -3,6 +3,8 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
+import fi.helsinki.cs.tmc.snapshot.api.model.Course;
+import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
@@ -70,7 +72,6 @@ public final class ParticipantControllerTest {
     public void shouldReturnParticipants() throws Exception {
 
         final ObjectMapper mapper = new ObjectMapper();
-
         final List<TmcParticipant> tmcParticipants = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
@@ -97,11 +98,13 @@ public final class ParticipantControllerTest {
     public void shouldReturnParticipant() throws Exception {
 
         final ObjectMapper mapper = new ObjectMapper();
-
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i,
+                                       new Course(1L, "course"),
+                                       new Exercise(1L, "exercise"),
+                                       new ArrayList<SnapshotFile>()));
         }
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("hiphei");

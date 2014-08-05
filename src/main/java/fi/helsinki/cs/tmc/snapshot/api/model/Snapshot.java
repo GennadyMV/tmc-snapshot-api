@@ -13,8 +13,8 @@ import java.util.Map;
 public final class Snapshot implements Comparable<Snapshot> {
 
     private final Long id;
-    private final String course;
-    private final String exercise;
+    private final Course course;
+    private final Exercise exercise;
     private final Map<String, SnapshotFile> files;
     private final Date timestamp;
 
@@ -23,8 +23,8 @@ public final class Snapshot implements Comparable<Snapshot> {
 
     @JsonCreator
     public Snapshot(@JsonProperty("id") final Long id,
-                    @JsonProperty("course") final String course,
-                    @JsonProperty("exercise") final String exercise,
+                    @JsonProperty("course") final Course course,
+                    @JsonProperty("exercise") final Exercise exercise,
                     @JsonProperty("files") final List<SnapshotFile> files) {
 
         this.id = id;
@@ -41,16 +41,16 @@ public final class Snapshot implements Comparable<Snapshot> {
     }
 
     public Snapshot(final Long id,
-                    final String course,
-                    final String exercise,
+                    final Course course,
+                    final Exercise exercise,
                     final Map<String, SnapshotFile> files) {
 
         this(id, course, exercise, files, false);
     }
 
     public Snapshot(final Long id,
-                    final String course,
-                    final String exercise,
+                    final Course course,
+                    final Exercise exercise,
                     final Map<String, SnapshotFile> files,
                     final boolean fromCompleteSnapshot) {
 
@@ -67,12 +67,12 @@ public final class Snapshot implements Comparable<Snapshot> {
         return id;
     }
 
-    public String getCourse() {
+    public Course getCourse() {
 
         return course;
     }
 
-    public String getExercise() {
+    public Exercise getExercise() {
 
         return exercise;
     }

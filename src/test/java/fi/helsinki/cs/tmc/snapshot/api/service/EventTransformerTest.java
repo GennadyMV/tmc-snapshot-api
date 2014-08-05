@@ -52,8 +52,8 @@ public class EventTransformerTest {
 
         assertEquals(2, snapshots.size());
 
-        assertEquals("exercise1", snapshots.get(0).getExercise());
-        assertEquals("exercise2", snapshots.get(1).getExercise());
+        assertEquals("exercise1", snapshots.get(0).getExercise().getName());
+        assertEquals("exercise2", snapshots.get(1).getExercise().getName());
 
         assertNotNull(snapshots.get(0).getFile("example.java"));
         assertNotNull(snapshots.get(0).getFile("test.java"));

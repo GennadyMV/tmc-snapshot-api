@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.model.Course;
+import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 
@@ -163,7 +165,10 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i,
+                                       new Course(1L, "course"),
+                                       new Exercise(1L, "exercise"),
+                                       new ArrayList<SnapshotFile>()));
         }
 
         when(spywareSnapshotService.findAll("test", "jack")).thenReturn(snapshots);
@@ -181,7 +186,10 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
+            snapshots.add(new Snapshot((long) i,
+                                       new Course(1L, "course"),
+                                       new Exercise(1L, "exercise"),
+                                       new ArrayList<SnapshotFile>()));
         }
 
         when(spywareSnapshotService.findAll("data", "user")).thenReturn(snapshots);

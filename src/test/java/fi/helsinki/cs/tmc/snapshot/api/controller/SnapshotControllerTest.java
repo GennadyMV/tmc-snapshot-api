@@ -3,6 +3,8 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
+import fi.helsinki.cs.tmc.snapshot.api.model.Course;
+import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
@@ -68,11 +70,13 @@ public final class SnapshotControllerTest {
     public void shouldReturnSnapshots() throws Exception {
 
         final ObjectMapper mapper = new ObjectMapper();
-
         final List<Snapshot> snapshotData = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            snapshotData.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
+            snapshotData.add(new Snapshot((long) i,
+                                          new Course(1L, "course"),
+                                          new Exercise(1L, "exercise"),
+                                          new ArrayList<SnapshotFile>()));
         }
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("smith");
@@ -90,10 +94,11 @@ public final class SnapshotControllerTest {
     public void shouldReturnSnapshot() throws Exception {
 
         final ObjectMapper mapper = new ObjectMapper();
-
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-
-        final Snapshot snapshotData = new Snapshot(1L, "course", "exercise", Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L,
+                                                   new Course(1L, "course"),
+                                                   new Exercise(1L, "exercise"),
+                                                   Arrays.asList(file));
 
         when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
         when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
