@@ -138,12 +138,12 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
         try {
             information = mapper.readValue(new String(decodedData, "UTF-8"), SnapshotEventInformation.class);
-        } catch (IOException exception) {
+        } catch (IOException | NullPointerException exception) {
             return;
         }
 
         // No patches to apply
-        if (information.getPatches() == null || information.getPatches().isEmpty()) {
+        if (information == null || information.getPatches() == null || information.getPatches().isEmpty()) {
             return;
         }
 
@@ -221,7 +221,7 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         for (SnapshotEvent event : events) {
 
             // Only process complete snapshots of type file_delete
-            if (event.getEventType().equals("code_snapshot")) {
+            if ("code_snapshot".equals(event.getEventType())) {
                 if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
 
                     continue;
