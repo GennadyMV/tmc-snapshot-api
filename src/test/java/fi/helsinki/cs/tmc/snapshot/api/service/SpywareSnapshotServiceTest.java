@@ -1,9 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.google.DiffMatchPatch;
-
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 
@@ -13,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 
@@ -53,6 +48,10 @@ public final class SpywareSnapshotServiceTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
+
+        Whitebox.setInternalState(patchService, new EventReader());
+        Whitebox.setInternalState(patchService, new EventProcessor());
+        Whitebox.setInternalState(patchService, new EventTransformer());
     }
 
     @Test
@@ -65,9 +64,7 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
-        Whitebox.setInternalState(patchService, new ObjectMapper());
-        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
+
 
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
@@ -106,10 +103,6 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
-        Whitebox.setInternalState(patchService, new ObjectMapper());
-        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
-
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 11741));
@@ -131,10 +124,6 @@ public final class SpywareSnapshotServiceTest {
         final File dataFile = new File("test-data/content-error.dat");
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
-
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
-        Whitebox.setInternalState(patchService, new ObjectMapper());
-        Whitebox.setInternalState(patchService, new TreeMap<String, String>());
 
         when(spywareService.fetchIndex("mooc", "pekka")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
