@@ -6,18 +6,19 @@ import java.util.Map;
 public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
     private String courseName;
-    private String data;
     private String exerciseName;
     private String eventType;
-    private final Map<String, String> files = new HashMap<>();
+    private String data;
     private Long happenedAt;
     private String metadata;
     private Long systemNanotime;
+    private final Map<String, String> files = new HashMap<>();
 
     public boolean isProjectActionEvent() {
 
         return eventType.contains("project_action");
     }
+
 
     public void setCourseName(final String courseName) {
 
@@ -64,14 +65,15 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         this.happenedAt = happenedAt;
     }
 
-    public void setSystemNanotime(final Long systemNanotime) {
-
-        this.systemNanotime = systemNanotime;
-    }
-
     public Long getHappenedAt() {
 
         return happenedAt;
+    }
+
+
+    public void setSystemNanotime(final Long systemNanotime) {
+
+        this.systemNanotime = systemNanotime;
     }
 
     public void setMetadata(final String metadata) {

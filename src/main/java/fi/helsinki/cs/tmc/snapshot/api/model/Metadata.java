@@ -3,7 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Metadata {
+public final class Metadata {
 
     private final String cause;
     private final String file;
