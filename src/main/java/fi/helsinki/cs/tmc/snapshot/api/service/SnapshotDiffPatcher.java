@@ -234,8 +234,8 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
                 files.put(entry.getKey(), new SnapshotFile(entry.getKey(), entry.getValue()));
             }
 
-            final boolean isComplete = event.getEventType().equals("code_snapshot");
-            snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), event.getCourseName(), event.getExerciseName(), files, isComplete));
+            final boolean isComplete = "code_snapshot".equals(event.getEventType());
+            snapshots.add(new Snapshot(event.getHappenedAt(), event.getCourseName(), event.getExerciseName(), files, isComplete));
         }
 
         LOG.info("Done converting events.");

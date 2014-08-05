@@ -10,9 +10,9 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     private String exerciseName;
     private String eventType;
     private final Map<String, String> files = new HashMap<>();
-    private String happenedAt;
+    private Long happenedAt;
     private String metadata;
-    private String systemNanotime;
+    private Long systemNanotime;
 
     public boolean isProjectActionEvent() {
 
@@ -59,17 +59,17 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         return data;
     }
 
-    public void setHappenedAt(final String happenedAt) {
+    public void setHappenedAt(final Long happenedAt) {
 
         this.happenedAt = happenedAt;
     }
 
-    public void setSystemNanotime(final String systemNanotime) {
+    public void setSystemNanotime(final Long systemNanotime) {
 
         this.systemNanotime = systemNanotime;
     }
 
-    public String getHappenedAt() {
+    public Long getHappenedAt() {
 
         return happenedAt;
     }
@@ -93,7 +93,7 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     public int compareTo(final SnapshotEvent event) {
 
         if (!happenedAt.equals(event.happenedAt)) {
-            return new Long(Long.parseLong(getHappenedAt())).compareTo(Long.parseLong(event.getHappenedAt()));
+            return getHappenedAt().compareTo(event.getHappenedAt());
         }
 
         return systemNanotime.compareTo(event.systemNanotime);

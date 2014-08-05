@@ -44,9 +44,9 @@ public final class SnapshotEventTest {
     @Test
     public void canSetHappenedAt() {
 
-        event.setHappenedAt("yesterday");
+        event.setHappenedAt(10L);
 
-        assertEquals("yesterday", event.getHappenedAt());
+        assertEquals(10L, (long) event.getHappenedAt());
     }
 
     @Test
@@ -77,10 +77,10 @@ public final class SnapshotEventTest {
     public void eventWithSmallerHappenedAtIsFirstWhenOrdered() {
 
         final SnapshotEvent e1 = new SnapshotEvent();
-        e1.setHappenedAt("1");
+        e1.setHappenedAt(1L);
 
         final SnapshotEvent e2 = new SnapshotEvent();
-        e2.setHappenedAt("2");
+        e2.setHappenedAt(2L);
 
         assertTrue(e1.compareTo(e2) < 0);
         assertTrue(e2.compareTo(e1) > 0);
@@ -90,12 +90,12 @@ public final class SnapshotEventTest {
     public void eventsWithSameHappenedAtAreOrderedBasedOnNanotime() {
 
         final SnapshotEvent e1 = new SnapshotEvent();
-        e1.setHappenedAt("1");
-        e1.setSystemNanotime("1");
+        e1.setHappenedAt(1L);
+        e1.setSystemNanotime(1L);
 
         final SnapshotEvent e2 = new SnapshotEvent();
-        e2.setHappenedAt("1");
-        e2.setSystemNanotime("2");
+        e2.setHappenedAt(1L);
+        e2.setSystemNanotime(2L);
 
         assertTrue(e1.compareTo(e2) < 0);
         assertTrue(e2.compareTo(e1) > 0);
