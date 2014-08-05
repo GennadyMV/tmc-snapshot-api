@@ -3,13 +3,16 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +21,7 @@ public class EventTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(EventTransformer.class);
 
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
+
         final List<Snapshot> snapshots = toFileSnapshots(events);
         toExerciseSnapshots(snapshots);
 
@@ -59,7 +63,7 @@ public class EventTransformer {
         return snapshots;
     }
 
-    public void toExerciseSnapshots(final List<Snapshot> snapshots) {
+    private void toExerciseSnapshots(final List<Snapshot> snapshots) {
 
         LOG.info("Building exercise continuums...");
 

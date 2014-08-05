@@ -1,11 +1,14 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.DiffMatchPatch;
+
 import fi.helsinki.cs.tmc.snapshot.api.model.Metadata;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
 import fi.helsinki.cs.tmc.snapshot.api.util.Zip;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
@@ -13,9 +16,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.codec.binary.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 
 @Service
