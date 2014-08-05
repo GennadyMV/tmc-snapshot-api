@@ -22,6 +22,10 @@ public class EventTransformer {
 
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
 
+        if (events == null) {
+            return new ArrayList<>();
+        }
+
         final List<Snapshot> snapshots = toFileSnapshots(events);
         toExerciseSnapshots(snapshots);
 
@@ -35,6 +39,15 @@ public class EventTransformer {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (SnapshotEvent event : events) {
+
+            // Invalid event
+            if (event.getHappenedAt() == null ||
+                event.getCourseName() == null ||
+                event.getEventType() == null ||
+                event.getExerciseName() == null) {
+
+                continue;
+            }
 
             // Only process complete snapshots of type file_delete
             if (event.getEventType().equals("code_snapshot")) {
@@ -51,6 +64,7 @@ public class EventTransformer {
             }
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
+
             snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()),
                                        event.getCourseName(),
                                        event.getExerciseName(),
