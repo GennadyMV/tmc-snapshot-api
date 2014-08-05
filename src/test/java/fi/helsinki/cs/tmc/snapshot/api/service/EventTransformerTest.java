@@ -17,7 +17,7 @@ public class EventTransformerTest {
 
     private SnapshotEvent createEvent(final String courseName,
                                       final String exerciseName,
-                                      final String happenedAt,
+                                      final Long happenedAt,
                                       final String eventType) {
 
         final SnapshotEvent event = new SnapshotEvent();
@@ -31,41 +31,16 @@ public class EventTransformerTest {
     }
 
     @Test
-    public void shouldNotConvertInvalidEventsToSnapshots() {
-
-        final List<SnapshotEvent> events = new ArrayList<>();
-
-        // Missing properties, e.g. course name, event type
-        final SnapshotEvent event1 = new SnapshotEvent();
-
-        event1.getFiles().put("example.java", "public class Example { }");
-        event1.getFiles().put("test.java", "public class Test { }");
-
-        // Missing properties, e.g. course name, event type
-        final SnapshotEvent event2 = new SnapshotEvent();
-
-        event2.getFiles().put("experiment.java", "public class Experiment { }");
-        event2.getFiles().put("trial.java", "public class Trial { }");
-
-        events.add(event1);
-        events.add(event2);
-
-        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
-
-        assertEquals(0, snapshots.size());
-    }
-
-    @Test
     public void shouldConvertEventsToSnapshots() {
 
         final List<SnapshotEvent> events = new ArrayList<>();
 
-        final SnapshotEvent event1 = createEvent("mooc", "exercise1", "100", "text_insert");
+        final SnapshotEvent event1 = createEvent("mooc", "exercise1", 100L, "text_insert");
 
         event1.getFiles().put("example.java", "public class Example { }");
         event1.getFiles().put("test.java", "public class Test { }");
 
-        final SnapshotEvent event2 = createEvent("mooc", "exercise2", "101", "text_remove");
+        final SnapshotEvent event2 = createEvent("mooc", "exercise2", 101L, "text_remove");
 
         event2.getFiles().put("experiment.java", "public class Experiment { }");
         event2.getFiles().put("trial.java", "public class Trial { }");

@@ -125,7 +125,7 @@ public final class SpywareSnapshotServiceTest {
 
         when(spywareService.fetchIndex("mooc", "pekka")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
-                            .thenReturn(Arrays.copyOfRange(bytes, 0, 704));
+                            .thenReturn(Arrays.copyOfRange(bytes, 0, 710));
 
         when(patchService.patch(any(List.class))).thenCallRealMethod();
 
@@ -133,6 +133,28 @@ public final class SpywareSnapshotServiceTest {
 
         assertNotNull(snapshots);
         assertEquals(2, snapshots.size());
+    }
+
+    @Test
+    public void shouldNotFailForCorruptedPatchData() throws Exception {
+
+        final File indexFile = new File("test-data/patch-data.idx");
+        final FileInputStream indexInputStream = new FileInputStream(indexFile);
+
+        final File dataFile = new File("test-data/patch-data.dat");
+
+        final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
+
+        when(spywareService.fetchIndex("peliohjelmointi", "pekka")).thenReturn(indexInputStream);
+        when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
+                            .thenReturn(Arrays.copyOfRange(bytes, 0, 710));
+
+        when(patchService.patch(any(List.class))).thenCallRealMethod();
+
+        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("peliohjelmointi", "pekka");
+
+        assertNotNull(snapshots);
+        assertEquals(5, snapshots.size());
     }
 
     @Test

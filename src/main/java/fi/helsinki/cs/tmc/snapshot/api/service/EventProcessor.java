@@ -25,66 +25,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventProcessor {
+public final class EventProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
 
     private Map<String, String> fileCache;
     private final ObjectMapper mapper = new ObjectMapper();
     private final DiffMatchPatch patcher = new DiffMatchPatch();
-
-    public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
-
-        LOG.info("Processing {} events", events.size());
-
-        fileCache = new HashMap<>();
-
-        for (SnapshotEvent event : events) {
-            if (event.getEventType().equals("code_snapshot")) {
-                processCompleteSnapshot(event);
-            } else {
-                patchFile(event);
-            }
-        }
-
-        LOG.info("Events processed.");
-    }
-
-    private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
-
-        final byte[] decodedData = Base64.decodeBase64(event.getData());
-        SnapshotEventInformation information;
-
-        try {
-            information = mapper.readValue(new String(decodedData, "UTF-8"), SnapshotEventInformation.class);
-        } catch (IOException exception) {
-            return;
-        }
-
-        // No patches to apply
-        if (information.getPatches() == null || information.getPatches().isEmpty()) {
-            return;
-        }
-
-        // Parse patches
-        final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
-
-        // Current file content from cache
-        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
-
-        // Apply patches to content
-        final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
-        fileCache.put(information.getFile(), updatedContent);
-
-        // Save content to specific event
-        event.getFiles().put(information.getFile(), updatedContent);
-    }
-
-    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
-
-        processData(event);
-        processMetadata(event);
-    }
 
     private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
 
@@ -115,8 +62,8 @@ public class EventProcessor {
 
         try {
             metadata = mapper.readValue(event.getMetadata(), Metadata.class);
-        } catch (IOException | NullPointerException ex) {
-            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), ex.getMessage());
+        } catch (IOException | NullPointerException exception) {
+            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), exception.getMessage());
             return;
         }
 
@@ -129,5 +76,58 @@ public class EventProcessor {
         if (metadata.getCause().equals("file_delete")) {
             fileCache.remove(file);
         }
+    }
+
+    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
+
+        processData(event);
+        processMetadata(event);
+    }
+
+    private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
+
+        final byte[] decodedData = Base64.decodeBase64(event.getData());
+        SnapshotEventInformation information;
+
+        try {
+            information = mapper.readValue(new String(decodedData, "UTF-8"), SnapshotEventInformation.class);
+        } catch (IOException exception) {
+            return;
+        }
+
+        // No patches to apply
+        if (information == null || information.getPatches() == null || information.getPatches().isEmpty()) {
+            return;
+        }
+
+        // Parse patches
+        final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
+
+        // Current file content from cache
+        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
+
+        // Apply patches to content
+        final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
+        fileCache.put(information.getFile(), updatedContent);
+
+        // Save content to specific event
+        event.getFiles().put(information.getFile(), updatedContent);
+    }
+
+    public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
+
+        LOG.info("Processing {} events...", events.size());
+
+        fileCache = new HashMap<>();
+
+        for (SnapshotEvent event : events) {
+            if (event.getEventType().equals("code_snapshot")) {
+                processCompleteSnapshot(event);
+            } else {
+                patchFile(event);
+            }
+        }
+
+        LOG.info("Events processed.");
     }
 }

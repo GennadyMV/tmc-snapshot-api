@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventReader {
+public final class EventReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventReader.class);
 
@@ -34,9 +34,44 @@ public class EventReader {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
+
+        try {
+
+            final List<SnapshotEvent> eventsList = new ArrayList<>();
+            final SnapshotEvent[] events = mapper.readValue(eventsJson, SnapshotEvent[].class);
+
+            for (SnapshotEvent event : events) {
+
+
+                if (event == null) {
+                    continue;
+                }
+
+                // Invalid event
+                if (event.getHappenedAt() == null ||
+                    event.getCourseName() == null ||
+                    event.getEventType() == null ||
+                    event.getExerciseName() == null) {
+
+                    continue;
+                }
+
+                if (!event.isProjectActionEvent()) {
+                    eventsList.add(event);
+                }
+            }
+
+            return eventsList;
+
+        } catch (IOException exception) {
+            return null;
+        }
+    }
+
     public Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
 
-        LOG.info("Building events from {} chunks of raw data", data.size());
+        LOG.info("Building events from {} chunks of raw data...", data.size());
 
         final Set<SnapshotEvent> events = new TreeSet<>();
 
@@ -57,25 +92,4 @@ public class EventReader {
 
         return events;
     }
-
-    private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
-
-        try {
-            final List<SnapshotEvent> eventsList = new ArrayList<>();
-            final SnapshotEvent[] events = mapper.readValue(eventsJson, SnapshotEvent[].class);
-
-            for (SnapshotEvent event : events) {
-
-                if (!event.isProjectActionEvent()) {
-                    eventsList.add(event);
-                }
-            }
-
-            return eventsList;
-
-        } catch (IOException exception) {
-            return null;
-        }
-    }
-
 }
