@@ -65,8 +65,8 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new ObjectMapper());
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new TreeMap<String, String>());
 
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
@@ -81,7 +81,7 @@ public final class SpywareSnapshotServiceTest {
 
         assertNotNull(snapshots);
 
-        //64 total, 44 of which are folder_create, file_change or file_create -> 20
+        // 64 total, 44 of which are folder_create, file_change or file_create -> 20
         assertEquals(20, snapshots.size());
     }
 
@@ -106,8 +106,8 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new ObjectMapper());
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new TreeMap<String, String>());
 
         when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
@@ -132,8 +132,8 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new ObjectMapper());
+        Whitebox.setInternalState(patchService, new DiffMatchPatch());
         Whitebox.setInternalState(patchService, new TreeMap<String, String>());
 
         when(spywareService.fetchIndex("mooc", "pekka")).thenReturn(indexInputStream);
@@ -154,7 +154,6 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-
             snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 
@@ -173,7 +172,6 @@ public final class SpywareSnapshotServiceTest {
         final List<Snapshot> snapshots = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-
             snapshots.add(new Snapshot((long) i, "course", "exercise", new ArrayList<SnapshotFile>()));
         }
 

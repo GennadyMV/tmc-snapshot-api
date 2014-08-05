@@ -41,59 +41,14 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SnapshotDiffPatcher.class);
 
-    private final DiffMatchPatch patcher = new DiffMatchPatch();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final DiffMatchPatch patcher = new DiffMatchPatch();
     private Map<String, String> fileCache;
 
     @PostConstruct
     public void initialise() {
 
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
-    @Override
-    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
-
-        // Reset file cache
-        fileCache = new TreeMap<>();
-
-        // Read events from bytes
-        final Collection<SnapshotEvent> events = readEvents(content);
-
-        // Build files from patches
-        processEvents(events);
-
-        // Transform to snapshots
-        final List<Snapshot> snapshots = asSnapshotList(events);
-
-        // Build file continuums for exercises
-        buildExerciseContinuum(snapshots);
-
-        return snapshots;
-    }
-
-    private Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
-
-        LOG.info("Building events from {} chunks of raw data", data.size());
-
-        final Set<SnapshotEvent> events = new TreeSet<>();
-
-        for (byte[] compressed : data) {
-
-            // Decompress .dat content
-            final byte[] decompressed = GZip.decompress(compressed);
-
-            // Generate events from decompressed string data
-            final Collection<SnapshotEvent> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
-
-            if (generatedEvents != null) {
-                events.addAll(generatedEvents);
-            }
-        }
-
-        LOG.info("Done building events.");
-
-        return events;
     }
 
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
@@ -116,19 +71,79 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         }
     }
 
-    private void processEvents(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
+    private Collection<SnapshotEvent> readEvents(final List<byte[]> data) throws IOException {
 
-        LOG.info("Processing {} events", events.size());
+        LOG.info("Building events from {} chunks of raw data...", data.size());
 
-        for (SnapshotEvent event : events) {
-            if (event.getEventType().equals("code_snapshot")) {
-                processCompleteSnapshot(event);
-            } else {
-                patchFile(event);
+        final Set<SnapshotEvent> events = new TreeSet<>();
+
+        for (byte[] compressed : data) {
+
+            // Decompress .dat content
+            final byte[] decompressed = GZip.decompress(compressed);
+
+            // Generate events from decompressed string data
+            final Collection<SnapshotEvent> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
+
+            if (generatedEvents != null) {
+                events.addAll(generatedEvents);
             }
         }
 
-        LOG.info("Events processed.");
+        LOG.info("Done building events.");
+
+        return events;
+    }
+
+    private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
+
+        final byte[] decodedData = Base64.decodeBase64(event.getData());
+        final Map<String, byte[]> data;
+
+        try {
+            data = Zip.decompress(decodedData);
+        } catch (IOException exception) {
+            return;
+        }
+
+        for (String filename : data.keySet()) {
+
+            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
+            final String fileContent = new String(data.get(filename), "UTF-8");
+
+            if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
+                fileCache.put(fileKey, fileContent);
+                event.getFiles().put(fileKey, fileContent);
+            }
+        }
+    }
+
+    private void processMetadata(final SnapshotEvent event) {
+
+        final Metadata metadata;
+
+        try {
+            metadata = mapper.readValue(event.getMetadata(), Metadata.class);
+        } catch (IOException | NullPointerException exception) {
+            LOG.info("Unable to parse metadata for event {}: {}.", event.getHappenedAt(), exception.getMessage());
+            return;
+        }
+
+        if (metadata == null) {
+            return;
+        }
+
+        final String file = metadata.getFile();
+
+        if (metadata.getCause().equals("file_delete")) {
+            fileCache.remove(file);
+        }
+    }
+
+    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
+
+        processData(event);
+        processMetadata(event);
     }
 
     private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
@@ -161,60 +176,25 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
-    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
+    private void processEvents(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
 
-        processData(event);
-        processMetadata(event);
-    }
+        LOG.info("Processing {} events...", events.size());
 
-    private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
+        for (SnapshotEvent event : events) {
 
-        final byte[] decodedData = Base64.decodeBase64(event.getData());
-        final Map<String, byte[]> data;
-
-        try {
-            data = Zip.decompress(decodedData);
-        } catch (IOException ex) {
-            return;
-        }
-
-        for (String filename : data.keySet()) {
-
-            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
-            final String fileContent = new String(data.get(filename), "UTF-8");
-
-            if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
-                fileCache.put(fileKey, fileContent);
-                event.getFiles().put(fileKey, fileContent);
+            if (event.getEventType().equals("code_snapshot")) {
+                processCompleteSnapshot(event);
+            } else {
+                patchFile(event);
             }
         }
-    }
 
-    private void processMetadata(final SnapshotEvent event) {
-
-        final Metadata metadata;
-
-        try {
-            metadata = mapper.readValue(event.getMetadata(), Metadata.class);
-        } catch (IOException | NullPointerException ex) {
-            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), ex.getMessage());
-            return;
-        }
-
-        if (metadata == null) {
-            return;
-        }
-
-        final String file = metadata.getFile();
-
-        if (metadata.getCause().equals("file_delete")) {
-            fileCache.remove(file);
-        }
+        LOG.info("Events processed.");
     }
 
     private List<Snapshot> asSnapshotList(final Collection<SnapshotEvent> events) {
 
-        LOG.info("Converting events to snapshots.");
+        LOG.info("Converting events to snapshots...");
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
@@ -222,8 +202,8 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
 
             // Only process complete snapshots of type file_delete
             if (event.getEventType().equals("code_snapshot")) {
-                if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
 
+                if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
                     continue;
                 }
             }
@@ -235,7 +215,11 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
             }
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
-            snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()), event.getCourseName(), event.getExerciseName(), files, isComplete));
+            snapshots.add(new Snapshot(Long.parseLong(event.getHappenedAt()),
+                                       event.getCourseName(),
+                                       event.getExerciseName(),
+                                       files,
+                                       isComplete));
         }
 
         LOG.info("Done converting events.");
@@ -268,5 +252,26 @@ public final class SnapshotDiffPatcher implements SnapshotDiffPatchService {
         }
 
         LOG.info("Done building exercise continuums.");
+    }
+
+    @Override
+    public List<Snapshot> patch(final List<byte[]> content) throws IOException {
+
+        // Reset file cache
+        fileCache = new TreeMap<>();
+
+        // Read events from bytes
+        final Collection<SnapshotEvent> events = readEvents(content);
+
+        // Build files from patches
+        processEvents(events);
+
+        // Transform to snapshots
+        final List<Snapshot> snapshots = asSnapshotList(events);
+
+        // Build file continuums for exercises
+        buildExerciseContinuum(snapshots);
+
+        return snapshots;
     }
 }
