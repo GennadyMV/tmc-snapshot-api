@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ HttpRequestBuilder.class, DefaultSpywareService.class })
-public final class HttpSpywareServiceTest {
+public final class DefaultSpywareServiceTest {
 
     @Spy
     private final MockClientHttpRequest request = new MockClientHttpRequest(HttpMethod.GET, null);

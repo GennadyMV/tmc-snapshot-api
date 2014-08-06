@@ -16,7 +16,7 @@ public final class Participant {
 
     public Participant(final String username) {
 
-        id = new String(Base64.encodeBase64(username.getBytes()));
+        id = Base64.encodeBase64URLSafeString(username.getBytes());
         this.username = username;
         courses = new HashMap<>();
     }
