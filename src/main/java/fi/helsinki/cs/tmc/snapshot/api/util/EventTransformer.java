@@ -48,7 +48,7 @@ public final class EventTransformer {
                                        isComplete));
         }
 
-        LOG.info("Done converting events.");
+        LOG.info("Converted events.");
 
         return snapshots;
     }
@@ -74,7 +74,7 @@ public final class EventTransformer {
             previous = current;
         }
 
-        LOG.info("Done building exercise continuums.");
+        LOG.info("Built exercise continuums.");
     }
 
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
