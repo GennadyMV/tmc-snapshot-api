@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
@@ -25,6 +26,10 @@ public final class ParticipantSnapshotService implements ParticipantService {
         final Collection<SnapshotEvent> events = eventService.findByInstanceAndId(instance, username);
 
         snapshotOrganiser.organise(participant, events);
+
+        if (participant == null) {
+            throw new NotFoundException();
+        }
 
         return participant;
     }
