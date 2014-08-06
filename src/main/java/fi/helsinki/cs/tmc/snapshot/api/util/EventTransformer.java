@@ -23,7 +23,7 @@ public final class EventTransformer {
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
 
         if (events == null) {
-            return new ArrayList<>();
+            return null;
         }
 
         final List<Snapshot> snapshots = toFileSnapshots(events);

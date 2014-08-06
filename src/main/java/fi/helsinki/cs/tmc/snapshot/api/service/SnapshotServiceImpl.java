@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
@@ -34,7 +35,13 @@ public class SnapshotServiceImpl implements SnapshotService {
 
         eventProcessor.process(events);
 
-        return eventTransformer.toSnapshotList(events);
+        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
+
+        if (snapshots == null) {
+            throw new NotFoundException();
+        }
+
+        return snapshots;
     }
 
     @Override
@@ -52,7 +59,7 @@ public class SnapshotServiceImpl implements SnapshotService {
             }
         }
 
-        return null;
+        throw new NotFoundException();
     }
 
 }
