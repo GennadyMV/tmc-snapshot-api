@@ -28,7 +28,7 @@ public final class SnapshotController {
         return snapshotService.findAll(instance, userId, courseId, exerciseId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "{snapshot}")
+    @RequestMapping(method = RequestMethod.GET, value = "{snapshotId}")
     public Snapshot read(@PathVariable final String instance,
                          @PathVariable final String userId,
                          @PathVariable final String courseId,
