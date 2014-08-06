@@ -1,15 +1,13 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.util.EventReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SpywareSnapshotService implements SnapshotService {
+public class SnapshotEventServiceImpl implements SnapshotEventService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SpywareSnapshotService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SnapshotEventServiceImpl.class);
 
     @Autowired
     private SnapshotDiffPatchService patchService;
@@ -29,12 +27,9 @@ public final class SpywareSnapshotService implements SnapshotService {
     private EventReader eventReader;
 
     @Autowired
-    private SnapshotOrganiser snapshotOrganiser;
-
-    @Autowired
     private SpywareService spywareServer;
 
-    private List<byte[]> findWithRange(final String index,
+    private List<byte[]> retrieveInChunks(final String index,
                                        final String instance,
                                        final String username) throws IOException  {
 
@@ -49,42 +44,22 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public Participant find(final String instance, final String username) throws IOException {
+    public Collection<SnapshotEvent> find(final String instance, final String username) throws IOException {
 
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
-
-        final Participant participant = new Participant(username);
 
         // Fetch index
         final String index = spywareServer.fetchIndex(instance, username);
 
         // Fetch data
-        final List<byte[]> content = findWithRange(index, instance, username);
+        final List<byte[]> content = retrieveInChunks(index, instance, username);
 
         // Read events from bytes
         final Collection<SnapshotEvent> events = eventReader.readEvents(content);
 
         LOG.info("Found " + events.size() + " events ...");
 
-        snapshotOrganiser.organise(participant, events);
-
-        return participant;
+        return events;
     }
-    /*
-    @Override
-    public Snapshot find(final String instance, final String username, final Long id) throws IOException {
 
-        LOG.info("Finding snapshot for {} with id {} from instance {}...", username, id, instance);
-
-        final Collection<Snapshot> events = findAll(instance, username);
-
-        for (Snapshot event : events) {
-            if (event.getId().equals(id)) {
-                return event;
-            }
-        }
-
-        return null;
-    }
-    */
 }

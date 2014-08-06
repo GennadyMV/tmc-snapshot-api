@@ -2,11 +2,11 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.codec.binary.Base64;
 
 public final class Participant {
 

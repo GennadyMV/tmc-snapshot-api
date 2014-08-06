@@ -2,6 +2,9 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
+import fi.helsinki.cs.tmc.snapshot.api.util.EventReader;
+import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 
 import java.io.IOException;
 import java.util.Collection;
