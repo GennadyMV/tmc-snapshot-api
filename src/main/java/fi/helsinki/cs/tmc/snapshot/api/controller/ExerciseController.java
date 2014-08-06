@@ -33,6 +33,6 @@ public final class ExerciseController {
                          @PathVariable final String course,
                          @PathVariable final String exercise) throws IOException {
 
-        return exerciseService.findById(instance, username, course, exercise);
+        return exerciseService.find(instance, username, course, exercise);
     }
 }

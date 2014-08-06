@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class ParticipantExerciseService implements ExerciseService {
+public final class DefaultExerciseService implements ExerciseService {
 
     @Autowired
     private CourseService courseService;
@@ -19,15 +19,15 @@ public final class ParticipantExerciseService implements ExerciseService {
                                         final String username,
                                         final String course) throws IOException {
 
-        return courseService.findById(instance, username, course).getExercises();
+        return courseService.find(instance, username, course).getExercises();
     }
 
     @Override
-    public Exercise findById(final String instance,
+    public Exercise find(final String instance,
                              final String username,
                              final String course,
                              final String exercise) throws IOException {
 
-        return courseService.findById(instance, username, course).getExercise(exercise);
+        return courseService.find(instance, username, course).getExercise(exercise);
     }
 }

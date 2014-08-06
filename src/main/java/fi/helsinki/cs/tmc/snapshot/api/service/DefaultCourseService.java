@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class ParticipantCourseService implements CourseService {
+public final class DefaultCourseService implements CourseService {
 
     @Autowired
     private ParticipantService participantService;
@@ -17,12 +17,12 @@ public final class ParticipantCourseService implements CourseService {
     @Override
     public Collection<Course> findAll(final String instance, final String username) throws IOException {
 
-        return participantService.findByInstanceAndId(instance, username).getCourses();
+        return participantService.find(instance, username).getCourses();
     }
 
     @Override
-    public Course findById(final String instance, final String username, final String course) throws IOException {
+    public Course find(final String instance, final String username, final String course) throws IOException {
 
-        return participantService.findByInstanceAndId(instance, username).getCourse(course);
+        return participantService.find(instance, username).getCourse(course);
     }
 }

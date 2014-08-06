@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ParticipantSnapshotEventService implements SnapshotEventService {
+public class DefaultSnapshotEventService implements SnapshotEventService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ParticipantSnapshotEventService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSnapshotEventService.class);
 
     @Autowired
     private SpywareService spywareService;
@@ -52,7 +52,7 @@ public class ParticipantSnapshotEventService implements SnapshotEventService {
 
         while (i < endIndex) {
 
-            final byte[] bytes = spywareService.fetchChunkByInstanceAndId(instance,
+            final byte[] bytes = spywareService.fetchChunkByRange(instance,
                                                                           username,
                                                                           i,
                                                                           Math.min(i + spywareChunkSize, endIndex));
@@ -73,12 +73,12 @@ public class ParticipantSnapshotEventService implements SnapshotEventService {
     }
 
     @Override
-    public Collection<SnapshotEvent> findByInstanceAndId(final String instance, final String username) throws IOException {
+    public Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException {
 
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
 
         // Fetch index
-        final String index = spywareService.fetchIndexByInstanceAndId(instance, username);
+        final String index = spywareService.fetchIndex(instance, username);
 
         // Fetch data
         final List<byte[]> content = fetchDataByInstanceAndId(index, instance, username);
