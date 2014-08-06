@@ -29,6 +29,9 @@ public final class SpywareSnapshotService implements SnapshotService {
     private EventReader eventReader;
 
     @Autowired
+    private SnapshotOrganiser snapshotOrganiser;
+
+    @Autowired
     private SpywareService spywareServer;
 
     private List<byte[]> findWithRange(final String index,
@@ -63,7 +66,7 @@ public final class SpywareSnapshotService implements SnapshotService {
 
         LOG.info("Found " + events.size() + " events ...");
 
-        new SnapshotOrganizer().organize(participant, events);
+        snapshotOrganiser.organise(participant, events);
 
         return participant;
     }

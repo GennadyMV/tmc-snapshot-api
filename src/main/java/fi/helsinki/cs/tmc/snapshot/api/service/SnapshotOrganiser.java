@@ -4,16 +4,21 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Course;
 import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+
 import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SnapshotOrganizer implements SnapshotOrganizerService {
+import org.springframework.stereotype.Service;
+
+@Service
+public final class SnapshotOrganiser implements SnapshotOrganiserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SpywareSnapshotService.class);
 
     @Override
-    public void organize(final Participant participant, final Collection<SnapshotEvent> snapshotEvents) {
+    public void organise(final Participant participant, final Collection<SnapshotEvent> snapshotEvents) {
 
         for (SnapshotEvent event : snapshotEvents) {
 
@@ -34,5 +39,4 @@ public final class SnapshotOrganizer implements SnapshotOrganizerService {
             exercise.addSnapshotEvent(event);
         }
     }
-
 }
