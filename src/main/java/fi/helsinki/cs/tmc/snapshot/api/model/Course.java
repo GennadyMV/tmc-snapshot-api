@@ -41,9 +41,7 @@ public final class Course {
 
     public void addExercise(final Exercise exercise) {
 
-        if (!exercises.containsKey(exercise.getId())) {
-            exercises.put(exercise.getId(), exercise);
-        }
+        exercises.put(exercise.getId(), exercise);
     }
 
     public Exercise getExercise(final String id) {

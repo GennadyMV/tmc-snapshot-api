@@ -39,9 +39,7 @@ public final class Participant {
 
     public void addCourse(final Course course) {
 
-        if (!courses.containsKey(course.getId())) {
-            courses.put(course.getId(), course);
-        }
+        courses.put(course.getId(), course);
     }
 
     public Course getCourse(final String id) {

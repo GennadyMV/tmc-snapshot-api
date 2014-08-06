@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Course;
 
 import java.io.IOException;
@@ -23,6 +24,12 @@ public final class DefaultCourseService implements CourseService {
     @Override
     public Course find(final String instance, final String userId, final String courseId) throws IOException {
 
-        return participantService.find(instance, userId).getCourse(courseId);
+        final Course course = participantService.find(instance, userId).getCourse(courseId);
+
+        if (course == null) {
+            throw new NotFoundException();
+        }
+
+        return course;
     }
 }

@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 
 import java.io.IOException;
@@ -28,6 +29,12 @@ public final class DefaultExerciseService implements ExerciseService {
                              final String courseId,
                              final String exerciseId) throws IOException {
 
-        return courseService.find(instance, userId, courseId).getExercise(exerciseId);
+        final Exercise exercise = courseService.find(instance, userId, courseId).getExercise(exerciseId);
+
+        if (exercise == null) {
+            throw new NotFoundException();
+        }
+
+        return exercise;
     }
 }
