@@ -31,20 +31,14 @@ public final class SpywareSnapshotService implements SnapshotService {
     @Autowired
     private SpywareService spywareServer;
 
-    private List<byte[]> findWithRange(final InputStream index,
+    private List<byte[]> findWithRange(final String index,
                                        final String instance,
                                        final String username) throws IOException  {
 
         final List<byte[]> byteData = new ArrayList<>();
 
-        // Convert to string
-        final String indexData;
-
-        indexData = IOUtils.toString(index);
-        index.close();
-
         // Split on newlines
-        for (String event : indexData.split("\\n")) {
+        for (String event : index.split("\\n")) {
             byteData.add(spywareServer.fetchData(event, instance, username));
         }
 
@@ -59,7 +53,7 @@ public final class SpywareSnapshotService implements SnapshotService {
         final Participant participant = new Participant(username);
 
         // Fetch index
-        final InputStream index = spywareServer.fetchIndex(instance, username);
+        final String index = spywareServer.fetchIndex(instance, username);
 
         // Fetch data
         final List<byte[]> content = findWithRange(index, instance, username);

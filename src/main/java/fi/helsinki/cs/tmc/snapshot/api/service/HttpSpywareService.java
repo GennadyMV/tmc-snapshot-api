@@ -82,7 +82,7 @@ public final class HttpSpywareService implements SpywareService {
     }
 
     @Override
-    public InputStream fetchIndex(final String instance, final String username) throws IOException {
+    public String fetchIndex(final String instance, final String username) throws IOException {
 
         LOG.info("Fetching Spyware-index for {} from instance {}...",
                     username,
@@ -104,6 +104,9 @@ public final class HttpSpywareService implements SpywareService {
 
         LOG.info("Spyware-index fetched.");
 
-        return response.getBody();
+        final String index = IOUtils.toString(response.getBody());
+        response.close();
+
+        return index;
     }
 }
