@@ -24,36 +24,28 @@ import org.mockito.MockitoAnnotations;
 
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ SnapshotDiffPatcher.class, SpywareSnapshotService.class })
+@PrepareForTest({ ParticipantSnapshotService.class })
 public final class SpywareSnapshotServiceTest {
 
     @Mock
     private SpywareService spywareService;
 
     @Mock
-    private SnapshotDiffPatcher patchService;
-
-    @Mock
-    private SpywareSnapshotService spywareSnapshotService;
+    private ParticipantService participantService;
 
     @InjectMocks
-    private SpywareSnapshotService injectedSpywareSnapshotService;
+    private ParticipantService injectedParticipantService;
 
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
-
-        Whitebox.setInternalState(patchService, new EventReader());
-        Whitebox.setInternalState(patchService, new EventProcessor());
-        Whitebox.setInternalState(patchService, new EventTransformer());
     }
 
     @Test
@@ -74,7 +66,7 @@ public final class SpywareSnapshotServiceTest {
 
         when(patchService.patch(any(List.class))).thenCallRealMethod();
 
-        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
+        final List<Snapshot> snapshots = injectedParticipantService.findAll("hy", "karpo");
 
         assertNotNull(snapshots);
 
@@ -88,7 +80,7 @@ public final class SpywareSnapshotServiceTest {
         final FileInputStream indexInputStream = new FileInputStream(new File("test-data/test.idx"));
 
         when(spywareService.fetchIndexByInstanceAndId("mooc", "coom")).thenReturn(indexInputStream);
-        injectedSpywareSnapshotService.findAll("mooc", "coom");
+        injectedParticipantService.findAll("mooc", "coom");
 
         indexInputStream.available();
     }
@@ -109,7 +101,7 @@ public final class SpywareSnapshotServiceTest {
 
         when(patchService.patch(any(List.class))).thenCallRealMethod();
 
-        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("hy", "karpo");
+        final List<Snapshot> snapshots = injectedParticipantService.findAll("hy", "karpo");
 
         assertNotNull(snapshots);
         assertEquals(0, snapshots.size());
@@ -131,7 +123,7 @@ public final class SpywareSnapshotServiceTest {
 
         when(patchService.patch(any(List.class))).thenCallRealMethod();
 
-        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("mooc", "pekka");
+        final List<Snapshot> snapshots = injectedParticipantService.findAll("mooc", "pekka");
 
         assertNotNull(snapshots);
         assertEquals(2, snapshots.size());
@@ -153,7 +145,7 @@ public final class SpywareSnapshotServiceTest {
 
         when(patchService.patch(any(List.class))).thenCallRealMethod();
 
-        final List<Snapshot> snapshots = injectedSpywareSnapshotService.findAll("peliohjelmointi", "pekka");
+        final List<Snapshot> snapshots = injectedParticipantService.findAll("peliohjelmointi", "pekka");
 
         assertNotNull(snapshots);
         assertEquals(5, snapshots.size());
@@ -171,10 +163,10 @@ public final class SpywareSnapshotServiceTest {
                                        new ArrayList<SnapshotFile>()));
         }
 
-        when(spywareSnapshotService.findAll("test", "jack")).thenReturn(snapshots);
-        when(spywareSnapshotService.find("test", "jack", 2L)).thenCallRealMethod();
+        when(participantService.findAll("test", "jack")).thenReturn(snapshots);
+        when(participantService.find("test", "jack", 2L)).thenCallRealMethod();
 
-        final Snapshot snapshot = spywareSnapshotService.find("test", "jack", 2L);
+        final Snapshot snapshot = participantService.find("test", "jack", 2L);
 
         assertNotNull(snapshot);
         assertEquals(2, (long) snapshot.getId());
@@ -192,10 +184,10 @@ public final class SpywareSnapshotServiceTest {
                                        new ArrayList<SnapshotFile>()));
         }
 
-        when(spywareSnapshotService.findAll("data", "user")).thenReturn(snapshots);
-        when(spywareSnapshotService.find("data", "user", 404L)).thenCallRealMethod();
+        when(participantService.findAll("data", "user")).thenReturn(snapshots);
+        when(participantService.find("data", "user", 404L)).thenCallRealMethod();
 
-        final Snapshot snapshot = spywareSnapshotService.find("data", "user", 404L);
+        final Snapshot snapshot = participantService.find("data", "user", 404L);
 
         assertNull(snapshot);
     }
