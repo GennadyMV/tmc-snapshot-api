@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SnapshotFileServiceImpl implements SnapshotFileService {
+public final class DefaultSnapshotFileService implements SnapshotFileService {
 
     @Autowired
     private SnapshotService snapshotService;
