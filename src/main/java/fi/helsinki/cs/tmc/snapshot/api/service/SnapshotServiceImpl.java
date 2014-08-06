@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SnapshotServiceImpl implements SnapshotService {
+public final class SnapshotServiceImpl implements SnapshotService {
 
     @Autowired
     private ExerciseService exerciseService;
@@ -31,7 +31,8 @@ public class SnapshotServiceImpl implements SnapshotService {
                                final String course,
                                final String exercise) throws IOException {
 
-        final Collection<SnapshotEvent> events = exerciseService.find(instance, username, course, exercise).getSnapshotEvents();
+        final Collection<SnapshotEvent> events = exerciseService.findById(instance, username, course, exercise)
+                                                                .getSnapshotEvents();
 
         eventProcessor.process(events);
 
@@ -61,5 +62,4 @@ public class SnapshotServiceImpl implements SnapshotService {
 
         throw new NotFoundException();
     }
-
 }

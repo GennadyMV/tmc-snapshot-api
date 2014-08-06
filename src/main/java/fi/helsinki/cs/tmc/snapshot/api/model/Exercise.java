@@ -17,9 +17,9 @@ public final class Exercise {
 
     public Exercise(final String name) {
 
-        this.id = DigestUtils.md5DigestAsHex(name.getBytes());
+        id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
-        this.snapshotEvents = new ArrayList<>();
+        snapshotEvents = new ArrayList<>();
     }
 
     public String getId() {
@@ -46,7 +46,7 @@ public final class Exercise {
     @Override
     public int hashCode() {
 
-        return 83 * 7 + Objects.hashCode(this.name);
+        return 83 * 7 + Objects.hashCode(name);
     }
 
     @Override

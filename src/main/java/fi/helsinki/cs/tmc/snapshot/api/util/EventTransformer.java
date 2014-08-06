@@ -20,18 +20,6 @@ public final class EventTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventTransformer.class);
 
-    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
-
-        if (events == null) {
-            return null;
-        }
-
-        final List<Snapshot> snapshots = toFileSnapshots(events);
-        toExerciseSnapshots(snapshots);
-
-        return snapshots;
-    }
-
     private List<Snapshot> toFileSnapshots(final Collection<SnapshotEvent> events) {
 
         LOG.info("Converting events to snapshots...");
@@ -87,5 +75,17 @@ public final class EventTransformer {
         }
 
         LOG.info("Done building exercise continuums.");
+    }
+
+    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
+
+        if (events == null) {
+            return new ArrayList<>();
+        }
+
+        final List<Snapshot> snapshots = toFileSnapshots(events);
+        toExerciseSnapshots(snapshots);
+
+        return snapshots;
     }
 }

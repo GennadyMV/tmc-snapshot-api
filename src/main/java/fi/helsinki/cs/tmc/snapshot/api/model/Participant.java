@@ -16,9 +16,9 @@ public final class Participant {
 
     public Participant(final String username) {
 
-        this.id = new String(Base64.encodeBase64(username.getBytes()));
+        id = new String(Base64.encodeBase64(username.getBytes()));
         this.username = username;
-        this.courses = new HashMap<>();
+        courses = new HashMap<>();
     }
 
     public String getId() {
@@ -40,7 +40,7 @@ public final class Participant {
     public void addCourse(final Course course) {
 
         if (!courses.containsKey(course.getName())) {
-            this.courses.put(course.getName(), course);
+            courses.put(course.getName(), course);
         }
     }
 

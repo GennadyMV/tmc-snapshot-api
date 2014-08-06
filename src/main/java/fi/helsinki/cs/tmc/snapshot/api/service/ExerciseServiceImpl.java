@@ -16,11 +16,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     private CourseService courseService;
 
     @Override
-    public Collection<Exercise> find(final String instance,
+    public Collection<Exercise> findAll(final String instance,
                                      final String username,
                                      final String course) throws IOException {
 
-        final Collection<Exercise> exercises = courseService.find(instance, username, course).getExercises();
+        final Collection<Exercise> exercises = courseService.findById(instance, username, course).getExercises();
 
         if (exercises == null) {
             throw new NotFoundException();
@@ -30,12 +30,12 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Exercise find(final String instance,
+    public Exercise findById(final String instance,
                          final String username,
                          final String course,
                          final String exerciseId) throws IOException {
 
-        final Exercise exercise = courseService.find(instance, username, course).getExercise(exerciseId);
+        final Exercise exercise = courseService.findById(instance, username, course).getExercise(exerciseId);
 
         if (exercise == null) {
             throw new NotFoundException();

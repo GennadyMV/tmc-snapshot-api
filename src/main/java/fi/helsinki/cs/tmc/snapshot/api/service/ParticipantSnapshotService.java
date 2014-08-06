@@ -7,31 +7,25 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class ParticipantServiceImpl implements ParticipantService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ParticipantServiceImpl.class);
+public final class ParticipantSnapshotService implements ParticipantService {
 
     @Autowired
     private SnapshotEventService eventService;
 
     @Autowired
-    private SnapshotOrganiserService snapshotOrganizer;
+    private SnapshotOrganiserService snapshotOrganiser;
 
     @Override
-    public Participant find(final String instance, final String username) throws IOException {
+    public Participant findByInstanceAndId(final String instance, final String username) throws IOException {
 
         final Participant participant = new Participant(username);
+        final Collection<SnapshotEvent> events = eventService.findByInstanceAndId(instance, username);
 
-        final Collection<SnapshotEvent> events = eventService.find(instance, username);
-
-        snapshotOrganizer.organise(participant, events);
+        snapshotOrganiser.organise(participant, events);
 
         if (participant == null) {
             throw new NotFoundException();

@@ -16,9 +16,9 @@ public class CourseServiceImpl implements CourseService {
     private ParticipantService participantService;
 
     @Override
-    public Collection<Course> find(final String instance, final String username) throws IOException {
+    public Collection<Course> findAll(final String instance, final String username) throws IOException {
 
-        final Collection<Course> courses = participantService.find(instance, username).getCourses();
+        final Collection<Course> courses = participantService.findByInstanceAndId(instance, username).getCourses();
 
         if (courses == null) {
             throw new NotFoundException();
@@ -28,9 +28,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course find(final String instance, final String username, final String courseId) throws IOException {
+    public Course findById(final String instance, final String username, final String courseId) throws IOException {
 
-        final Course course = participantService.find(instance, username).getCourse(courseId);
+        final Course course = participantService.findByInstanceAndId(instance, username).getCourse(courseId);
 
         if (course == null) {
             throw new NotFoundException();

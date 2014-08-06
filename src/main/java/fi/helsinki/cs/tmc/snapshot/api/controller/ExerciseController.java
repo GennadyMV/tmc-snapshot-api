@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "{instance}/participants/{username}/courses/{course}/exercises", produces = "application/json")
-public class ExerciseController {
+public final class ExerciseController {
 
     @Autowired
     private ExerciseService exerciseService;
@@ -24,7 +24,7 @@ public class ExerciseController {
                                      @PathVariable final String username,
                                      @PathVariable final String course) throws IOException {
 
-        return exerciseService.find(instance, username, course);
+        return exerciseService.findAll(instance, username, course);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{exercise}")
@@ -33,6 +33,6 @@ public class ExerciseController {
                          @PathVariable final String course,
                          @PathVariable final String exercise) throws IOException {
 
-        return exerciseService.find(instance, username, course, exercise);
+        return exerciseService.findById(instance, username, course, exercise);
     }
 }
