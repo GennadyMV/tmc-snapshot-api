@@ -1,14 +1,10 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
-import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,33 +18,37 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
-@IntegrationTest
 @ActiveProfiles("test")
 public final class SnapshotControllerTest {
 
-    private static final String HY_INSTANCE = "hy";
-
-    @Mock
-    private TmcService tmcDataService;
+    private static final String INSTANCE = "hy";
+    private static final String USER = "testUsername";
+    private static final String COURSE = "testCourseName";
+    private static final String EXERCISE = "testExerciseName";
+    private static final String SNAPSHOT_BASE_URL = "/hy/participants/testUsername/courses/testCourseName/exercises/testExerciseName/snapshots";
 
     @Mock
     private SnapshotService snapshotService;
@@ -69,72 +69,58 @@ public final class SnapshotControllerTest {
     @Test
     public void shouldReturnSnapshots() throws Exception {
 
-        final ObjectMapper mapper = new ObjectMapper();
         final List<Snapshot> snapshotData = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             snapshotData.add(new Snapshot((long) i,
-                                          new Course(1L, "course"),
-                                          new Exercise(1L, "exercise"),
                                           new ArrayList<SnapshotFile>()));
         }
 
-        when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("smith");
-        when(snapshotService.findAll(HY_INSTANCE, "smith")).thenReturn(snapshotData);
+        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(snapshotData);
 
-        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots")).andReturn();
-        final String snapshotJson = result.getResponse().getContentAsString();
+        mockMvc.perform(get(SNAPSHOT_BASE_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(5)));
 
-        final List<Snapshot> snapshots = Arrays.asList(mapper.readValue(snapshotJson, Snapshot[].class));
-
-        assertEquals(5, snapshots.size());
+        verify(snapshotService).findAll(INSTANCE, USER, COURSE, EXERCISE);
+        verifyNoMoreInteractions(snapshotService);
     }
 
     @Test
     public void shouldReturnSnapshot() throws Exception {
 
-        final ObjectMapper mapper = new ObjectMapper();
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot(1L,
-                                                   new Course(1L, "course"),
-                                                   new Exercise(1L, "exercise"),
-                                                   Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L, Arrays.asList(file));
 
-        when(tmcDataService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
-        when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, 1L)).thenReturn(snapshotData);
 
-        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots/1")).andReturn();
-        final String snapshotJson = result.getResponse().getContentAsString();
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.files", hasSize(1)))
+                .andExpect(jsonPath("$.files[0]", is("/src/HeiMaailma.java")));
 
-        final Snapshot snapshot = mapper.readValue(snapshotJson, Snapshot.class);
-
-        assertEquals(1, (long) snapshot.getId());
-        assertEquals(1, snapshot.getFiles().size());
-        assertEquals("/src/HeiMaailma.java", snapshot.getFiles().iterator().next().getPath());
+        verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, 1L);
+        verifyNoMoreInteractions(snapshotService);
     }
 
     @Test
-    public void shouldReturnNullOnFalseParticipantId() throws Exception {
+    public void listHandlesNotFoundException() throws Exception {
 
-        when(tmcDataService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
+        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenThrow(new NotFoundException());
 
-        mockMvc.perform(get("/hy/participants/0/snapshots")).andExpect(status().is(404));
+        mockMvc.perform(get(SNAPSHOT_BASE_URL))
+                .andExpect(status().is(404));
     }
 
     @Test
-    public void shouldReturnNullOnInvalidParticipantIdAndValidSnapshotId() throws Exception {
+    public void readHandlesNotFoundException() throws Exception {
 
-        when(tmcDataService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, 1L)).thenThrow(new NotFoundException());
 
-        mockMvc.perform(get("/hy/participants/0/snapshots/1")).andExpect(status().is(404));
-    }
-
-    @Test
-    public void shouldReturnNullOnFalseSnapshotId() throws Exception {
-
-        when(tmcDataService.findUsernameById(HY_INSTANCE, 1)).thenReturn("smith");
-        when(snapshotService.find(HY_INSTANCE, "smith", 1L)).thenReturn(null);
-
-        mockMvc.perform(get("/hy/participants/1/snapshots/0")).andExpect(status().is(404));
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
+                .andExpect(status().is(404));
     }
 }
