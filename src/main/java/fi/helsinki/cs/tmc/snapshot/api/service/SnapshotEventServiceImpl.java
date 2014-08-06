@@ -4,12 +4,10 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,20 +29,14 @@ public class SnapshotEventServiceImpl implements SnapshotEventService {
     @Autowired
     private SpywareService spywareServer;
 
-    private List<byte[]> retrieveInChunks(final InputStream index,
+    private List<byte[]> retrieveInChunks(final String index,
                                        final String instance,
                                        final String username) throws IOException  {
 
         final List<byte[]> byteData = new ArrayList<>();
 
-        // Convert to string
-        final String indexData;
-
-        indexData = IOUtils.toString(index);
-        index.close();
-
         // Split on newlines
-        for (String event : indexData.split("\\n")) {
+        for (String event : index.split("\\n")) {
             byteData.add(spywareServer.fetchData(event, instance, username));
         }
 
@@ -57,7 +49,7 @@ public class SnapshotEventServiceImpl implements SnapshotEventService {
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
 
         // Fetch index
-        final InputStream index = spywareServer.fetchIndex(instance, username);
+        final String index = spywareServer.fetchIndex(instance, username);
 
         // Fetch data
         final List<byte[]> content = retrieveInChunks(index, instance, username);
