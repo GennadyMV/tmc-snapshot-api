@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SnapshotServiceImpl implements SnapshotService {
+public final class DefaultSnapshotService implements SnapshotService {
 
     @Autowired
     private ExerciseService exerciseService;
@@ -25,12 +25,12 @@ public final class SnapshotServiceImpl implements SnapshotService {
     private EventTransformer eventTransformer;
 
     @Override
-    public List<Snapshot> find(final String instance,
+    public List<Snapshot> findAll(final String instance,
                                final String username,
                                final String course,
                                final String exercise) throws IOException {
 
-        final Collection<SnapshotEvent> events = exerciseService.findById(instance, username, course, exercise)
+        final Collection<SnapshotEvent> events = exerciseService.find(instance, username, course, exercise)
                                                                 .getSnapshotEvents();
 
         eventProcessor.process(events);
@@ -45,7 +45,7 @@ public final class SnapshotServiceImpl implements SnapshotService {
                          final String exercise,
                          final Long snapshotId) throws IOException {
 
-        final List<Snapshot> snapshots = find(instance, username, course, exercise);
+        final List<Snapshot> snapshots = findAll(instance, username, course, exercise);
 
         for (Snapshot snapshot : snapshots) {
             if (snapshot.getId().equals(snapshotId)) {

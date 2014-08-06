@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class ParticipantSnapshotService implements ParticipantService {
+public final class DefaultParticipantService implements ParticipantService {
 
     @Autowired
     private SnapshotEventService eventService;
@@ -19,10 +19,10 @@ public final class ParticipantSnapshotService implements ParticipantService {
     private SnapshotOrganiserService snapshotOrganiser;
 
     @Override
-    public Participant findByInstanceAndId(final String instance, final String username) throws IOException {
+    public Participant find(final String instance, final String username) throws IOException {
 
         final Participant participant = new Participant(username);
-        final Collection<SnapshotEvent> events = eventService.findByInstanceAndId(instance, username);
+        final Collection<SnapshotEvent> events = eventService.findAll(instance, username);
 
         snapshotOrganiser.organise(participant, events);
 

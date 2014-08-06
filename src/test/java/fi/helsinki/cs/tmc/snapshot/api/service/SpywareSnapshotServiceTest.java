@@ -66,7 +66,7 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        when(spywareService.fetchIndexByInstanceAndId("hy", "karpo")).thenReturn(indexInputStream);
+        when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 11683))
                             .thenReturn(Arrays.copyOfRange(bytes, 11683, 12945))
@@ -87,7 +87,7 @@ public final class SpywareSnapshotServiceTest {
 
         final FileInputStream indexInputStream = new FileInputStream(new File("test-data/test.idx"));
 
-        when(spywareService.fetchIndexByInstanceAndId("mooc", "coom")).thenReturn(indexInputStream);
+        when(spywareService.fetchIndex("mooc", "coom")).thenReturn(indexInputStream);
         injectedSpywareSnapshotService.findAll("mooc", "coom");
 
         indexInputStream.available();
@@ -103,7 +103,7 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        when(spywareService.fetchIndexByInstanceAndId("hy", "karpo")).thenReturn(indexInputStream);
+        when(spywareService.fetchIndex("hy", "karpo")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 11741));
 
@@ -125,7 +125,7 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        when(spywareService.fetchIndexByInstanceAndId("mooc", "pekka")).thenReturn(indexInputStream);
+        when(spywareService.fetchIndex("mooc", "pekka")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 710));
 
@@ -147,7 +147,7 @@ public final class SpywareSnapshotServiceTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        when(spywareService.fetchIndexByInstanceAndId("peliohjelmointi", "pekka")).thenReturn(indexInputStream);
+        when(spywareService.fetchIndex("peliohjelmointi", "pekka")).thenReturn(indexInputStream);
         when(spywareService.fetchData(any(String.class), any(String.class), any(String.class)))
                             .thenReturn(Arrays.copyOfRange(bytes, 0, 710));
 
