@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +20,6 @@ import org.springframework.stereotype.Service;
 public class SnapshotEventServiceImpl implements SnapshotEventService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SnapshotEventServiceImpl.class);
-
-    @Autowired
-    private SnapshotDiffPatchService patchService;
 
     @Autowired
     private EventReader eventReader;

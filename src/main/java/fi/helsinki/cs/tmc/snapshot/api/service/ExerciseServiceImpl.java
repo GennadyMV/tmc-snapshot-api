@@ -14,17 +14,20 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
     private CourseService courseService;
 
-
     @Override
-    public Collection<Exercise> find(final String instance, final String username, final String course) throws IOException {
+    public Collection<Exercise> find(final String instance,
+                                     final String username,
+                                     final String course) throws IOException {
 
         return courseService.find(instance, username, course).getExercises();
     }
 
     @Override
-    public Exercise find(final String instance, final String username, final String course, final String exercise) throws IOException {
+    public Exercise find(final String instance,
+                         final String username,
+                         final String course,
+                         final String exercise) throws IOException {
 
         return courseService.find(instance, username, course).getExercise(exercise);
     }
-
 }

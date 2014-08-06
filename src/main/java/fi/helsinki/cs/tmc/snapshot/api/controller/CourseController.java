@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping(value = "{instance}/participants/{username}/courses", produces = "application/json")
 public class CourseController {
@@ -34,5 +33,4 @@ public class CourseController {
 
         return courseService.find(instance, username, course);
     }
-
 }

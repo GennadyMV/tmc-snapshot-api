@@ -8,7 +8,6 @@ import java.util.Collection;
 public interface CourseService {
 
     Collection<Course> find(String instance, String username) throws IOException;
-
     Course find(String instance, String username, String course) throws IOException;
 
 }

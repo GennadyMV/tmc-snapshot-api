@@ -27,7 +27,7 @@ public final class EventTransformer {
         }
 
         final List<Snapshot> snapshots = toFileSnapshots(events);
-        //toExerciseSnapshots(snapshots);
+        toExerciseSnapshots(snapshots);
 
         return snapshots;
     }
@@ -55,32 +55,27 @@ public final class EventTransformer {
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
 
-//            snapshots.add(new Snapshot(event.getHappenedAt(),
-//                                       course,
-//                                       exercise,
-//                                       files,
-//                                       isComplete));
+            snapshots.add(new Snapshot(event.getHappenedAt(),
+                                       files,
+                                       isComplete));
         }
 
         LOG.info("Done converting events.");
 
         return snapshots;
     }
-    /*
+
     private void toExerciseSnapshots(final List<Snapshot> snapshots) {
 
         LOG.info("Building exercise continuums...");
 
-        final Map<String, Snapshot> cache = new HashMap<>();
+        Snapshot previous = null;
 
         for (Snapshot current : snapshots) {
 
-            final String key = current.;
-
             // Complete snapshots are already complete, no need to parse previous.
             // Also skip if current snapshot is the first from this exercise.
-            if (!current.isFromCompleteSnapshot() && cache.containsKey(key)) {
-                final Snapshot previous = cache.get(key);
+            if (!current.isFromCompleteSnapshot() && previous != null) {
 
                 for (SnapshotFile file : previous.getFiles()) {
                     if (current.getFile(file.getPath()) == null) {
@@ -88,9 +83,9 @@ public final class EventTransformer {
                     }
                 }
             }
-            cache.put(key, current);
+            previous = current;
         }
 
         LOG.info("Done building exercise continuums.");
-    }*/
+    }
 }

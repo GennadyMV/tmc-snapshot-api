@@ -8,7 +8,6 @@ import java.util.Collection;
 public interface ExerciseService {
 
     Collection<Exercise> find(String instance, String username, String course) throws IOException;
-
     Exercise find(String instance, String username, String course, String exercise) throws IOException;
 
 }

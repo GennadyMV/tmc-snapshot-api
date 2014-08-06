@@ -6,13 +6,13 @@ import java.util.Map;
 public final class SnapshotEvent implements Comparable<SnapshotEvent> {
 
     private String courseName;
+    private String data;
     private String exerciseName;
     private String eventType;
-    private String data;
+    private final Map<String, String> files = new HashMap<>();
     private Long happenedAt;
     private String metadata;
     private Long systemNanotime;
-    private final Map<String, String> files = new HashMap<>();
 
     public boolean isProjectActionEvent() {
 

@@ -42,7 +42,6 @@ public final class EventReader {
 
             for (SnapshotEvent event : events) {
 
-
                 if (event == null) {
                     continue;
                 }
