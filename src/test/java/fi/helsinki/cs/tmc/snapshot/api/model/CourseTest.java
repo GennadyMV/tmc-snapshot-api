@@ -49,7 +49,7 @@ public class CourseTest {
 
     @Test
     public void canNotAddSameExerciseMultipleTimes() {
-        
+
         final Exercise e = new Exercise("ex1");
         course.addExercise(e);
         course.addExercise(e);
