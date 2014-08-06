@@ -1,8 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,10 +9,15 @@ public final class ParticipantTest {
     @Test
     public void constructorSetsValues() {
 
-        final List<Snapshot> snapshots = new ArrayList<>();
-        final Participant participant = new Participant(123L, snapshots);
+        final Participant participant = new Participant("admin");
 
-        assertEquals(Long.valueOf(123), participant.getId());
-        assertEquals(snapshots, participant.getSnapshots());
+        final Course course = new Course("mooc");
+        participant.addCourse(course);
+        participant.addCourse(course);
+
+        assertEquals("admin", participant.getUsername());
+        assertEquals("YWRtaW4=", participant.getId());
+        assertEquals(course, participant.getCourse("mooc"));
+        assertEquals(1, participant.getCourses().size());
     }
 }
