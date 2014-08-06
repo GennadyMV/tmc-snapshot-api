@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface SpywareService {
 
-    byte[] fetchData(final String event, final String instance, final String username) throws IOException;
+    byte[] fetchChunk(String instance, String username, int i, int min) throws IOException;
     String fetchIndex(final String instance, final String username) throws IOException;
 
 }

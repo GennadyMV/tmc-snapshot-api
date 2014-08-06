@@ -4,7 +4,6 @@ import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
@@ -45,21 +44,16 @@ public final class HttpSpywareService implements SpywareService {
 
     @Cacheable("RawSpywareData")
     @Override
-    public byte[] fetchData(final String event, final String instance, final String username) throws IOException {
-
-        final String[] indexes = event.split("\\s+");
-
-        final int start = Integer.parseInt(indexes[0]);
-        final int length = Integer.parseInt(indexes[1]);
+    public byte[] fetchChunk(final String instance, final String username, final int start, final int end) throws IOException {
 
         LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
                     username,
                     instance,
                     start,
-                    start + length);
+                    end);
 
         final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).build();
-        request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
+        request.getHeaders().set("Range", String.format("bytes=%d-%d", start, end));
 
         final ClientHttpResponse response = request.execute();
 
@@ -80,6 +74,7 @@ public final class HttpSpywareService implements SpywareService {
 
         return bytes;
     }
+
 
     @Override
     public String fetchIndex(final String instance, final String username) throws IOException {
