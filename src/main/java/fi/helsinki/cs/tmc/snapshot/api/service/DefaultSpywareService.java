@@ -4,7 +4,6 @@ import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
@@ -21,9 +20,9 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class HttpSpywareService implements SpywareService {
+public final class DefaultSpywareService implements SpywareService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HttpSpywareService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSpywareService.class);
 
     @Value("${spyware.url}")
     private String spywareUrl;
@@ -43,23 +42,47 @@ public final class HttpSpywareService implements SpywareService {
                              .authenticate(spywareUsername, spywarePassword);
     }
 
-    @Cacheable("RawSpywareData")
     @Override
-    public byte[] fetchData(final String event, final String instance, final String username) throws IOException {
+    public String fetchIndex(final String instance, final String username) throws IOException {
 
-        final String[] indexes = event.split("\\s+");
+        LOG.info("Fetching Spyware-index for {} from instance {}...",
+                 username,
+                 instance);
 
-        final int start = Integer.parseInt(indexes[0]);
-        final int length = Integer.parseInt(indexes[1]);
+        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/%s.idx", instance, username))
+                                                          .get()
+                                                          .execute();
+
+        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            response.close();
+            throw new NotFoundException();
+        }
+
+        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            response.close();
+            throw new IOException("Remote server returned status " + response.getRawStatusCode());
+        }
+
+        LOG.info("Spyware-index fetched.");
+
+        final String index = IOUtils.toString(response.getBody());
+        response.close();
+
+        return index;
+    }
+
+    @Cacheable("spyware")
+    @Override
+    public byte[] fetchChunkByRange(final String instance, final String username, final int start, final int end) throws IOException {
 
         LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
-                    username,
-                    instance,
-                    start,
-                    start + length);
+                 username,
+                 instance,
+                 start,
+                 end);
 
-        final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).build();
-        request.getHeaders().set("Range", String.format("bytes=%d-%d", start, start + length));
+        final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).get();
+        request.getHeaders().set("Range", String.format("bytes=%d-%d", start, end));
 
         final ClientHttpResponse response = request.execute();
 
@@ -79,31 +102,5 @@ public final class HttpSpywareService implements SpywareService {
         LOG.info("Spyware-data fetched.");
 
         return bytes;
-    }
-
-    @Override
-    public InputStream fetchIndex(final String instance, final String username) throws IOException {
-
-        LOG.info("Fetching Spyware-index for {} from instance {}...",
-                    username,
-                    instance);
-
-        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/%s.idx", instance, username))
-                                                          .build()
-                                                          .execute();
-
-        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            response.close();
-            throw new NotFoundException();
-        }
-
-        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
-            response.close();
-            throw new IOException("Remote server returned status " + response.getRawStatusCode());
-        }
-
-        LOG.info("Spyware-index fetched.");
-
-        return response.getBody();
     }
 }

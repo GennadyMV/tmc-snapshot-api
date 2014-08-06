@@ -1,23 +1,28 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.codec.binary.Base64;
 
 public final class Exercise {
 
-    private final Long id;
+    private final String id;
     private final String name;
+    private final List<SnapshotEvent> snapshotEvents;
 
-    @JsonCreator
-    public Exercise(@JsonProperty("id") final Long id, @JsonProperty("name") final String name) {
+    public Exercise(final String name) {
 
-        this.id = id;
+        id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
+        snapshotEvents = new ArrayList<>();
     }
 
-    public Long getId() {
+    public String getId() {
 
         return id;
     }
@@ -27,10 +32,21 @@ public final class Exercise {
         return name;
     }
 
+    @JsonIgnore
+    public Collection<SnapshotEvent> getSnapshotEvents() {
+
+        return snapshotEvents;
+    }
+
+    public void addSnapshotEvent(final SnapshotEvent snapshot) {
+
+        snapshotEvents.add(snapshot);
+    }
+
     @Override
     public int hashCode() {
 
-        return 83 * 7 + Objects.hashCode(this.name);
+        return 83 * 7 + Objects.hashCode(name);
     }
 
     @Override

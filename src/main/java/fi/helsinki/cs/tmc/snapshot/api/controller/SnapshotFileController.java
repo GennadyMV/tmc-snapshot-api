@@ -1,9 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
+import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotFileService;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -17,53 +15,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants", produces = "application/json")
+@RequestMapping(value = "{instance}/participants/{userId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/files", produces = "application/json")
 public final class SnapshotFileController {
 
     @Autowired
-    private SnapshotService snapshotService;
+    private SnapshotFileService snapshotFileService;
 
-    @Autowired
-    private TmcService tmcService;
-
-    @RequestMapping(method = RequestMethod.GET, value = "{participant}/snapshots/{snapshot}/files")
+    @RequestMapping(method = RequestMethod.GET)
     public Collection<SnapshotFile> list(@PathVariable final String instance,
-                                         @PathVariable final Long participant,
-                                         @PathVariable final Long snapshot) throws IOException {
+                               @PathVariable final String userId,
+                               @PathVariable final String courseId,
+                               @PathVariable final String exerciseId,
+                               @PathVariable final Long snapshotId) throws IOException {
 
-        final String username = tmcService.findUsernameById(instance, participant);
-
-        if (username == null) {
-            throw new NotFoundException();
-        }
-
-        return snapshotService.find(instance, username, snapshot).getFiles();
+        return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId);
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "{participant}/snapshots/{snapshot}/files/**",
+                    value = "**",
                     produces = "text/plain")
     public String read(final HttpServletRequest request,
                        @PathVariable final String instance,
-                       @PathVariable final Long participant,
-                       @PathVariable final Long snapshot) throws IOException {
+                       @PathVariable final String userId,
+                       @PathVariable final String courseId,
+                       @PathVariable final String exerciseId,
+                       @PathVariable final Long snapshotId) throws IOException {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";
         final String path = "/" + url.substring(url.indexOf(separator) + separator.length());
 
-        final String username = tmcService.findUsernameById(instance, participant);
-
-        if (username == null) {
-            throw new NotFoundException();
-        }
-
-        final SnapshotFile file = snapshotService.find(instance, username, snapshot).getFile(path);
-
-        if (file == null) {
-            throw new NotFoundException();
-        }
-
-        return file.getContent();
+        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, path);
     }
 }

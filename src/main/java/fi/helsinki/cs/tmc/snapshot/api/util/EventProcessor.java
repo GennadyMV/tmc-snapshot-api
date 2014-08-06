@@ -1,13 +1,12 @@
-package fi.helsinki.cs.tmc.snapshot.api.service;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.DiffMatchPatch;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Metadata;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
-import fi.helsinki.cs.tmc.snapshot.api.util.Zip;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventMetadata;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,7 +39,7 @@ public final class EventProcessor {
 
         try {
             data = Zip.decompress(decodedData);
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             return;
         }
 
@@ -58,12 +57,12 @@ public final class EventProcessor {
 
     private void processMetadata(final SnapshotEvent event) {
 
-        final Metadata metadata;
+        final SnapshotEventMetadata metadata;
 
         try {
-            metadata = mapper.readValue(event.getMetadata(), Metadata.class);
+            metadata = mapper.readValue(event.getMetadata(), SnapshotEventMetadata.class);
         } catch (IOException | NullPointerException exception) {
-            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), exception.getMessage());
+            LOG.info("Unable to parse metadata for event {}: {}.", event.getHappenedAt(), exception.getMessage());
             return;
         }
 

@@ -16,14 +16,14 @@ public final class ExerciseTest {
     @Before
     public void setUp() {
 
-        exercise = new Exercise(1L, "test");
+        exercise = new Exercise("test");
     }
 
     @Test
     public void constructorSetsValues() {
 
-        assertEquals(1L, (long) exercise.getId());
         assertEquals("test", exercise.getName());
+        assertEquals("dGVzdA", exercise.getId());
         assertEquals(83 * 7 + Objects.hashCode(exercise.getName()), exercise.hashCode());
     }
 
@@ -42,16 +42,18 @@ public final class ExerciseTest {
     @Test
     public void equalsShouldReturnFalseOnDifferentExerciseId() {
 
-        final Exercise other = new Exercise(2L, "test");
+        final Exercise other = new Exercise("toast");
 
+        assertFalse(exercise.getId().equals(other.getId()));
         assertFalse(exercise.equals(other));
     }
 
     @Test
     public void equalsShouldReturnTrueOnSameExerciseId() {
 
-        final Exercise other = new Exercise(1L, "hy");
+        final Exercise other = new Exercise("test");
 
+        assertTrue(exercise.getId().equals(other.getId()));
         assertTrue(exercise.equals(other));
     }
 }

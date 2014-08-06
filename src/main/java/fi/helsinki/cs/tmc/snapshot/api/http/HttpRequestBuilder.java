@@ -43,7 +43,7 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
 
         final AuthCache cache = new BasicAuthCache();
         final AuthScheme scheme = new BasicScheme();
-        final HttpHost httpHost = new HttpHost(this.host, this.port, this.protocol);
+        final HttpHost httpHost = new HttpHost(host, port, protocol);
 
         cache.put(httpHost, scheme);
 
@@ -80,19 +80,19 @@ public final class HttpRequestBuilder extends HttpComponentsClientHttpRequestFac
         return this;
     }
 
-    public HttpRequestBuilder setPath(final String newPath) {
-
-        this.path = newPath;
-        return this;
-    }
-
     public HttpRequestBuilder addParameter(final String key, final String value) {
 
         parameters.put(key, value);
         return this;
     }
 
-    public ClientHttpRequest build() throws IOException {
+    public HttpRequestBuilder setPath(final String path) {
+
+        this.path = path;
+        return this;
+    }
+
+    public ClientHttpRequest get() throws IOException {
 
         final URI uri = buildURI();
         final ClientHttpRequest request = createRequest(uri, HttpMethod.GET);

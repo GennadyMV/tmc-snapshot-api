@@ -24,7 +24,7 @@ public final class HttpRequestBuilderTest {
     @Test
     public void constructorSetsValues() throws URISyntaxException, IOException {
 
-        final ClientHttpRequest request = builder.build();
+        final ClientHttpRequest request = builder.get();
 
         assertEquals("host", request.getURI().getHost());
         assertEquals(80, request.getURI().getPort());
@@ -35,7 +35,7 @@ public final class HttpRequestBuilderTest {
     public void setPathSetsPath() throws IOException, URISyntaxException {
 
         builder.setPath("/path/to/foo");
-        final ClientHttpRequest request = builder.build();
+        final ClientHttpRequest request = builder.get();
 
         assertEquals("http://host:80/path/to/foo", request.getURI().toString());
     }
@@ -44,7 +44,7 @@ public final class HttpRequestBuilderTest {
     public void addParameterAddsParameter() throws IOException, URISyntaxException {
 
         builder.addParameter("param", "val");
-        final ClientHttpRequest request = builder.build();
+        final ClientHttpRequest request = builder.get();
 
         assertTrue(request.getURI().toString().contains("param=val"));
     }
@@ -54,7 +54,7 @@ public final class HttpRequestBuilderTest {
 
         builder.addParameter("param1", "val1");
         builder.addParameter("param2", "val2");
-        final ClientHttpRequest request = builder.build();
+        final ClientHttpRequest request = builder.get();
 
         assertTrue(request.getURI().toString().contains("param1=val1"));
         assertTrue(request.getURI().toString().contains("param2=val2"));

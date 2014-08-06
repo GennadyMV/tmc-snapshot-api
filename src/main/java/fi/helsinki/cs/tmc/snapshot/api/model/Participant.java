@@ -1,29 +1,49 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.codec.binary.Base64;
 
 public final class Participant {
 
-    private final Long id;
-    private final List<Snapshot> snapshots;
+    private final String id;
+    private final String username;
+    private final Map<String, Course> courses;
 
-    @JsonCreator
-    public Participant(@JsonProperty("id") final Long id, @JsonProperty("snapshots") final List<Snapshot> snapshots) {
+    public Participant(final String username) {
 
-        this.id = id;
-        this.snapshots = snapshots;
+        id = Base64.encodeBase64URLSafeString(username.getBytes());
+        this.username = username;
+        courses = new HashMap<>();
     }
 
-    public Long getId() {
+    public String getId() {
 
         return id;
     }
 
-    public List<Snapshot> getSnapshots() {
+    public String getUsername() {
 
-        return snapshots;
+        return username;
+    }
+
+    @JsonIgnore
+    public Collection<Course> getCourses() {
+
+        return courses.values();
+    }
+
+    public void addCourse(final Course course) {
+
+        courses.put(course.getId(), course);
+    }
+
+    public Course getCourse(final String id) {
+
+        return courses.get(id);
     }
 }

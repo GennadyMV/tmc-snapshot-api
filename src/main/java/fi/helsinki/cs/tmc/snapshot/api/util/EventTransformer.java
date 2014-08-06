@@ -1,7 +1,5 @@
-package fi.helsinki.cs.tmc.snapshot.api.service;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
@@ -21,18 +19,6 @@ import org.springframework.stereotype.Service;
 public final class EventTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventTransformer.class);
-
-    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
-
-        if (events == null) {
-            return new ArrayList<>();
-        }
-
-        final List<Snapshot> snapshots = toFileSnapshots(events);
-        toExerciseSnapshots(snapshots);
-
-        return snapshots;
-    }
 
     private List<Snapshot> toFileSnapshots(final Collection<SnapshotEvent> events) {
 
@@ -55,20 +41,14 @@ public final class EventTransformer {
                 files.put(entry.getKey(), new SnapshotFile(entry.getKey(), entry.getValue()));
             }
 
-            // TODO: Resolve correct IDs
-            final Course course = new Course(1L, event.getCourseName());
-            final Exercise exercise = new Exercise(1L, event.getExerciseName());
-
             final boolean isComplete = event.getEventType().equals("code_snapshot");
 
             snapshots.add(new Snapshot(event.getHappenedAt(),
-                                       course,
-                                       exercise,
                                        files,
                                        isComplete));
         }
 
-        LOG.info("Done converting events.");
+        LOG.info("Converted events.");
 
         return snapshots;
     }
@@ -77,16 +57,13 @@ public final class EventTransformer {
 
         LOG.info("Building exercise continuums...");
 
-        final Map<String, Snapshot> cache = new HashMap<>();
+        Snapshot previous = null;
 
         for (Snapshot current : snapshots) {
 
-            final String key = current.getCourse().getName() + "-" + current.getExercise().getName();
-
             // Complete snapshots are already complete, no need to parse previous.
             // Also skip if current snapshot is the first from this exercise.
-            if (!current.isFromCompleteSnapshot() && cache.containsKey(key)) {
-                final Snapshot previous = cache.get(key);
+            if (!current.isFromCompleteSnapshot() && previous != null) {
 
                 for (SnapshotFile file : previous.getFiles()) {
                     if (current.getFile(file.getPath()) == null) {
@@ -94,9 +71,21 @@ public final class EventTransformer {
                     }
                 }
             }
-            cache.put(key, current);
+            previous = current;
         }
 
-        LOG.info("Done building exercise continuums.");
+        LOG.info("Built exercise continuums.");
+    }
+
+    public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
+
+        if (events == null) {
+            return new ArrayList<>();
+        }
+
+        final List<Snapshot> snapshots = toFileSnapshots(events);
+        toExerciseSnapshots(snapshots);
+
+        return snapshots;
     }
 }

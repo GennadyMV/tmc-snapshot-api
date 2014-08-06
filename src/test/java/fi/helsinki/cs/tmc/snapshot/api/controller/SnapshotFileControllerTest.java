@@ -1,17 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
-import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
-import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
-import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
+import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotFileService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -22,36 +16,41 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
-@IntegrationTest
 @ActiveProfiles("test")
 public final class SnapshotFileControllerTest {
 
-    private static final String HY_INSTANCE = "hy";
+    private static final String INSTANCE = "hy";
+    private static final String USER = "testUsername";
+    private static final String COURSE = "testCourseName";
+    private static final String EXERCISE = "testExerciseName";
+    private static final Long SNAPSHOT = 1L;
+    private static final String FILE_BASE_URL = "/hy/participants/testUsername/courses/testCourseName/exercises/testExerciseName/snapshots/1/files";
 
     @Mock
-    private TmcService tmcService;
-
-    @Mock
-    private SnapshotService snapshotService;
+    private SnapshotFileService snapshotFileService;
 
     @InjectMocks
     private SnapshotFileController snapshotFileController;
@@ -69,70 +68,58 @@ public final class SnapshotFileControllerTest {
     @Test
     public void shouldReturnSnapshotFiles() throws Exception {
 
-        final ObjectMapper mapper = new ObjectMapper();
+        final List<SnapshotFile> files = new ArrayList<>();
+        files.add(new SnapshotFile("path1", "content1"));
+        files.add(new SnapshotFile("path2", "content2"));
+        files.add(new SnapshotFile("path3", "content3"));
 
-        final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot(1L,
-                                                   new Course(1L, "course"),
-                                                   new Exercise(1L, "exercise"),
-                                                   Arrays.asList(file));
 
-        when(tmcService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
-        when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
+        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenReturn(files);
 
-        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots/1/files")).andReturn();
-        final String snapshotFilesJson = result.getResponse().getContentAsString();
+        mockMvc.perform(get(FILE_BASE_URL))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", hasSize(3)))
+               .andExpect(jsonPath("$[0]", is("path1")))
+               .andExpect(jsonPath("$[1]", is("path2")))
+               .andExpect(jsonPath("$[2]", is("path3")));
 
-        final List<SnapshotFile> snapshotFiles = Arrays.asList(mapper.readValue(snapshotFilesJson, SnapshotFile[].class));
+        verify(snapshotFileService).findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT);
+        verifyNoMoreInteractions(snapshotFileService);
 
-        assertEquals(1, snapshotFiles.size());
-        assertEquals("/src/HeiMaailma.java", snapshotFiles.get(0).getPath());
     }
 
     @Test
     public void shouldReturnSnapshotFile() throws Exception {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot(1L,
-                                                   new Course(1L, "course"),
-                                                   new Exercise(1L, "exercise"),
-                                                   Arrays.asList(file));
 
-        when(tmcService.findUsernameById(HY_INSTANCE, 2064)).thenReturn("jones");
-        when(snapshotService.find(HY_INSTANCE, "jones", 1L)).thenReturn(snapshotData);
+        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, "/path")).thenReturn("testContent");
 
-        final MvcResult result = mockMvc.perform(get("/hy/participants/2064/snapshots/1/files/src/HeiMaailma.java")).andReturn();
-        final String fileContent = result.getResponse().getContentAsString();
+        mockMvc.perform(get(FILE_BASE_URL + "/path"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+               .andExpect(content().string("testContent"));
 
-        assertEquals("text/plain", result.getResponse().getContentType());
-        assertEquals("public class HeiMaailma { }", fileContent);
+        verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, "/path");
+        verifyNoMoreInteractions(snapshotFileService);
     }
 
     @Test
-    public void shouldReturn404OnNonExistantParticipantId() throws Exception {
+    public void listShouldHandleNotFoundException() throws Exception {
 
-        when(tmcService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
+        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenThrow(new NotFoundException());
 
-        mockMvc.perform(get("/hy/participants/0/snapshots/1/files")).andExpect(status().is(404));
+        mockMvc.perform(get(FILE_BASE_URL))
+                .andExpect(status().is(404));
     }
 
     @Test
-    public void shouldReturn404OnNonExistantParticipantIdForSpecificFile() throws Exception {
+    public void readShouldHandleNotFoundException() throws Exception {
 
-        when(tmcService.findUsernameById(HY_INSTANCE, 0)).thenReturn(null);
+        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, "/path")).thenThrow(new NotFoundException());
 
-        mockMvc.perform(get("/hy/participants/0/snapshots/1/files/src/Legit.java")).andExpect(status().is(404));
-    }
-
-    @Test
-    public void shouldReturn404OnNonExistantSnapshotFile() throws Exception {
-
-        when(tmcService.findUsernameById(HY_INSTANCE, 1)).thenReturn("jack");
-        when(snapshotService.find(HY_INSTANCE, "jack", 1L)).thenReturn(new Snapshot(1L,
-                                                                                    new Course(1L, "course"),
-                                                                                    new Exercise(1L, "exercise"),
-                                                                                    new ArrayList<SnapshotFile>()));
-
-        mockMvc.perform(get("/hy/participants/1/snapshots/1/files/src/404.java")).andExpect(status().is(404));
+        mockMvc.perform(get(FILE_BASE_URL + "/path"))
+                .andExpect(status().is(404));
     }
 }

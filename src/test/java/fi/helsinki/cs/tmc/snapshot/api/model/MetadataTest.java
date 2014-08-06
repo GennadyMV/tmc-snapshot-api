@@ -9,7 +9,7 @@ public final class MetadataTest {
     @Test
     public void constructorSetsValuesCorrectly() {
 
-        final Metadata metadata = new Metadata("myCause", "myFile");
+        final SnapshotEventMetadata metadata = new SnapshotEventMetadata("myCause", "myFile");
 
         assertEquals("myCause", metadata.getCause());
         assertEquals("myFile", metadata.getFile());

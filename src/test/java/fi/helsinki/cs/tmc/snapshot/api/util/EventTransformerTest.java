@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.snapshot.api.service;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 public class EventTransformerTest {
 
@@ -52,9 +51,6 @@ public class EventTransformerTest {
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
         assertEquals(2, snapshots.size());
-
-        assertEquals("exercise1", snapshots.get(0).getExercise().getName());
-        assertEquals("exercise2", snapshots.get(1).getExercise().getName());
 
         assertNotNull(snapshots.get(0).getFile("example.java"));
         assertNotNull(snapshots.get(0).getFile("test.java"));
@@ -101,30 +97,22 @@ public class EventTransformerTest {
         event1.getFiles().put("example.java", "public class Example { }");
         event1.getFiles().put("test.java", "public class Test { }");
 
-        final SnapshotEvent event2 = createEvent("mooc", "example", 101L, "text_insert");
+        final SnapshotEvent event2 = createEvent("mooc", "continuum", 102L, "text_insert");
 
-        event2.getFiles().put("random.java", "public class Random { }");
-
-        final SnapshotEvent event3 = createEvent("mooc", "continuum", 102L, "text_insert");
-
-        event3.getFiles().put("experiment.java", "public class Experiment { }");
-        event3.getFiles().put("trial.java", "public class Trial { }");
+        event2.getFiles().put("experiment.java", "public class Experiment { }");
+        event2.getFiles().put("trial.java", "public class Trial { }");
 
         events.add(event1);
         events.add(event2);
-        events.add(event3);
 
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
         assertEquals(2, snapshots.get(0).getFiles().size());
-        assertEquals(1, snapshots.get(1).getFiles().size());
-        assertEquals(4, snapshots.get(2).getFiles().size());
+        assertEquals(4, snapshots.get(1).getFiles().size());
 
-        assertNull(snapshots.get(2).getFile("random.java"));
-
-        assertNotNull(snapshots.get(2).getFile("example.java"));
-        assertNotNull(snapshots.get(2).getFile("test.java"));
-        assertNotNull(snapshots.get(2).getFile("experiment.java"));
-        assertNotNull(snapshots.get(2).getFile("trial.java"));
+        assertNotNull(snapshots.get(1).getFile("example.java"));
+        assertNotNull(snapshots.get(1).getFile("test.java"));
+        assertNotNull(snapshots.get(1).getFile("experiment.java"));
+        assertNotNull(snapshots.get(1).getFile("trial.java"));
     }
 }

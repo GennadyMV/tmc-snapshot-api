@@ -10,19 +10,14 @@ public final class SnapshotEventInformation {
     @JsonProperty("full_document")
     private Boolean fullDocument;
 
-    public String getFile() {
-
-        return file;
-    }
-
     public void setFile(final String file) {
 
         this.file = file;
     }
 
-    public String getPatches() {
+    public String getFile() {
 
-        return patches;
+        return file;
     }
 
     public void setPatches(final String patches) {
@@ -30,13 +25,18 @@ public final class SnapshotEventInformation {
         this.patches = patches;
     }
 
-    public Boolean isFullDocument() {
+    public String getPatches() {
 
-        return fullDocument;
+        return patches;
     }
 
     public void setFullDocument(final Boolean fullDocument) {
 
         this.fullDocument = fullDocument;
+    }
+
+    public Boolean isFullDocument() {
+
+        return fullDocument;
     }
 }
