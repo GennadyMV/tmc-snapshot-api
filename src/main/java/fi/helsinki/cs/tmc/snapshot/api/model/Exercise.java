@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.util.DigestUtils;
+import org.apache.commons.codec.binary.Base64;
 
 public final class Exercise {
 
@@ -17,7 +17,7 @@ public final class Exercise {
 
     public Exercise(final String name) {
 
-        id = DigestUtils.md5DigestAsHex(name.getBytes());
+        id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
         snapshotEvents = new ArrayList<>();
     }

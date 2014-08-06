@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.springframework.util.DigestUtils;
+import org.apache.commons.codec.binary.Base64;
 
 public final class Course {
 
@@ -19,7 +19,7 @@ public final class Course {
 
     public Course(final String name) {
 
-        id = DigestUtils.md5DigestAsHex(name.getBytes());
+        id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
         exercises = new HashMap<>();
     }
