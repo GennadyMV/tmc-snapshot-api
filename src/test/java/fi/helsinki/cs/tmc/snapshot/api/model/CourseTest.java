@@ -1,14 +1,14 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import java.util.Objects;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import org.springframework.util.DigestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class CourseTest {
@@ -25,7 +25,7 @@ public class CourseTest {
     public void constructorSetsValues() {
 
         assertEquals("mooc", course.getName());
-        assertEquals(DigestUtils.md5DigestAsHex("mooc".getBytes()), course.getId());
+        assertEquals("bW9vYw", course.getId());
         assertEquals(59 * 7 + Objects.hashCode(course.getName()), course.hashCode());
     }
 
@@ -44,7 +44,9 @@ public class CourseTest {
 
         assertEquals(1, course.getExercises().size());
         assertEquals(e, course.getExercises().iterator().next());
-        assertEquals(e, course.getExercise("ex1"));
+
+        assertNull(course.getExercise("ex1"));
+        assertEquals(e, course.getExercise("ZXgx"));
     }
 
     @Test

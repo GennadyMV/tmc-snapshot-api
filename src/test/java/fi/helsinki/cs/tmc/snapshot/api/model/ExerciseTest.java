@@ -23,7 +23,7 @@ public class ExerciseTest {
     public void constructorSetsValues() {
 
         assertEquals("test", exercise.getName());
-        assertEquals("098f6bcd4621d373cade4e832627b4f6", exercise.getId());
+        assertEquals("dGVzdA", exercise.getId());
         assertEquals(83 * 7 + Objects.hashCode(exercise.getName()), exercise.hashCode());
     }
 
