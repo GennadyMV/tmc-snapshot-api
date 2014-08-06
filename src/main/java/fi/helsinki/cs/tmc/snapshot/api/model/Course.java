@@ -19,7 +19,7 @@ public final class Course {
 
     public Course(final String name) {
 
-        this.id = DigestUtils.md5DigestAsHex(name.getBytes());
+        id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
         exercises = new HashMap<>();
     }
