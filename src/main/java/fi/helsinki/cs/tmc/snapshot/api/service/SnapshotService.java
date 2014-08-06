@@ -9,6 +9,6 @@ public interface SnapshotService {
 
     List<Snapshot> find(final String instance, final String username, final String course, final String exercise) throws IOException;
 
-    Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshot);
+    Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshot) throws IOException;
 
 }

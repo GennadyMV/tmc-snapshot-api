@@ -29,22 +29,23 @@ public class SnapshotServiceImpl implements SnapshotService {
 
         final Collection<SnapshotEvent> events = exerciseService.find(instance, username, course, exercise).getSnapshotEvents();
 
-        System.out.println(events.size());
-
-        System.out.println("EVENTS:");
-        for (SnapshotEvent event : events) {
-            System.out.println(event.getHappenedAt());
-        }
-
         eventProcessor.process(events);
-        return eventTransformer.toSnapshotList(events);
 
+        return eventTransformer.toSnapshotList(events);
     }
 
     @Override
-    public Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshot) {
+    public Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshotId) throws IOException {
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        final List<Snapshot> snapshots = find(instance, username, course, exercise);
+
+        for (Snapshot snapshot : snapshots) {
+            if (snapshot.getId().equals(snapshotId)) {
+                return snapshot;
+            }
+        }
+
+        return null;
     }
 
 }
