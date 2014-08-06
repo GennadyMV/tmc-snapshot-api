@@ -1,7 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public final class Participant {
 
     public Participant(final String username) {
 
-        this.id = new String(Base64.getEncoder().encode(username.getBytes()));
+        this.id = new String(Base64.encodeBase64(username.getBytes()));
         this.username = username;
         this.courses = new HashMap<>();
     }
