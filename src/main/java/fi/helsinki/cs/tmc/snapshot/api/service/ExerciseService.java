@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface ExerciseService {
 
-    Collection<Exercise> find(String instance, String username, String course) throws IOException;
-    Exercise find(String instance, String username, String course, String exercise) throws IOException;
+    Collection<Exercise> findAll(String instance, String username, String course) throws IOException;
+    Exercise findById(String instance, String username, String course, String exercise) throws IOException;
 
 }

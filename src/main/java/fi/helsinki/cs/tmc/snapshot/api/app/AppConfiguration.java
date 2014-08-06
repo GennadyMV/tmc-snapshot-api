@@ -18,35 +18,35 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 public class AppConfiguration extends WebMvcConfigurerAdapter {
 
-    @Override
-    public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
+    private Cache buildSpywareCache() {
 
-        configurer.favorPathExtension(false)
-                  .defaultContentType(MediaType.APPLICATION_JSON);
+        final CacheConfiguration configuration = new CacheConfiguration();
+        configuration.setName("spyware");
+
+        // 50% of max heap size
+        final Long maxMemory = Runtime.getRuntime().maxMemory();
+        final Long cacheMemory = (long) (maxMemory * 0.5);
+        configuration.setMaxBytesLocalHeap(cacheMemory);
+
+        return new Cache(configuration);
     }
 
     @Bean
     public CacheManager cacheManager() {
 
-        // Caches
-        final Cache tmcUsername = new Cache(new CacheConfiguration("TmcUsername", 5000));
-
-        final CacheConfiguration spywareConfig = new CacheConfiguration();
-        spywareConfig.setName("RawSpywareData");
-
-        // 50% of max heap size
-        final Long maxMemory = Runtime.getRuntime().maxMemory();
-        final Long cacheMemory = (long) (maxMemory * 0.5);
-        spywareConfig.setMaxBytesLocalHeap(cacheMemory);
-
-        final Cache rawSpywareData = new Cache(spywareConfig);
-
         // Ehcache Manager
         final net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.newInstance();
 
-        cacheManager.addCache(tmcUsername);
-        cacheManager.addCache(rawSpywareData);
+        // Caches
+        cacheManager.addCache(buildSpywareCache());
 
         return new EhCacheCacheManager(cacheManager);
+    }
+
+    @Override
+    public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
+
+        configurer.favorPathExtension(false)
+                  .defaultContentType(MediaType.APPLICATION_JSON);
     }
 }

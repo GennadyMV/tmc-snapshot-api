@@ -19,9 +19,9 @@ public final class Course {
 
     public Course(final String name) {
 
-        this.id = DigestUtils.md5DigestAsHex(name.getBytes());
+        id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
-        this.exercises = new HashMap<>();
+        exercises = new HashMap<>();
     }
 
     public String getId() {
@@ -54,7 +54,7 @@ public final class Course {
     @Override
     public int hashCode() {
 
-        return 59 * 7 + Objects.hashCode(this.name);
+        return 59 * 7 + Objects.hashCode(name);
     }
 
     @Override

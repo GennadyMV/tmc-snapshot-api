@@ -16,8 +16,8 @@ public final class Snapshot implements Comparable<Snapshot> {
     public Snapshot(final Long id, final List<SnapshotFile> files) {
 
         this.id = id;
-        this.timestamp = new Date(id);
-        this.fromCompleteSnapshot = false;
+        timestamp = new Date(id);
+        fromCompleteSnapshot = false;
 
         this.files = new HashMap<>();
 
@@ -36,9 +36,9 @@ public final class Snapshot implements Comparable<Snapshot> {
                     final boolean fromCompleteSnapshot) {
 
         this.id = id;
-        this.timestamp = new Date(id);
-        this.fromCompleteSnapshot = fromCompleteSnapshot;
+        timestamp = new Date(id);
         this.files = files;
+        this.fromCompleteSnapshot = fromCompleteSnapshot;
     }
 
     public Long getId() {
@@ -74,6 +74,6 @@ public final class Snapshot implements Comparable<Snapshot> {
     @Override
     public int compareTo(final Snapshot other) {
 
-        return this.timestamp.compareTo(other.timestamp);
+        return timestamp.compareTo(other.timestamp);
     }
 }

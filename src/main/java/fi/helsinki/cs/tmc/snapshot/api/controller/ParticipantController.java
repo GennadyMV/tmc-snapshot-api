@@ -21,6 +21,6 @@ public final class ParticipantController {
     @RequestMapping(method = RequestMethod.GET, value = "{username}")
     public Participant read(@PathVariable final String instance, @PathVariable final String username) throws IOException {
 
-        return participantService.find(instance, username);
+        return participantService.findByInstanceAndId(instance, username);
     }
 }

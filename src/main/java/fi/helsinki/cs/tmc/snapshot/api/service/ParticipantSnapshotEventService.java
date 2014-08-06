@@ -17,39 +17,45 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SnapshotEventServiceImpl implements SnapshotEventService {
+public class ParticipantSnapshotEventService implements SnapshotEventService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SnapshotEventServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ParticipantSnapshotEventService.class);
+
+    @Autowired
+    private SpywareService spywareService;
 
     @Autowired
     private EventReader eventReader;
 
-    @Autowired
-    private SpywareService spywareServer;
-
     @Value("${spyware.chunkSize}")
     private int spywareChunkSize;
 
-    private List<byte[]> fetchData(final String index, final String instance, final String username) throws IOException {
+    private int[] indexRange(final String indexLine) {
 
+        final String[] indexes = indexLine.split("\\s+");
+        return new int[] { Integer.parseInt(indexes[0]), Integer.parseInt(indexes[1]) };
+    }
+
+    private List<byte[]> fetchDataByInstanceAndId(final String index, final String instance, final String username) throws IOException {
 
         final String[] indexLines = index.split("\\n");
-
         final int[] lastRange = indexRange(indexLines[indexLines.length - 1]);
         final int endIndex = lastRange[0] + lastRange[1];
-
         final byte[] byteData = new byte[endIndex];
+
+        LOG.info("Fetching Spyware-data for {} from instance {} with length {}...",
+                 username,
+                 instance,
+                 endIndex);
 
         int i = 0;
 
-        LOG.info("Fetching Spyware-data for {} from instance {} with length {}...",
-                    username,
-                    instance,
-                    endIndex);
-
         while (i < endIndex) {
 
-            final byte[] bytes = spywareServer.fetchChunk(instance, username, i, Math.min(i + spywareChunkSize, endIndex));
+            final byte[] bytes = spywareService.fetchChunkByInstanceAndId(instance,
+                                                                          username,
+                                                                          i,
+                                                                          Math.min(i + spywareChunkSize, endIndex));
 
             for (byte b : bytes) {
                 byteData[i++] = b;
@@ -66,23 +72,16 @@ public class SnapshotEventServiceImpl implements SnapshotEventService {
         return chunks;
     }
 
-    private int[] indexRange(final String indexLine) {
-
-        final String[] indexes = indexLine.split("\\s+");
-
-        return new int[] { Integer.parseInt(indexes[0]), Integer.parseInt(indexes[1]) };
-    }
-
     @Override
-    public Collection<SnapshotEvent> find(final String instance, final String username) throws IOException {
+    public Collection<SnapshotEvent> findByInstanceAndId(final String instance, final String username) throws IOException {
 
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
 
         // Fetch index
-        final String index = spywareServer.fetchIndex(instance, username);
+        final String index = spywareService.fetchIndexByInstanceAndId(instance, username);
 
         // Fetch data
-        final List<byte[]> content = fetchData(index, instance, username);
+        final List<byte[]> content = fetchDataByInstanceAndId(index, instance, username);
 
         // Read events from bytes
         final Collection<SnapshotEvent> events = eventReader.readEvents(content);
@@ -91,5 +90,4 @@ public class SnapshotEventServiceImpl implements SnapshotEventService {
 
         return events;
     }
-
 }

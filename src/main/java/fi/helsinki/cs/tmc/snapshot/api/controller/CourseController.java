@@ -1,4 +1,3 @@
-
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Course;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "{instance}/participants/{username}/courses", produces = "application/json")
-public class CourseController {
+public final class CourseController {
 
     @Autowired
     private CourseService courseService;
@@ -23,7 +22,7 @@ public class CourseController {
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Course> list(@PathVariable final String instance, @PathVariable final String username) throws IOException {
 
-        return courseService.find(instance, username);
+        return courseService.findAll(instance, username);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{course}")
@@ -31,6 +30,6 @@ public class CourseController {
                        @PathVariable final String username,
                        @PathVariable final String course) throws IOException {
 
-        return courseService.find(instance, username, course);
+        return courseService.findById(instance, username, course);
     }
 }

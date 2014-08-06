@@ -17,12 +17,16 @@ public final class SnapshotOrganiser implements SnapshotOrganiserService {
 
         for (SnapshotEvent event : snapshotEvents) {
 
+            // Course
+
             Course course = participant.getCourse(event.getCourseName());
 
             if (course == null) {
                 course = new Course(event.getCourseName());
                 participant.addCourse(course);
             }
+
+            // Exercise
 
             Exercise exercise = course.getExercise(event.getExerciseName());
 

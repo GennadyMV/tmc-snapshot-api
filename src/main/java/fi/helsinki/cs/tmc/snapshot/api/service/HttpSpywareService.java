@@ -42,17 +42,46 @@ public final class HttpSpywareService implements SpywareService {
                              .authenticate(spywareUsername, spywarePassword);
     }
 
-    @Cacheable("RawSpywareData")
     @Override
-    public byte[] fetchChunk(final String instance, final String username, final int start, final int end) throws IOException {
+    public String fetchIndexByInstanceAndId(final String instance, final String username) throws IOException {
+
+        LOG.info("Fetching Spyware-index for {} from instance {}...",
+                 username,
+                 instance);
+
+        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/%s.idx", instance, username))
+                                                          .get()
+                                                          .execute();
+
+        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            response.close();
+            throw new NotFoundException();
+        }
+
+        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
+            response.close();
+            throw new IOException("Remote server returned status " + response.getRawStatusCode());
+        }
+
+        LOG.info("Spyware-index fetched.");
+
+        final String index = IOUtils.toString(response.getBody());
+        response.close();
+
+        return index;
+    }
+
+    @Cacheable("spyware")
+    @Override
+    public byte[] fetchChunkByInstanceAndId(final String instance, final String username, final int start, final int end) throws IOException {
 
         LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
-                    username,
-                    instance,
-                    start,
-                    end);
+                 username,
+                 instance,
+                 start,
+                 end);
 
-        final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).build();
+        final ClientHttpRequest request = requestBuilder.setPath(String.format("/%s/%s.dat", instance, username)).get();
         request.getHeaders().set("Range", String.format("bytes=%d-%d", start, end));
 
         final ClientHttpResponse response = request.execute();
@@ -73,35 +102,5 @@ public final class HttpSpywareService implements SpywareService {
         LOG.info("Spyware-data fetched.");
 
         return bytes;
-    }
-
-
-    @Override
-    public String fetchIndex(final String instance, final String username) throws IOException {
-
-        LOG.info("Fetching Spyware-index for {} from instance {}...",
-                    username,
-                    instance);
-
-        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/%s.idx", instance, username))
-                                                          .build()
-                                                          .execute();
-
-        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            response.close();
-            throw new NotFoundException();
-        }
-
-        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
-            response.close();
-            throw new IOException("Remote server returned status " + response.getRawStatusCode());
-        }
-
-        LOG.info("Spyware-index fetched.");
-
-        final String index = IOUtils.toString(response.getBody());
-        response.close();
-
-        return index;
     }
 }
