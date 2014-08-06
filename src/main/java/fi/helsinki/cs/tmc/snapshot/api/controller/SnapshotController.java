@@ -25,7 +25,7 @@ public final class SnapshotController {
                                @PathVariable final String course,
                                @PathVariable final String exercise) throws IOException {
 
-        return snapshotService.find(instance, username, course, exercise);
+        return snapshotService.findAll(instance, username, course, exercise);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{snapshot}")

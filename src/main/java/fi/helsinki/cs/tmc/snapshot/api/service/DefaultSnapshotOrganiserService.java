@@ -10,7 +10,7 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class SnapshotOrganiser implements SnapshotOrganiserService {
+public final class DefaultSnapshotOrganiserService implements SnapshotOrganiserService {
 
     @Override
     public void organise(final Participant participant, final Collection<SnapshotEvent> snapshotEvents) {

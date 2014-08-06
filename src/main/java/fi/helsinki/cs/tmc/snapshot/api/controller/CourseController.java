@@ -30,6 +30,6 @@ public final class CourseController {
                        @PathVariable final String username,
                        @PathVariable final String course) throws IOException {
 
-        return courseService.findById(instance, username, course);
+        return courseService.find(instance, username, course);
     }
 }

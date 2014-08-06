@@ -20,9 +20,9 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class HttpSpywareService implements SpywareService {
+public final class DefaultSpywareService implements SpywareService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HttpSpywareService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSpywareService.class);
 
     @Value("${spyware.url}")
     private String spywareUrl;
@@ -43,7 +43,7 @@ public final class HttpSpywareService implements SpywareService {
     }
 
     @Override
-    public String fetchIndexByInstanceAndId(final String instance, final String username) throws IOException {
+    public String fetchIndex(final String instance, final String username) throws IOException {
 
         LOG.info("Fetching Spyware-index for {} from instance {}...",
                  username,
@@ -73,7 +73,7 @@ public final class HttpSpywareService implements SpywareService {
 
     @Cacheable("spyware")
     @Override
-    public byte[] fetchChunkByInstanceAndId(final String instance, final String username, final int start, final int end) throws IOException {
+    public byte[] fetchChunkByRange(final String instance, final String username, final int start, final int end) throws IOException {
 
         LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
                  username,
