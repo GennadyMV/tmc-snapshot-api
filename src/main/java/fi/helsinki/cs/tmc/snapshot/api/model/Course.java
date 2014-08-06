@@ -1,23 +1,29 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
+import org.springframework.util.DigestUtils;
 
 public final class Course {
 
-    private final Long id;
+    private final String id;
     private final String name;
 
-    @JsonCreator
-    public Course(@JsonProperty("id") final Long id, @JsonProperty("name") final String name) {
+    @JsonIgnore
+    private final Map<String, Exercise> exercises;
 
-        this.id = id;
+    public Course(final String name) {
+
+        id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
+        this.exercises = new HashMap<>();
     }
 
-    public Long getId() {
+    public String getId() {
 
         return id;
     }
@@ -25,6 +31,23 @@ public final class Course {
     public String getName() {
 
         return name;
+    }
+
+    public Collection<Exercise> getExercises() {
+
+        return exercises.values();
+    }
+
+    public void addExercise(final Exercise exercise) {
+
+        if (!exercises.containsKey(exercise.getName())) {
+            exercises.put(exercise.getName(), exercise);
+        }
+    }
+
+    public Exercise getExercise(final String exerciseName) {
+
+        return exercises.get(exerciseName);
     }
 
     @Override
@@ -48,4 +71,5 @@ public final class Course {
 
         return id.equals(other.getId());
     }
+
 }

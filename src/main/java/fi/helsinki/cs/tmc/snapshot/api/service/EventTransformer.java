@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
@@ -29,7 +27,7 @@ public final class EventTransformer {
         }
 
         final List<Snapshot> snapshots = toFileSnapshots(events);
-        toExerciseSnapshots(snapshots);
+        //toExerciseSnapshots(snapshots);
 
         return snapshots;
     }
@@ -55,24 +53,20 @@ public final class EventTransformer {
                 files.put(entry.getKey(), new SnapshotFile(entry.getKey(), entry.getValue()));
             }
 
-            // TODO: Resolve correct IDs
-            final Course course = new Course(1L, event.getCourseName());
-            final Exercise exercise = new Exercise(1L, event.getExerciseName());
-
             final boolean isComplete = event.getEventType().equals("code_snapshot");
 
-            snapshots.add(new Snapshot(event.getHappenedAt(),
-                                       course,
-                                       exercise,
-                                       files,
-                                       isComplete));
+//            snapshots.add(new Snapshot(event.getHappenedAt(),
+//                                       course,
+//                                       exercise,
+//                                       files,
+//                                       isComplete));
         }
 
         LOG.info("Done converting events.");
 
         return snapshots;
     }
-
+    /*
     private void toExerciseSnapshots(final List<Snapshot> snapshots) {
 
         LOG.info("Building exercise continuums...");
@@ -81,7 +75,7 @@ public final class EventTransformer {
 
         for (Snapshot current : snapshots) {
 
-            final String key = current.getCourse().getName() + "-" + current.getExercise().getName();
+            final String key = current.;
 
             // Complete snapshots are already complete, no need to parse previous.
             // Also skip if current snapshot is the first from this exercise.
@@ -98,5 +92,5 @@ public final class EventTransformer {
         }
 
         LOG.info("Done building exercise continuums.");
-    }
+    }*/
 }

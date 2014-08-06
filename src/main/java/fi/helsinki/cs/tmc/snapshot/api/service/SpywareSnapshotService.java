@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
+import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,9 @@ public final class SpywareSnapshotService implements SnapshotService {
 
     @Autowired
     private SnapshotDiffPatchService patchService;
+
+    @Autowired
+    private EventReader eventReader;
 
     @Autowired
     private SpywareService spywareServer;
@@ -48,9 +52,11 @@ public final class SpywareSnapshotService implements SnapshotService {
     }
 
     @Override
-    public List<Snapshot> findAll(final String instance, final String username) throws IOException {
+    public Participant find(final String instance, final String username) throws IOException {
 
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
+
+        final Participant participant = new Participant(username);
 
         // Fetch index
         final InputStream index = spywareServer.fetchIndex(instance, username);
@@ -58,9 +64,16 @@ public final class SpywareSnapshotService implements SnapshotService {
         // Fetch data
         final List<byte[]> content = findWithRange(index, instance, username);
 
-        return patchService.patch(content);
-    }
+        // Read events from bytes
+        final Collection<SnapshotEvent> events = eventReader.readEvents(content);
 
+        LOG.info("Found " + events.size() + " events ...");
+
+        new SnapshotOrganizer().organize(participant, events);
+
+        return participant;
+    }
+    /*
     @Override
     public Snapshot find(final String instance, final String username, final Long id) throws IOException {
 
@@ -76,4 +89,5 @@ public final class SpywareSnapshotService implements SnapshotService {
 
         return null;
     }
+    */
 }

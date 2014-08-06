@@ -1,23 +1,27 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+
+import org.springframework.util.DigestUtils;
 
 public final class Exercise {
 
-    private final Long id;
+    private final String id;
     private final String name;
+    private final List<SnapshotEvent> snapshotEvents;
 
-    @JsonCreator
-    public Exercise(@JsonProperty("id") final Long id, @JsonProperty("name") final String name) {
+    public Exercise(final String name) {
 
-        this.id = id;
+        id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
+        this.snapshotEvents = new ArrayList<>();
     }
 
-    public Long getId() {
+    public String getId() {
 
         return id;
     }
@@ -25,6 +29,17 @@ public final class Exercise {
     public String getName() {
 
         return name;
+    }
+
+    @JsonIgnore
+    public Collection<SnapshotEvent> getSnapshotEvents() {
+
+        return snapshotEvents;
+    }
+
+    public void addSnapshotEvent(final SnapshotEvent snapshot) {
+
+        snapshotEvents.add(snapshot);
     }
 
     @Override
