@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +26,8 @@ public class SnapshotEventServiceImpl implements SnapshotEventService {
     private SpywareService spywareServer;
 
     private List<byte[]> retrieveInChunks(final String index,
-                                       final String instance,
-                                       final String username) throws IOException  {
+                                          final String instance,
+                                          final String username) throws IOException  {
 
         final List<byte[]> byteData = new ArrayList<>();
 

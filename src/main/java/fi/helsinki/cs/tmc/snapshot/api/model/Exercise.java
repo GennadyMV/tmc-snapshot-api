@@ -17,7 +17,7 @@ public final class Exercise {
 
     public Exercise(final String name) {
 
-        id = DigestUtils.md5DigestAsHex(name.getBytes());
+        this.id = DigestUtils.md5DigestAsHex(name.getBytes());
         this.name = name;
         this.snapshotEvents = new ArrayList<>();
     }

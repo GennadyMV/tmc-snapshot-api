@@ -25,7 +25,10 @@ public class SnapshotServiceImpl implements SnapshotService {
     private EventTransformer eventTransformer;
 
     @Override
-    public List<Snapshot> find(final String instance, final String username, final String course, final String exercise) throws IOException {
+    public List<Snapshot> find(final String instance,
+                               final String username,
+                               final String course,
+                               final String exercise) throws IOException {
 
         final Collection<SnapshotEvent> events = exerciseService.find(instance, username, course, exercise).getSnapshotEvents();
 
@@ -35,7 +38,11 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     @Override
-    public Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshotId) throws IOException {
+    public Snapshot find(final String instance,
+                         final String username,
+                         final String course,
+                         final String exercise,
+                         final Long snapshotId) throws IOException {
 
         final List<Snapshot> snapshots = find(instance, username, course, exercise);
 

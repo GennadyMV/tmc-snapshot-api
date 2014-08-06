@@ -77,7 +77,6 @@ public final class EventTransformer {
             // Also skip if current snapshot is the first from this exercise.
             if (!current.isFromCompleteSnapshot() && previous != null) {
 
-
                 for (SnapshotFile file : previous.getFiles()) {
                     if (current.getFile(file.getPath()) == null) {
                         current.addFile(file);
