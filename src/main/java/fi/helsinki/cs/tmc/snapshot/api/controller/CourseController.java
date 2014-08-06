@@ -2,7 +2,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.service.CourseService;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -19,22 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     @Autowired
-    private SnapshotService snapshotService;
+    private CourseService courseService;
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Course> list(@PathVariable final String instance, @PathVariable final String username) throws IOException {
 
-        return snapshotService.find(instance, username)
-                              .getCourses();
+        return courseService.find(instance, username);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{course}")
     public Course read(@PathVariable final String instance,
-                            @PathVariable final String username,
-                            @PathVariable final String course) throws IOException {
+                       @PathVariable final String username,
+                       @PathVariable final String course) throws IOException {
 
-        return snapshotService.find(instance, username)
-                              .getCourse(course);
+        return courseService.find(instance, username, course);
     }
 
 }

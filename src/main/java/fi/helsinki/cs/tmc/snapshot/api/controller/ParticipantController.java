@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
-import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public final class ParticipantController {
     private TmcService tmcService;
 
     @Autowired
-    private SnapshotService snapshotService;
+    private ParticipantService participantService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<TmcParticipant> list(@PathVariable final String instance) throws IOException {
@@ -33,6 +33,6 @@ public final class ParticipantController {
     @RequestMapping(method = RequestMethod.GET, value = "{username}")
     public Participant read(@PathVariable final String instance, @PathVariable final String username) throws IOException {
 
-        return snapshotService.find(instance, username);
+        return participantService.find(instance, username);
     }
 }

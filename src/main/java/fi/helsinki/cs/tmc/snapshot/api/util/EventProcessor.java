@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.snapshot.api.service;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -7,7 +7,6 @@ import com.google.DiffMatchPatch;
 import fi.helsinki.cs.tmc.snapshot.api.model.Metadata;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
-import fi.helsinki.cs.tmc.snapshot.api.util.Zip;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

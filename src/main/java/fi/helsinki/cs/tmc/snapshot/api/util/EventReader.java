@@ -1,10 +1,9 @@
-package fi.helsinki.cs.tmc.snapshot.api.service;
+package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-import fi.helsinki.cs.tmc.snapshot.api.util.GZip;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
