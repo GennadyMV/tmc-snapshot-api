@@ -62,7 +62,7 @@ public final class EventProcessor {
         try {
             metadata = mapper.readValue(event.getMetadata(), SnapshotEventMetadata.class);
         } catch (IOException | NullPointerException exception) {
-            LOG.info("Unable to parse metadata for event {}:  {}.", event.getHappenedAt(), exception.getMessage());
+            LOG.info("Unable to parse metadata for event {}: {}.", event.getHappenedAt(), exception.getMessage());
             return;
         }
 

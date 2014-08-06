@@ -36,7 +36,7 @@ public class DefaultSnapshotEventService implements SnapshotEventService {
         return new int[] { Integer.parseInt(indexes[0]), Integer.parseInt(indexes[1]) };
     }
 
-    private List<byte[]> fetchDataByInstanceAndId(final String index, final String instance, final String username) throws IOException {
+    private List<byte[]> fetchData(final String index, final String instance, final String username) throws IOException {
 
         final String[] indexLines = index.split("\\n");
         final int[] lastRange = indexRange(indexLines[indexLines.length - 1]);
@@ -62,12 +62,17 @@ public class DefaultSnapshotEventService implements SnapshotEventService {
             }
         }
 
+        LOG.info("Spyware-data fetched.");
+        LOG.info("Splitting events from chunks...");
+
         final List<byte[]> chunks = new ArrayList<>();
 
         for (String line : indexLines) {
             final int[] range = indexRange(line);
             chunks.add(Arrays.copyOfRange(byteData, range[0], range[0] + range[1]));
         }
+
+        LOG.info("Split {} events.", indexLines.length);
 
         return chunks;
     }
@@ -81,12 +86,12 @@ public class DefaultSnapshotEventService implements SnapshotEventService {
         final String index = spywareService.fetchIndex(instance, username);
 
         // Fetch data
-        final List<byte[]> content = fetchDataByInstanceAndId(index, instance, username);
+        final List<byte[]> content = fetchData(index, instance, username);
 
         // Read events from bytes
         final Collection<SnapshotEvent> events = eventReader.readEvents(content);
 
-        LOG.info("Found " + events.size() + " events ...");
+        LOG.info("Found {} events.", events.size());
 
         return events;
     }

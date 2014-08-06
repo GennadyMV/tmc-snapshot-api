@@ -86,7 +86,7 @@ public final class EventReader {
             }
         }
 
-        LOG.info("Done building events.");
+        LOG.info("Built events.");
 
         return events;
     }
