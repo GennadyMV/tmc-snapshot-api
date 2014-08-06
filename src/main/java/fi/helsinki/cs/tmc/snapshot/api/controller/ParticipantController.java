@@ -18,9 +18,9 @@ public final class ParticipantController {
     @Autowired
     private ParticipantService participantService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "{username}")
-    public Participant read(@PathVariable final String instance, @PathVariable final String username) throws IOException {
+    @RequestMapping(method = RequestMethod.GET, value = "{id}")
+    public Participant read(@PathVariable final String instance, @PathVariable final String id) throws IOException {
 
-        return participantService.find(instance, username);
+        return participantService.find(instance, id);
     }
 }

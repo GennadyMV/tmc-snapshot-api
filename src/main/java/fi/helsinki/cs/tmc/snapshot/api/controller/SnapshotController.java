@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants/{username}/courses/{course}/exercises/{exercise}/snapshots", produces = "application/json")
+@RequestMapping(value = "{instance}/participants/{userId}/courses/{courseId}/exercises/{exerciseId}/snapshots", produces = "application/json")
 public final class SnapshotController {
 
     @Autowired
@@ -21,20 +21,20 @@ public final class SnapshotController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Snapshot> list(@PathVariable final String instance,
-                               @PathVariable final String username,
-                               @PathVariable final String course,
-                               @PathVariable final String exercise) throws IOException {
+                               @PathVariable final String userId,
+                               @PathVariable final String courseId,
+                               @PathVariable final String exerciseId) throws IOException {
 
-        return snapshotService.findAll(instance, username, course, exercise);
+        return snapshotService.findAll(instance, userId, courseId, exerciseId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{snapshot}")
     public Snapshot read(@PathVariable final String instance,
-                         @PathVariable final String username,
-                         @PathVariable final String course,
-                         @PathVariable final String exercise,
-                         @PathVariable final Long snapshot) throws IOException {
+                         @PathVariable final String userId,
+                         @PathVariable final String courseId,
+                         @PathVariable final String exerciseId,
+                         @PathVariable final Long snapshotId) throws IOException {
 
-        return snapshotService.find(instance, username, course, exercise, snapshot);
+        return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
     }
 }

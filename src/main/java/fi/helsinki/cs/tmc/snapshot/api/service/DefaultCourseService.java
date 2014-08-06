@@ -15,14 +15,14 @@ public final class DefaultCourseService implements CourseService {
     private ParticipantService participantService;
 
     @Override
-    public Collection<Course> findAll(final String instance, final String username) throws IOException {
+    public Collection<Course> findAll(final String instance, final String id) throws IOException {
 
-        return participantService.find(instance, username).getCourses();
+        return participantService.find(instance, id).getCourses();
     }
 
     @Override
-    public Course find(final String instance, final String username, final String course) throws IOException {
+    public Course find(final String instance, final String userId, final String courseId) throws IOException {
 
-        return participantService.find(instance, username).getCourse(course);
+        return participantService.find(instance, userId).getCourse(courseId);
     }
 }

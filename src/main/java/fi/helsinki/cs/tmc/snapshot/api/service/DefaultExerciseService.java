@@ -16,18 +16,18 @@ public final class DefaultExerciseService implements ExerciseService {
 
     @Override
     public Collection<Exercise> findAll(final String instance,
-                                        final String username,
-                                        final String course) throws IOException {
+                                        final String userId,
+                                        final String courseId) throws IOException {
 
-        return courseService.find(instance, username, course).getExercises();
+        return courseService.find(instance, userId, courseId).getExercises();
     }
 
     @Override
     public Exercise find(final String instance,
-                             final String username,
-                             final String course,
-                             final String exercise) throws IOException {
+                             final String userId,
+                             final String courseId,
+                             final String exerciseId) throws IOException {
 
-        return courseService.find(instance, username, course).getExercise(exercise);
+        return courseService.find(instance, userId, courseId).getExercise(exerciseId);
     }
 }

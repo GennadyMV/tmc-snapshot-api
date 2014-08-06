@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface ParticipantService {
 
-    Participant find(String instance, String username) throws IOException;
+    Participant find(String instance, String id) throws IOException;
 
 }

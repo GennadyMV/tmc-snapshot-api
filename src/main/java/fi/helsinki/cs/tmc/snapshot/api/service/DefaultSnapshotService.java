@@ -27,11 +27,11 @@ public final class DefaultSnapshotService implements SnapshotService {
 
     @Override
     public List<Snapshot> findAll(final String instance,
-                               final String username,
-                               final String course,
-                               final String exercise) throws IOException {
+                                  final String userId,
+                                  final String courseId,
+                                  final String exerciseId) throws IOException {
 
-        final Collection<SnapshotEvent> events = exerciseService.find(instance, username, course, exercise)
+        final Collection<SnapshotEvent> events = exerciseService.find(instance, userId, courseId, exerciseId)
                                                                 .getSnapshotEvents();
 
         eventProcessor.process(events);
@@ -47,12 +47,12 @@ public final class DefaultSnapshotService implements SnapshotService {
 
     @Override
     public Snapshot find(final String instance,
-                         final String username,
-                         final String course,
-                         final String exercise,
+                         final String userId,
+                         final String courseId,
+                         final String exerciseId,
                          final Long snapshotId) throws IOException {
 
-        final List<Snapshot> snapshots = findAll(instance, username, course, exercise);
+        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
 
         for (Snapshot snapshot : snapshots) {
             if (snapshot.getId().equals(snapshotId)) {

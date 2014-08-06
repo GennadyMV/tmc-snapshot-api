@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants/{username}/courses/{course}/exercises/{exercise}/snapshots/{snapshot}/files", produces = "application/json")
+@RequestMapping(value = "{instance}/participants/{userId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/files", produces = "application/json")
 public final class SnapshotFileController {
 
     @Autowired
@@ -23,12 +23,12 @@ public final class SnapshotFileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<SnapshotFile> list(@PathVariable final String instance,
-                               @PathVariable final String username,
-                               @PathVariable final String course,
-                               @PathVariable final String exercise,
-                               @PathVariable final Long snapshot) throws IOException {
+                               @PathVariable final String userId,
+                               @PathVariable final String courseId,
+                               @PathVariable final String exerciseId,
+                               @PathVariable final Long snapshotId) throws IOException {
 
-        return snapshotFileService.findAll(instance, username, course, exercise, snapshot);
+        return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId);
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -36,15 +36,15 @@ public final class SnapshotFileController {
                     produces = "text/plain")
     public String read(final HttpServletRequest request,
                        @PathVariable final String instance,
-                       @PathVariable final String username,
-                       @PathVariable final String course,
-                       @PathVariable final String exercise,
-                       @PathVariable final Long snapshot) throws IOException {
+                       @PathVariable final String userId,
+                       @PathVariable final String courseId,
+                       @PathVariable final String exerciseId,
+                       @PathVariable final Long snapshotId) throws IOException {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";
         final String path = "/" + url.substring(url.indexOf(separator) + separator.length());
 
-        return snapshotFileService.find(instance, username, course, exercise, snapshot, path);
+        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, path);
     }
 }

@@ -41,14 +41,14 @@ public final class Course {
 
     public void addExercise(final Exercise exercise) {
 
-        if (!exercises.containsKey(exercise.getName())) {
-            exercises.put(exercise.getName(), exercise);
+        if (!exercises.containsKey(exercise.getId())) {
+            exercises.put(exercise.getId(), exercise);
         }
     }
 
-    public Exercise getExercise(final String exerciseName) {
+    public Exercise getExercise(final String id) {
 
-        return exercises.get(exerciseName);
+        return exercises.get(id);
     }
 
     @Override

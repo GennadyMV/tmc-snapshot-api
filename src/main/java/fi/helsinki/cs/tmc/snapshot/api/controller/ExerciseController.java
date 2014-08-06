@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants/{username}/courses/{course}/exercises", produces = "application/json")
+@RequestMapping(value = "{instance}/participants/{userId}/courses/{courseId}/exercises", produces = "application/json")
 public final class ExerciseController {
 
     @Autowired
@@ -21,18 +21,18 @@ public final class ExerciseController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Exercise> list(@PathVariable final String instance,
-                                     @PathVariable final String username,
-                                     @PathVariable final String course) throws IOException {
+                                     @PathVariable final String userId,
+                                     @PathVariable final String courseId) throws IOException {
 
-        return exerciseService.findAll(instance, username, course);
+        return exerciseService.findAll(instance, userId, courseId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "{exercise}")
+    @RequestMapping(method = RequestMethod.GET, value = "{exerciseId}")
     public Exercise read(@PathVariable final String instance,
-                         @PathVariable final String username,
-                         @PathVariable final String course,
-                         @PathVariable final String exercise) throws IOException {
+                         @PathVariable final String userId,
+                         @PathVariable final String courseId,
+                         @PathVariable final String exerciseId) throws IOException {
 
-        return exerciseService.find(instance, username, course, exercise);
+        return exerciseService.find(instance, userId, courseId, exerciseId);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SnapshotService {
 
-    List<Snapshot> findAll(final String instance, final String username, final String course, final String exercise) throws IOException;
-    Snapshot find(final String instance, final String username, final String course, final String exercise, final Long snapshot) throws IOException;
+    List<Snapshot> findAll(final String instance, final String userId, final String courseId, final String exerciseId) throws IOException;
+    Snapshot find(final String instance, final String userId, final String courseId, final String exerciseId, final Long snapshotId) throws IOException;
 
 }
