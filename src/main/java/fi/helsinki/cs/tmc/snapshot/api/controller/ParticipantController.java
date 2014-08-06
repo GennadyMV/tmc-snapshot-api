@@ -1,15 +1,11 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.Course;
-import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.TmcParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 import fi.helsinki.cs.tmc.snapshot.api.service.TmcService;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,23 +35,4 @@ public final class ParticipantController {
 
         return snapshotService.find(instance, username);
     }
-
-    @RequestMapping(method = RequestMethod.GET, value = "{username}/courses")
-    public Collection<Course> listCourses(@PathVariable final String instance, @PathVariable final String username) throws IOException {
-
-        return snapshotService.find(instance, username).getCourses();
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "{username}/courses/{courseName}/exercises")
-    public Collection<Exercise> listCourseExercises(@PathVariable final String instance, @PathVariable final String username, @PathVariable final String courseName) throws IOException {
-
-        return snapshotService.find(instance, username).getCourse(courseName).getExercises();
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "{username}/courses/{courseName}/exercises/{exerciseName}/snapshots")
-    public Collection<SnapshotEvent> listExerciseSnapshotEvents(@PathVariable final String instance, @PathVariable final String username, @PathVariable final String courseName, @PathVariable final String exerciseName) throws IOException {
-
-        return snapshotService.find(instance, username).getCourse(courseName).getExercise(exerciseName).getSnapshotEvents();
-    }
-
 }
