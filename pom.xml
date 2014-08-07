@@ -51,7 +51,7 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-        
+
         <!-- JSONPath -->
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -148,10 +148,14 @@
                         <excludes>
                             <exclude>com/google/*</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/app/App.class</exclude>
-                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotDiffPatchService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/CourseService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ExerciseService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ParticipantService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotEventService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotFileService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotOrganiserService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SpywareService.class</exclude>
-                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/TmcService.class</exclude>
                         </excludes>
                     </instrumentation>
                     <formats>
