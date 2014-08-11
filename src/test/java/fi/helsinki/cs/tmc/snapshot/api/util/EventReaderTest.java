@@ -26,7 +26,7 @@ public class EventReaderTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        List<byte[]> data = new ArrayList<>();
+        final List<byte[]> data = new ArrayList<>();
         data.add(bytes);
 
         final Collection<SnapshotEvent> snapshotEvents = eventReader.readEvents(data);
@@ -48,7 +48,7 @@ public class EventReaderTest {
 
         final byte[] bytes = FileUtils.readFileToByteArray(dataFile);
 
-        List<byte[]> data = new ArrayList<>();
+        final List<byte[]> data = new ArrayList<>();
         data.add(bytes);
 
         final Collection<SnapshotEvent> snapshotEvents = eventReader.readEvents(data);
