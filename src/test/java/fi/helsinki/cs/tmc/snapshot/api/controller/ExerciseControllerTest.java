@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ExerciseControllerTest {
+public final class ExerciseControllerTest {
 
     private static final String INSTANCE = "hy";
     private static final String USERNAME = "testUsername";

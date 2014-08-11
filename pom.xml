@@ -52,14 +52,6 @@
             <version>2.4</version>
         </dependency>
 
-        <!-- JSONPath -->
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path-assert</artifactId>
-            <version>0.9.1</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- Apache HTTPClient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -81,6 +73,7 @@
         </dependency>
 
         <!-- Powermock -->
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
@@ -92,6 +85,14 @@
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito</artifactId>
             <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JSONPath -->
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>0.9.1</version>
             <scope>test</scope>
         </dependency>
 
