@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class DefaultParticipantServiceTest {
+public final class DefaultParticipantServiceTest {
 
     private static final String INSTANCE = "testInstance";
     private static final String USERNAME = "testUsername";

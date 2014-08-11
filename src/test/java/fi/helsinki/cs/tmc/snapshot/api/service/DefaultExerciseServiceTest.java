@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.when;
 
-public class DefaultExerciseServiceTest {
+public final class DefaultExerciseServiceTest {
 
     private static final String INSTANCE = "testInstance";
     private static final String USERNAME = "testUsername";
