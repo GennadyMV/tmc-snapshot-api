@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,8 +12,10 @@ public final class Snapshot implements Comparable<Snapshot> {
 
     private final Long id;
     private final Date timestamp;
-    private final boolean fromCompleteSnapshot;
     private final Map<String, SnapshotFile> files;
+
+    @JsonIgnore
+    private final boolean fromCompleteSnapshot;
 
     public Snapshot(final Long id, final List<SnapshotFile> files) {
 
@@ -46,6 +50,11 @@ public final class Snapshot implements Comparable<Snapshot> {
         return id;
     }
 
+    public Date getTimestamp() {
+
+        return timestamp;
+    }
+
     public void addFile(final SnapshotFile file) {
 
         files.put(file.getPath(), file);
@@ -59,11 +68,6 @@ public final class Snapshot implements Comparable<Snapshot> {
     public Collection<SnapshotFile> getFiles() {
 
         return files.values();
-    }
-
-    public Date getTimestamp() {
-
-        return timestamp;
     }
 
     public boolean isFromCompleteSnapshot() {
