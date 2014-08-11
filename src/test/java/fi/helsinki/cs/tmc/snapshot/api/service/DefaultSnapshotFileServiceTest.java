@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ DefaultSnapshotService.class, DefaultSnapshotFileService.class, Snapshot.class })
-public class DefaultSnapshotFileServiceTest {
+public final class DefaultSnapshotFileServiceTest {
 
     @Mock
     private DefaultSnapshotService snapshotService;
