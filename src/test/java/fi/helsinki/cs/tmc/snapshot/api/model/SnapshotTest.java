@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -86,5 +87,22 @@ public final class SnapshotTest {
 
         assertTrue(s1.compareTo(s2) == 0);
         assertTrue(s2.compareTo(s1) == 0);
+    }
+
+    @Test
+    public void shouldSortSnapshotsCorrectly() {
+
+        final Snapshot s1 = new Snapshot(2L, new HashMap<String, SnapshotFile>(), false);
+        final Snapshot s2 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), true);
+
+        final List<Snapshot> snapshots = new ArrayList<>();
+
+        snapshots.add(s1);
+        snapshots.add(s2);
+
+        Collections.sort(snapshots);
+
+        assertEquals(s2, snapshots.get(0));
+        assertEquals(s1, snapshots.get(1));
     }
 }

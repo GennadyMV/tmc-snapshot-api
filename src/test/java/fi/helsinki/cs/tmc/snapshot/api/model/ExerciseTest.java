@@ -56,4 +56,15 @@ public final class ExerciseTest {
         assertTrue(exercise.getId().equals(other.getId()));
         assertTrue(exercise.equals(other));
     }
+
+    @Test
+    public void shouldAddSnapshotEventToCollection() {
+
+        final SnapshotEvent event = new SnapshotEvent();
+
+        exercise.addSnapshotEvent(event);
+
+        assertEquals(1, exercise.getSnapshotEvents().size());
+        assertEquals(event, exercise.getSnapshotEvents().iterator().next());
+    }
 }
