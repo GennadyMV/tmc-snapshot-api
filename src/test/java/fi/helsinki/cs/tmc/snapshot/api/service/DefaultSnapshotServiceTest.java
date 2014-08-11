@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ EventProcessor.class, EventTransformer.class })
-public class DefaultSnapshotServiceTest {
+public final class DefaultSnapshotServiceTest {
 
     private static final String INSTANCE = "testInstance";
     private static final String USERNAME = "testUsername";
