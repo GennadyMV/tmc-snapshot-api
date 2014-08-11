@@ -7,16 +7,20 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -124,5 +128,4 @@ public class DefaultSnapshotServiceTest {
 
         snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, 0L);
     }
-
 }
