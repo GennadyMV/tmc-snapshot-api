@@ -53,9 +53,9 @@ public class DefaultSnapshotEventService implements SnapshotEventService {
         while (i < endIndex) {
 
             final byte[] bytes = spywareService.fetchChunkByRange(instance,
-                                                                          username,
-                                                                          i,
-                                                                          Math.min(i + spywareChunkSize, endIndex));
+                                                                  username,
+                                                                  i,
+                                                                  Math.min(i + spywareChunkSize, endIndex));
 
             for (byte b : bytes) {
                 byteData[i++] = b;
