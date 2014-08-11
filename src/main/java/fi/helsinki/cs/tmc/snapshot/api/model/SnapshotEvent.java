@@ -64,6 +64,11 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         this.systemNanotime = systemNanotime;
     }
 
+    public Long getSystemNanotime() {
+
+        return systemNanotime;
+    }
+
     public void setMetadata(final String metadata) {
 
         this.metadata = metadata;

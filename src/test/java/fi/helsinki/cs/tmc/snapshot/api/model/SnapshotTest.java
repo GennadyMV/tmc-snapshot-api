@@ -1,7 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,7 @@ public final class SnapshotTest {
         final SnapshotFile file = new SnapshotFile("path", "content");
         files.add(file);
 
-        final Snapshot snapshot = new Snapshot(13L, files);
+        final Snapshot snapshot = new Snapshot(13L, 13L, files);
 
         assertEquals(Long.valueOf(13L), snapshot.getId());
         assertEquals(file, snapshot.getFiles().iterator().next());
@@ -38,7 +37,7 @@ public final class SnapshotTest {
         final SnapshotFile file = new SnapshotFile("path", "content");
         files.put(file.getPath(), file);
 
-        final Snapshot snapshot = new Snapshot(13L, files);
+        final Snapshot snapshot = new Snapshot(13L, 13L, files);
 
         assertEquals(Long.valueOf(13L), snapshot.getId());
         assertEquals(file, snapshot.getFiles().iterator().next());
@@ -48,7 +47,7 @@ public final class SnapshotTest {
     @Test
     public void shouldAddFileToSnapshot() {
 
-        final Snapshot snapshot = new Snapshot(12L, new ArrayList<SnapshotFile>());
+        final Snapshot snapshot = new Snapshot(12L, 12L, new ArrayList<SnapshotFile>());
 
         snapshot.addFile(new SnapshotFile("example", "test"));
 
@@ -62,47 +61,10 @@ public final class SnapshotTest {
     @Test
     public void isFromCompleteSnapshotReturnCorrectStatus() {
 
-        final Snapshot s1 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), false);
-        final Snapshot s2 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), true);
+        final Snapshot s1 = new Snapshot(1L, 1L, new HashMap<String, SnapshotFile>(), false);
+        final Snapshot s2 = new Snapshot(1L, 1L, new HashMap<String, SnapshotFile>(), true);
 
         assertFalse(s1.isFromCompleteSnapshot());
         assertTrue(s2.isFromCompleteSnapshot());
-    }
-
-    @Test
-    public void compareToOrdersChronologically() {
-
-        final Snapshot s1 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), false);
-        final Snapshot s2 = new Snapshot(2L, new HashMap<String, SnapshotFile>(), true);
-
-        assertTrue(s1.compareTo(s2) < 0);
-        assertTrue(s2.compareTo(s1) > 0);
-    }
-
-    @Test
-    public void compareToReturnsZeroForSnapshotsWithSameTimestamp() {
-
-        final Snapshot s1 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), false);
-        final Snapshot s2 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), true);
-
-        assertTrue(s1.compareTo(s2) == 0);
-        assertTrue(s2.compareTo(s1) == 0);
-    }
-
-    @Test
-    public void shouldSortSnapshotsCorrectly() {
-
-        final Snapshot s1 = new Snapshot(2L, new HashMap<String, SnapshotFile>(), false);
-        final Snapshot s2 = new Snapshot(1L, new HashMap<String, SnapshotFile>(), true);
-
-        final List<Snapshot> snapshots = new ArrayList<>();
-
-        snapshots.add(s1);
-        snapshots.add(s2);
-
-        Collections.sort(snapshots);
-
-        assertEquals(s2, snapshots.get(0));
-        assertEquals(s1, snapshots.get(1));
     }
 }

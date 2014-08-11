@@ -68,9 +68,9 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
@@ -100,12 +100,12 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        final Snapshot snapshot = new Snapshot(0L, new ArrayList<SnapshotFile>());
+        final Snapshot snapshot = new Snapshot(0L, 0L, new ArrayList<SnapshotFile>());
         snapshots.add(snapshot);
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
@@ -119,9 +119,9 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);

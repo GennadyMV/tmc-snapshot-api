@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class Snapshot implements Comparable<Snapshot> {
+public final class Snapshot {
 
     private final Long id;
     private final Date timestamp;
@@ -17,10 +17,10 @@ public final class Snapshot implements Comparable<Snapshot> {
     @JsonIgnore
     private final boolean fromCompleteSnapshot;
 
-    public Snapshot(final Long id, final List<SnapshotFile> files) {
+    public Snapshot(final Long id, final Long timestamp, final List<SnapshotFile> files) {
 
         this.id = id;
-        timestamp = new Date(id);
+        this.timestamp = new Date(timestamp);
         fromCompleteSnapshot = false;
 
         this.files = new HashMap<>();
@@ -30,17 +30,18 @@ public final class Snapshot implements Comparable<Snapshot> {
         }
     }
 
-    public Snapshot(final Long id, final Map<String, SnapshotFile> files) {
+    public Snapshot(final Long id, final Long timestamp, final Map<String, SnapshotFile> files) {
 
-        this(id, files, false);
+        this(id, timestamp, files, false);
     }
 
     public Snapshot(final Long id,
+                    final Long timestamp,
                     final Map<String, SnapshotFile> files,
                     final boolean fromCompleteSnapshot) {
 
         this.id = id;
-        timestamp = new Date(id);
+        this.timestamp = new Date(timestamp);
         this.files = files;
         this.fromCompleteSnapshot = fromCompleteSnapshot;
     }
@@ -73,11 +74,5 @@ public final class Snapshot implements Comparable<Snapshot> {
     public boolean isFromCompleteSnapshot() {
 
         return fromCompleteSnapshot;
-    }
-
-    @Override
-    public int compareTo(final Snapshot other) {
-
-        return timestamp.compareTo(other.timestamp);
     }
 }
