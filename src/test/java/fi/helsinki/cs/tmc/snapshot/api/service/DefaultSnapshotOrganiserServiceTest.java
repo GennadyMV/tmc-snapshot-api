@@ -41,17 +41,19 @@ public final class DefaultSnapshotOrganiserServiceTest {
         final SnapshotEvent event1 = createEvent("mooc", "ex1", 1L, "text_insert");
         final SnapshotEvent event2 = createEvent("mooc", "ex2", 2L, "text_insert");
         final SnapshotEvent event3 = createEvent("mooc", "ex3", 3L, "text_insert");
+        final SnapshotEvent event4 = createEvent("mooc", "ex3", 4L, "text_insert");
 
         final Collection<SnapshotEvent> events = new ArrayList<>();
 
         events.add(event1);
         events.add(event2);
         events.add(event3);
+        events.add(event4);
 
         organiserService.organise(participant, events);
 
         assertEquals(1, participant.getCourses().size());
-        assertNotNull(participant.getCourse("bW9vYw"));
+        assertNotNull(participant.getCourse("mooc"));
 
         final Course course = participant.getCourses().iterator().next();
 
@@ -61,7 +63,11 @@ public final class DefaultSnapshotOrganiserServiceTest {
         final List<Exercise> exercises = new ArrayList(exerciseCollection);
 
         for (Exercise exercise : exercises) {
-            assertEquals(1, exercise.getSnapshotEvents().size());
+            if (exercise.getName().equals("ex3")) {
+                assertEquals(2, exercise.getSnapshotEvents().size());
+            } else {
+                assertEquals(1, exercise.getSnapshotEvents().size());
+            }
         }
     }
 }

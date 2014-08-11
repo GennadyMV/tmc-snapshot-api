@@ -6,6 +6,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.commons.codec.binary.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,8 @@ public final class DefaultExerciseService implements ExerciseService {
                              final String courseId,
                              final String exerciseId) throws IOException {
 
-        final Exercise exercise = courseService.find(instance, userId, courseId).getExercise(exerciseId);
+        final String exerciseName = new String(Base64.decodeBase64(exerciseId));
+        final Exercise exercise = courseService.find(instance, userId, courseId).getExercise(exerciseName);
 
         if (exercise == null) {
             throw new NotFoundException();

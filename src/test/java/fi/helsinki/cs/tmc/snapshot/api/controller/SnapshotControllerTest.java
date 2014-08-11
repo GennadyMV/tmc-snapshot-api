@@ -73,6 +73,7 @@ public final class SnapshotControllerTest {
 
         for (int i = 0; i < 5; i++) {
             snapshotData.add(new Snapshot((long) i,
+                                          (long) i,
                                           new ArrayList<SnapshotFile>()));
         }
 
@@ -91,7 +92,7 @@ public final class SnapshotControllerTest {
     public void shouldReturnSnapshot() throws Exception {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot(1L, Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot(1L, 1L, Arrays.asList(file));
 
         when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, 1L)).thenReturn(snapshotData);
 

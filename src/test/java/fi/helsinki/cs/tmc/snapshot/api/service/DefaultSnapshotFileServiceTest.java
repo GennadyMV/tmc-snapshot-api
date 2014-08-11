@@ -51,7 +51,7 @@ public final class DefaultSnapshotFileServiceTest {
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put("test.java", new SnapshotFile("test.java", "public class Test { }"));
 
-        final Snapshot snapshot = new Snapshot(2L, files);
+        final Snapshot snapshot = new Snapshot(2L, 2L, files);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -68,7 +68,7 @@ public final class DefaultSnapshotFileServiceTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionOnNonExistentPath() throws IOException {
 
-        final Snapshot snapshot = new Snapshot(2L, new HashMap<String, SnapshotFile>());
+        final Snapshot snapshot = new Snapshot(2L, 2L, new HashMap<String, SnapshotFile>());
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -86,7 +86,7 @@ public final class DefaultSnapshotFileServiceTest {
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put("trial.java", new SnapshotFile("trial.java", null));
 
-        final Snapshot snapshot = new Snapshot(2L, files);
+        final Snapshot snapshot = new Snapshot(2L, 2L, files);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -105,7 +105,7 @@ public final class DefaultSnapshotFileServiceTest {
         files.put("example.java", new SnapshotFile("example.java", "public class Example { }"));
         files.put("exercise.java", new SnapshotFile("exercise.java", "public class Exercise { }"));
 
-        final Snapshot snapshot = new Snapshot(2L, files);
+        final Snapshot snapshot = new Snapshot(2L, 2L, files);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -129,7 +129,7 @@ public final class DefaultSnapshotFileServiceTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionOnNonExistentSnapshotFiles() throws IOException {
 
-        final Snapshot snapshot = new Snapshot(2L, new HashMap<String, SnapshotFile>());
+        final Snapshot snapshot = new Snapshot(2L, 2L, new HashMap<String, SnapshotFile>());
         final Snapshot spy = spy(snapshot);
 
         when(snapshotService.find(any(String.class),
