@@ -14,7 +14,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class DefaultSnapshotOrganiserServiceTest {
+public final class DefaultSnapshotOrganiserServiceTest {
 
     private final DefaultSnapshotOrganiserService organiserService = new DefaultSnapshotOrganiserService();
 
