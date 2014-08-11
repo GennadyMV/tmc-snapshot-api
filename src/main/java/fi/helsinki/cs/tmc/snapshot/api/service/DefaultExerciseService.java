@@ -6,7 +6,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
