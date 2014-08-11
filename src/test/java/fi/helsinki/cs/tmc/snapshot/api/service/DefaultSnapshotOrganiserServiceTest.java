@@ -53,7 +53,7 @@ public final class DefaultSnapshotOrganiserServiceTest {
         organiserService.organise(participant, events);
 
         assertEquals(1, participant.getCourses().size());
-        assertNotNull(participant.getCourse("bW9vYw"));
+        assertNotNull(participant.getCourse("mooc"));
 
         final Course course = participant.getCourses().iterator().next();
 

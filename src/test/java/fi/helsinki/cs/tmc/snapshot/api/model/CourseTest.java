@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public final class CourseTest {
@@ -45,8 +44,7 @@ public final class CourseTest {
         assertEquals(1, course.getExercises().size());
         assertEquals(e, course.getExercises().iterator().next());
 
-        assertNull(course.getExercise("ex1"));
-        assertEquals(e, course.getExercise("ZXgx"));
+        assertEquals(e, course.getExercise("ex1"));
     }
 
     @Test

@@ -7,8 +7,6 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
 import java.util.Collection;
 
-import org.apache.commons.codec.binary.Base64;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +19,7 @@ public final class DefaultSnapshotOrganiserService implements SnapshotOrganiserS
 
             // Course
 
-            Course course = participant.getCourse(Base64.encodeBase64URLSafeString(event.getCourseName().getBytes()));
+            Course course = participant.getCourse(event.getCourseName());
 
             if (course == null) {
                 course = new Course(event.getCourseName());
@@ -30,7 +28,7 @@ public final class DefaultSnapshotOrganiserService implements SnapshotOrganiserS
 
             // Exercise
 
-            Exercise exercise = course.getExercise(Base64.encodeBase64URLSafeString(event.getExerciseName().getBytes()));
+            Exercise exercise = course.getExercise(event.getExerciseName());
 
             if (exercise == null) {
                 exercise = new Exercise(event.getExerciseName());
