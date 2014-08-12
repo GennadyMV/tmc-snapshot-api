@@ -41,12 +41,12 @@ public final class Course {
 
     public void addExercise(final Exercise exercise) {
 
-        exercises.put(exercise.getId(), exercise);
+        exercises.put(exercise.getName(), exercise);
     }
 
-    public Exercise getExercise(final String id) {
+    public Exercise getExercise(final String name) {
 
-        return exercises.get(id);
+        return exercises.get(name);
     }
 
     @Override

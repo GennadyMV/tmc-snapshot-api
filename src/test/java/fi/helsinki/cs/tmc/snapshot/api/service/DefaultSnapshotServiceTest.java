@@ -7,16 +7,20 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -27,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ EventProcessor.class, EventTransformer.class })
-public class DefaultSnapshotServiceTest {
+public final class DefaultSnapshotServiceTest {
 
     private static final String INSTANCE = "testInstance";
     private static final String USERNAME = "testUsername";
@@ -64,9 +68,9 @@ public class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
@@ -96,12 +100,12 @@ public class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        final Snapshot snapshot = new Snapshot(0L, new ArrayList<SnapshotFile>());
+        final Snapshot snapshot = new Snapshot(0L, 0L, new ArrayList<SnapshotFile>());
         snapshots.add(snapshot);
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
@@ -115,14 +119,13 @@ public class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot(1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot(3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(1L, 1L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(2L, 2L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot(3L, 3L, new ArrayList<SnapshotFile>()));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
 
         snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, 0L);
     }
-
 }

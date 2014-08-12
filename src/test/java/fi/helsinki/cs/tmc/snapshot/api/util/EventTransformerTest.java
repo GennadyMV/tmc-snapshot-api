@@ -18,6 +18,7 @@ public final class EventTransformerTest {
     private SnapshotEvent createEvent(final String courseName,
                                       final String exerciseName,
                                       final Long happenedAt,
+                                      final Long systemNanotime,
                                       final String eventType) {
 
         final SnapshotEvent event = new SnapshotEvent();
@@ -25,6 +26,7 @@ public final class EventTransformerTest {
         event.setCourseName(courseName);
         event.setExerciseName(exerciseName);
         event.setHappenedAt(happenedAt);
+        event.setSystemNanotime(systemNanotime);
         event.setEventType(eventType);
 
         return event;
@@ -35,12 +37,12 @@ public final class EventTransformerTest {
 
         final List<SnapshotEvent> events = new ArrayList<>();
 
-        final SnapshotEvent event1 = createEvent("mooc", "exercise1", 100L, "text_insert");
+        final SnapshotEvent event1 = createEvent("mooc", "exercise1", 100L, 100L, "text_insert");
 
         event1.getFiles().put("example.java", "public class Example { }");
         event1.getFiles().put("test.java", "public class Test { }");
 
-        final SnapshotEvent event2 = createEvent("mooc", "exercise2", 101L, "text_remove");
+        final SnapshotEvent event2 = createEvent("mooc", "exercise2", 101L, 101L, "text_remove");
 
         event2.getFiles().put("experiment.java", "public class Experiment { }");
         event2.getFiles().put("trial.java", "public class Trial { }");
@@ -72,10 +74,10 @@ public final class EventTransformerTest {
 
         final List<SnapshotEvent> events = new ArrayList<>();
 
-        final SnapshotEvent event1 = createEvent("hy", "ex", 50L, "code_snapshot");
+        final SnapshotEvent event1 = createEvent("hy", "ex", 50L, 50L, "code_snapshot");
         event1.setMetadata("file_create");
 
-        final SnapshotEvent event2 = createEvent("hy", "ex", 55L, "code_snapshot");
+        final SnapshotEvent event2 = createEvent("hy", "ex", 55L, 55L, "code_snapshot");
         event2.setMetadata("file_delete");
 
         events.add(event1);
@@ -84,7 +86,7 @@ public final class EventTransformerTest {
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
         assertEquals(1, snapshots.size());
-        assertEquals(55L, (long) snapshots.get(0).getId());
+        assertEquals(110L, (long) snapshots.get(0).getId());
     }
 
     @Test
@@ -92,12 +94,12 @@ public final class EventTransformerTest {
 
         final List<SnapshotEvent> events = new ArrayList<>();
 
-        final SnapshotEvent event1 = createEvent("mooc", "continuum", 100L, "code_snapshot");
+        final SnapshotEvent event1 = createEvent("mooc", "continuum", 100L, 100L, "code_snapshot");
 
         event1.getFiles().put("example.java", "public class Example { }");
         event1.getFiles().put("test.java", "public class Test { }");
 
-        final SnapshotEvent event2 = createEvent("mooc", "continuum", 102L, "text_insert");
+        final SnapshotEvent event2 = createEvent("mooc", "continuum", 102L, 102L, "text_insert");
 
         event2.getFiles().put("experiment.java", "public class Experiment { }");
         event2.getFiles().put("trial.java", "public class Trial { }");

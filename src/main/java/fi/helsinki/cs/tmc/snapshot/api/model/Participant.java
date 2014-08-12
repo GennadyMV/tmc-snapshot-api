@@ -39,11 +39,11 @@ public final class Participant {
 
     public void addCourse(final Course course) {
 
-        courses.put(course.getId(), course);
+        courses.put(course.getName(), course);
     }
 
-    public Course getCourse(final String id) {
+    public Course getCourse(final String name) {
 
-        return courses.get(id);
+        return courses.get(name);
     }
 }
