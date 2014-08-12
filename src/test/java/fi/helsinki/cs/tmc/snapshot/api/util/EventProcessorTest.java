@@ -18,26 +18,42 @@ public final class EventProcessorTest {
     private EventProcessor processor;
     private List<SnapshotEvent> events;
 
-    private void generateSnapshotEvent(final String courseName,
-                                       final String exerciseName,
-                                       final String eventType,
-                                       final Long happendAt,
-                                       final Long systemNanoTime,
-                                       final String metadata,
-                                       final String data) {
+
+    private void generatePatchForExampleExercise(final String data) {
+
+        generatePatch("hy", "viikko1-Viikko1_001.Nimi", data);
+    }
+
+    private void generateCodeSnapshotForExampleExercise(final String metadata, final String data) {
+
+        generateCodeSnapshot("hy", "viikko1-Viikko1_001.Nimi", metadata, data);
+    }
+
+    private void generatePatch(final String courseName, final String exerciseName, final String data) {
+
+        generateSnapshotEvent(courseName, exerciseName, "patch", null, data);
+    }
+
+    private void generateCodeSnapshot(final String courseName, final String exerciseName,
+                                      final String metadata, final String data) {
+
+        generateSnapshotEvent(courseName, exerciseName, "code_snapshot", metadata, data);
+    }
+
+    private void generateSnapshotEvent(final String courseName, final String exerciseName,
+                                       final String eventType, final String metadata, final String data) {
 
         final SnapshotEvent snapshotEvent = new SnapshotEvent();
 
         snapshotEvent.setCourseName(courseName);
         snapshotEvent.setExerciseName(exerciseName);
         snapshotEvent.setEventType(eventType);
-        snapshotEvent.setHappenedAt(happendAt);
-        snapshotEvent.setSystemNanotime(systemNanoTime);
         snapshotEvent.setMetadata(metadata);
         snapshotEvent.setData(data);
 
         events.add(snapshotEvent);
     }
+
 
     @Before
     public void setUp() {
@@ -146,41 +162,6 @@ public final class EventProcessorTest {
                 "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
                 events.get(events.size() - 1).getFiles().get(FILENAME));
 
-    }
-
-    private void generatePatchForExampleExercise(final String data) {
-
-        generatePatch("hy", "viikko1-Viikko1_001.Nimi", data);
-    }
-
-    private void generateCodeSnapshotForExampleExercise(final String metadata, final String data) {
-
-        generateCodeSnapshot("hy", "viikko1-Viikko1_001.Nimi", metadata, data);
-    }
-
-    private void generatePatch(final String courseName, final String exerciseName, final String data) {
-
-        generateSnapshotEvent(courseName, exerciseName, "patch", null, data);
-    }
-
-    private void generateCodeSnapshot(final String courseName, final String exerciseName,
-                                      final String metadata, final String data) {
-
-        generateSnapshotEvent(courseName, exerciseName, "code_snapshot", metadata, data);
-    }
-
-    private void generateSnapshotEvent(final String courseName, final String exerciseName,
-                                       final String eventType, final String metadata, final String data) {
-
-        final SnapshotEvent snapshotEvent = new SnapshotEvent();
-
-        snapshotEvent.setCourseName(courseName);
-        snapshotEvent.setExerciseName(exerciseName);
-        snapshotEvent.setEventType(eventType);
-        snapshotEvent.setMetadata(metadata);
-        snapshotEvent.setData(data);
-
-        events.add(snapshotEvent);
     }
 
 }
