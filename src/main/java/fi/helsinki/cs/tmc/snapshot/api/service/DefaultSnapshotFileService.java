@@ -21,7 +21,7 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                                             final String userId,
                                             final String courseId,
                                             final String exerciseId,
-                                            final Long snapshotId) throws IOException {
+                                            final String snapshotId) throws IOException {
 
         final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId).getFiles();
 
@@ -37,7 +37,7 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                        final String userId,
                        final String courseId,
                        final String exerciseId,
-                       final Long snapshotId,
+                       final String snapshotId,
                        final String path) throws IOException {
 
         final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);

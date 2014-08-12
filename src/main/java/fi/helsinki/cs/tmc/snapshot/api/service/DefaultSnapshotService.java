@@ -50,7 +50,7 @@ public final class DefaultSnapshotService implements SnapshotService {
                          final String userId,
                          final String courseId,
                          final String exerciseId,
-                         final Long snapshotId) throws IOException {
+                         final String snapshotId) throws IOException {
 
         final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
 
