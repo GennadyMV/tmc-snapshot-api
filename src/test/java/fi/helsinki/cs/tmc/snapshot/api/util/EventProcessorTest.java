@@ -1,24 +1,48 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class EventProcessorTest {
+public final class EventProcessorTest {
 
     private static final String FILENAME = "/src/Nimi.java";
 
-    private EventProcessor p;
+    private EventProcessor processor;
     private List<SnapshotEvent> events;
+
+    private void generateSnapshotEvent(final String courseName,
+                                       final String exerciseName,
+                                       final String eventType,
+                                       final Long happendAt,
+                                       final Long systemNanoTime,
+                                       final String metadata,
+                                       final String data) {
+
+        final SnapshotEvent snapshotEvent = new SnapshotEvent();
+
+        snapshotEvent.setCourseName(courseName);
+        snapshotEvent.setExerciseName(exerciseName);
+        snapshotEvent.setEventType(eventType);
+        snapshotEvent.setHappenedAt(happendAt);
+        snapshotEvent.setSystemNanotime(systemNanoTime);
+        snapshotEvent.setMetadata(metadata);
+        snapshotEvent.setData(data);
+
+        events.add(snapshotEvent);
+    }
 
     @Before
     public void setUp() {
 
-        p = new EventProcessor();
+        processor = new EventProcessor();
         events = new ArrayList<>();
     }
 
@@ -33,7 +57,8 @@ public class EventProcessorTest {
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzOSwxMiArMjM5LDggQEBcbiAgICAgXG4tc291dFxuICUwQSAgIFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDQ0IEBAXG4gaS8gJTBBICAgICAgICBcbitTeXN0ZW0ub3V0LnByaW50bG4oJTIyJTIyKTtcbiAlMEEgICAgJTdEJTBBJTBBJTdEXG4iLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0\\u003d");
 
-        p.process(events);
+        processor.process(events);
+
 
         for (SnapshotEvent snapshotEvent : events) {
             assertEquals(1, snapshotEvent.getFiles().size());
@@ -74,7 +99,7 @@ public class EventProcessorTest {
         generateCodeSnapshotForExampleExercise(null, "UEsDBBQACAgIADxsLkQAAAAAAAAAAAAAAAAaAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAAB4AAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAACgAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9LdXVzaS5qYXZhRUw7DsIwDN1zCqtTy9AegCMwlg0xmGK1gcSJaqcSQr0NN+FiGBDiLe89vU8up+AHGAKKwK4U8XB3Dgz5m4iiGi3JnyGi57rX2fN4OALOozS/9htdB3si0OeD2YgmU4sZZE4MsVxtTgxpulCI6P7D/iZKsU1F22znGriuNlWz/RRW59YXUEsHCMDfbXyEAAAApgAAAFBLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL1BLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAeAAAAAAAAAAAAAAAAAEoAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9QSwECFAAUAAgICAA8bC5EwN9tfIQAAACmAAAAKAAAAAAAAAAAAAAAAACYAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS9zcmMvS3V1c2kuamF2YVBLBQYAAAAAAwADAOoAAAByAQAAAAA\\u003d");
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDQ0IEBAXG4gaS8gJTBBICAgICAgICBcbitTeXN0ZW0ub3V0LnByaW50bG4oJTIyJTIyKTtcbiAlMEEgICAgJTdEJTBBJTBBJTdEXG4iLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0\\u003d");
 
-        p.process(events);
+        processor.process(events);
 
         assertEquals(1, events.get(1).getFiles().size());
         assertEquals(1, events.get(events.size() - 1).getFiles().size());
@@ -92,6 +117,8 @@ public class EventProcessorTest {
     @Test
     public void testCodeSnapshotPatching() {
 
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d");
+        
         generateCodeSnapshotForExampleExercise("\"cause\":\"file_change\",\"file\":\"/src/Nimi.java\"",
                                                 "UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1p\n" +
                                                 "LwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAA\n" +
@@ -106,11 +133,14 @@ public class EventProcessorTest {
                                                 "LmphdmFQSwUGAAAAAAMAAwDmAAAArQEAAAAA");
 
         try {
-            p.process(events);
+            processor.process(events);
         } catch (UnsupportedEncodingException ex) {
             fail("Problem reading zip");
         }
-        assertEquals(1, events.get(1).getFiles().size());
+
+        System.out.println(events.get(0).getFiles());
+
+        assertEquals(1, events.get(0).getFiles().size());
 
         assertEquals(
                 "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
@@ -132,7 +162,6 @@ public class EventProcessorTest {
 
         generateSnapshotEvent(courseName, exerciseName, "patch", null, data);
     }
-
 
     private void generateCodeSnapshot(final String courseName, final String exerciseName,
                                       final String metadata, final String data) {
