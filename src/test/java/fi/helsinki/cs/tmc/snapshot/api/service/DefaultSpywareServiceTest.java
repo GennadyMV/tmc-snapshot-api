@@ -157,7 +157,7 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchChunkByRange("foo", "bar", 1, 2);
-        } catch (IOException ex) {
+        } catch (NotFoundException ex) {
             verify(mockResponse).close();
             throw ex;
         }
