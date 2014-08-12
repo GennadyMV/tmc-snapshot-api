@@ -10,14 +10,14 @@ import java.util.Map;
 
 public final class Snapshot {
 
-    private final Long id;
+    private final String id;
     private final Date timestamp;
     private final Map<String, SnapshotFile> files;
 
     @JsonIgnore
     private final boolean fromCompleteSnapshot;
 
-    public Snapshot(final Long id, final Long timestamp, final List<SnapshotFile> files) {
+    public Snapshot(final String id, final Long timestamp, final List<SnapshotFile> files) {
 
         this.id = id;
         this.timestamp = new Date(timestamp);
@@ -30,12 +30,12 @@ public final class Snapshot {
         }
     }
 
-    public Snapshot(final Long id, final Long timestamp, final Map<String, SnapshotFile> files) {
+    public Snapshot(final String id, final Long timestamp, final Map<String, SnapshotFile> files) {
 
         this(id, timestamp, files, false);
     }
 
-    public Snapshot(final Long id,
+    public Snapshot(final String id,
                     final Long timestamp,
                     final Map<String, SnapshotFile> files,
                     final boolean fromCompleteSnapshot) {
@@ -46,7 +46,7 @@ public final class Snapshot {
         this.fromCompleteSnapshot = fromCompleteSnapshot;
     }
 
-    public Long getId() {
+    public String getId() {
 
         return id;
     }

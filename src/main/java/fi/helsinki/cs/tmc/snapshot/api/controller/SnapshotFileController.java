@@ -26,7 +26,7 @@ public final class SnapshotFileController {
                                @PathVariable final String userId,
                                @PathVariable final String courseId,
                                @PathVariable final String exerciseId,
-                               @PathVariable final Long snapshotId) throws IOException {
+                               @PathVariable final String snapshotId) throws IOException {
 
         return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId);
     }
@@ -39,7 +39,7 @@ public final class SnapshotFileController {
                        @PathVariable final String userId,
                        @PathVariable final String courseId,
                        @PathVariable final String exerciseId,
-                       @PathVariable final Long snapshotId) throws IOException {
+                       @PathVariable final String snapshotId) throws IOException {
 
         final String url = request.getRequestURI();
         final String separator = "/files/";

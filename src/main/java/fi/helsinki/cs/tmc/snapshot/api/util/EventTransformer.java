@@ -43,7 +43,7 @@ public final class EventTransformer {
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
 
-            snapshots.add(new Snapshot(event.getHappenedAt() + event.getSystemNanotime(),
+            snapshots.add(new Snapshot(event.getHappenedAt() + Long.toString(event.getSystemNanotime()),
                                        event.getHappenedAt(),
                                        files,
                                        isComplete));

@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface SnapshotFileService {
 
-    Collection<SnapshotFile> findAll(String instance, String userId, String courseId, String exerciseId, Long snapshotId) throws IOException;
-    String find(String instance, String userId, String courseId, String exerciseId, Long snapshotId, String path) throws IOException;
+    Collection<SnapshotFile> findAll(String instance, String userId, String courseId, String exerciseId, String snapshotId) throws IOException;
+    String find(String instance, String userId, String courseId, String exerciseId, String snapshotId, String path) throws IOException;
 
 }
