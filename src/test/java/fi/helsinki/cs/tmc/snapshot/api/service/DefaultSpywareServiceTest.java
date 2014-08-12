@@ -168,7 +168,7 @@ public final class DefaultSpywareServiceTest {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        try{
+        try {
             spywareService.fetchChunkByRange("foo", "bar", 1, 2);
         } catch (IOException ex) {
             verify(mockResponse).close();
