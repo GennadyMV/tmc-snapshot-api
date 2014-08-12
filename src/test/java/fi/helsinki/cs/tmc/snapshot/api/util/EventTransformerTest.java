@@ -86,7 +86,7 @@ public final class EventTransformerTest {
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
         assertEquals(1, snapshots.size());
-        assertEquals(110L, (long) snapshots.get(0).getId());
+        assertEquals("5555", snapshots.get(0).getId());
     }
 
     @Test

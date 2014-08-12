@@ -5,7 +5,6 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +21,6 @@ public final class EventProcessorTest {
 
     private EventProcessor processor;
     private List<SnapshotEvent> events;
-
 
     private void generatePatchForExampleExercise(final String data) {
 
@@ -98,15 +96,6 @@ public final class EventProcessorTest {
         }
     }
 
-    private void printEventsFiles() {
-
-        for (int i = 0; i < events.size(); i++) {
-            for (Entry<String, String> entry : events.get(i).getFiles().entrySet()) {
-                System.out.println("verifyEventFileContent(" + i + ", \"" + entry.getKey() + "\", \"" + entry.getValue().replaceAll("\n", "\\\\n").replaceAll("\"", "\\\\\"") + "\");");
-            }
-        }
-    }
-
     @Before
     public void setUp() {
 
@@ -127,7 +116,6 @@ public final class EventProcessorTest {
 
     @Test
     public void testPatchingFullDocumentShouldReturnPatchedFileContent() {
-
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
@@ -322,7 +310,6 @@ public final class EventProcessorTest {
 
         verifyEventFileContentForExampleFile(0, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
         verifyEventFileContentForExampleFile(1, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}");
-
     }
 
     @Test
@@ -332,8 +319,6 @@ public final class EventProcessorTest {
         generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), ZIP);
 
         process();
-
-        printEventsFiles();
 
         verifyEventFileContent(0, "/src/Nimi2.java", "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
         verifyEventFilesCount(1, 0);
@@ -350,5 +335,4 @@ public final class EventProcessorTest {
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
         verifyEventFilesCount(1, 0);
     }
-
 }

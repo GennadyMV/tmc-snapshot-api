@@ -46,7 +46,7 @@ public final class SnapshotFileControllerTest {
     private static final String USER = "testUsername";
     private static final String COURSE = "testCourseName";
     private static final String EXERCISE = "testExerciseName";
-    private static final Long SNAPSHOT = 1L;
+    private static final String SNAPSHOT = "1";
     private static final String FILE_BASE_URL = "/hy/participants/testUsername/courses/testCourseName/exercises/testExerciseName/snapshots/1/files";
 
     @Mock

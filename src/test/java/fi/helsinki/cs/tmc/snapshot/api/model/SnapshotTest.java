@@ -22,9 +22,9 @@ public final class SnapshotTest {
         final SnapshotFile file = new SnapshotFile("path", "content");
         files.add(file);
 
-        final Snapshot snapshot = new Snapshot(13L, 13L, files);
+        final Snapshot snapshot = new Snapshot("13", 13L, files);
 
-        assertEquals(Long.valueOf(13L), snapshot.getId());
+        assertEquals("13", snapshot.getId());
         assertEquals(file, snapshot.getFiles().iterator().next());
         assertEquals(new Date(13L), snapshot.getTimestamp());
     }
@@ -37,9 +37,9 @@ public final class SnapshotTest {
         final SnapshotFile file = new SnapshotFile("path", "content");
         files.put(file.getPath(), file);
 
-        final Snapshot snapshot = new Snapshot(13L, 13L, files);
+        final Snapshot snapshot = new Snapshot("13", 13L, files);
 
-        assertEquals(Long.valueOf(13L), snapshot.getId());
+        assertEquals("13", snapshot.getId());
         assertEquals(file, snapshot.getFiles().iterator().next());
         assertEquals(new Date(13L), snapshot.getTimestamp());
     }
@@ -47,7 +47,7 @@ public final class SnapshotTest {
     @Test
     public void shouldAddFileToSnapshot() {
 
-        final Snapshot snapshot = new Snapshot(12L, 12L, new ArrayList<SnapshotFile>());
+        final Snapshot snapshot = new Snapshot("12", 12L, new ArrayList<SnapshotFile>());
 
         snapshot.addFile(new SnapshotFile("example", "test"));
 
@@ -61,8 +61,8 @@ public final class SnapshotTest {
     @Test
     public void isFromCompleteSnapshotReturnCorrectStatus() {
 
-        final Snapshot s1 = new Snapshot(1L, 1L, new HashMap<String, SnapshotFile>(), false);
-        final Snapshot s2 = new Snapshot(1L, 1L, new HashMap<String, SnapshotFile>(), true);
+        final Snapshot s1 = new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false);
+        final Snapshot s2 = new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), true);
 
         assertFalse(s1.isFromCompleteSnapshot());
         assertTrue(s2.isFromCompleteSnapshot());

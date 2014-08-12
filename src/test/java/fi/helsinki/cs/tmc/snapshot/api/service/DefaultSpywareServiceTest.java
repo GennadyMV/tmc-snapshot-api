@@ -154,60 +154,85 @@ public final class DefaultSpywareServiceTest {
     public void findWithRangeShouldCloseResponseBodyStreamAfterNotFound() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
-        spywareService.fetchChunkByRange("foo", "bar", 1, 2);
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchChunkByRange("foo", "bar", 1, 2);
+        } catch (NotFoundException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test(expected = IOException.class)
     public void findWithRangeShouldCloseResponseBodyStreamAfterServerError() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
-        spywareService.fetchChunkByRange("foo", "bar", 1, 2);
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchChunkByRange("foo", "bar", 1, 2);
+        } catch (IOException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test(expected = IOException.class)
     public void findWithRangeShouldCloseResponseBodyStreamAfterClientError() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
-        spywareService.fetchChunkByRange("foo", "bar", 1, 2);
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchChunkByRange("foo", "bar", 1, 2);
+        } catch (IOException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test(expected = NotFoundException.class)
     public void fetchIndexShouldCloseResponseBodyStreamAfterNotFound() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
-        spywareService.fetchIndex("inst", "user");
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchIndex("inst", "user");
+        } catch (NotFoundException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test(expected = IOException.class)
     public void fetchIndexShouldCloseResponseBodyStreamAfterServerError() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
-        spywareService.fetchIndex("inst", "user");
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchIndex("inst", "user");
+        } catch (IOException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test(expected = IOException.class)
     public void fetchIndexShouldCloseResponseBodyStreamAfterClientError() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
-        spywareService.fetchIndex("inst", "user");
 
-        verify(mockResponse).close();
+        try {
+            spywareService.fetchIndex("inst", "user");
+        } catch (IOException ex) {
+            verify(mockResponse).close();
+            throw ex;
+        }
     }
 
     @Test
     public void fetchIndexShouldCloseResponseBodyStreamAfterSuccess() throws IOException {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.OK);
+
         spywareService.fetchIndex("inst", "user");
 
         verify(mockResponse).close();

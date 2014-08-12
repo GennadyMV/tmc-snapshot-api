@@ -72,7 +72,7 @@ public final class SnapshotControllerTest {
         final List<Snapshot> snapshotData = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            snapshotData.add(new Snapshot((long) i,
+            snapshotData.add(new Snapshot(Integer.toString(i),
                                           (long) i,
                                           new ArrayList<SnapshotFile>()));
         }
@@ -92,18 +92,18 @@ public final class SnapshotControllerTest {
     public void shouldReturnSnapshot() throws Exception {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot(1L, 1L, Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot("1", 1L, Arrays.asList(file));
 
-        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, 1L)).thenReturn(snapshotData);
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(snapshotData);
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", is("1")))
                 .andExpect(jsonPath("$.files", hasSize(1)))
                 .andExpect(jsonPath("$.files[0]", is("/src/HeiMaailma.java")));
 
-        verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, 1L);
+        verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
         verifyNoMoreInteractions(snapshotService);
     }
 
@@ -119,7 +119,7 @@ public final class SnapshotControllerTest {
     @Test
     public void readHandlesNotFoundException() throws Exception {
 
-        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, 1L)).thenThrow(new NotFoundException());
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
                 .andExpect(status().is(404));

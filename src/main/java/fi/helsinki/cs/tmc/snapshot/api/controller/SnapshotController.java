@@ -33,7 +33,7 @@ public final class SnapshotController {
                          @PathVariable final String userId,
                          @PathVariable final String courseId,
                          @PathVariable final String exerciseId,
-                         @PathVariable final Long snapshotId) throws IOException {
+                         @PathVariable final String snapshotId) throws IOException {
 
         return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
     }
