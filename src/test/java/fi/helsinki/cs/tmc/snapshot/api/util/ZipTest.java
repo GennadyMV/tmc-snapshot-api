@@ -66,7 +66,7 @@ public final class ZipTest {
     @Test
     public void testDecompressZipContainingTwoFiles() throws IOException {
 
-        // ZIP Achive containing 'test.java' file with content 'test'
+        // ZIP Achive containing 'Main.java' file with content 'mornings' and 'Doge.java' with content 'wuff'
         final byte[] content = { (byte) 0x50, (byte) 0x4b, (byte) 0x03, (byte) 0x04,
                                  (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                                  (byte) 0x08, (byte) 0x00, (byte) 0x24, (byte) 0x61,
