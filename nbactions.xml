@@ -10,8 +10,5 @@
         <goals>
             <goal>spring-boot:run</goal>
         </goals>
-        <properties>
-            <Env.MAVEN_OPTS>-javaagent:springloaded-1.2.0.RELEASE.jar -noverify</Env.MAVEN_OPTS>
-        </properties>
     </action>
 </actions>
