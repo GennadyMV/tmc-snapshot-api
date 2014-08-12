@@ -18,7 +18,6 @@ public final class EventProcessorTest {
     private EventProcessor processor;
     private List<SnapshotEvent> events;
 
-
     private void generatePatchForExampleExercise(final String data) {
 
         generatePatch("hy", "viikko1-Viikko1_001.Nimi", data);
@@ -54,7 +53,6 @@ public final class EventProcessorTest {
         events.add(snapshotEvent);
     }
 
-
     @Before
     public void setUp() {
 
@@ -75,7 +73,6 @@ public final class EventProcessorTest {
 
         processor.process(events);
 
-
         for (SnapshotEvent snapshotEvent : events) {
             assertEquals(1, snapshotEvent.getFiles().size());
         }
@@ -88,7 +85,6 @@ public final class EventProcessorTest {
 
         assertEquals("public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
                      events.get(6).getFiles().get(FILENAME));
-
     }
 
     @Test
@@ -127,7 +123,6 @@ public final class EventProcessorTest {
         assertEquals(
                 "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
                 events.get(events.size() - 1).getFiles().get(FILENAME));
-
     }
 
     @Test
@@ -161,7 +156,5 @@ public final class EventProcessorTest {
         assertEquals(
                 "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
                 events.get(events.size() - 1).getFiles().get(FILENAME));
-
     }
-
 }
