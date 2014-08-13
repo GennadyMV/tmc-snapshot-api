@@ -18,193 +18,219 @@ Run tests with `mvn test`.
 
 Build the project with `mvn package`.
 
-#API
-##Participant
+## REST API
 
-Information about a single participant.
+The REST API provides mostly JSON-responses as `application/json`. Files are returned as `text/plain`. Incase of an error, an error response is returned with the related status code and requested content-type. The API uses basic access for authentication.
+
+### 1. Participant
 
 ```
-/{instance}/participants/{participantID}/
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/
+Returns: A single participant with the provided instance and ID
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/`
+
 ```
 {
-  "id":"MDEyMzQ1Njc4",
-  "username":"012345678"
+    "id": "MDEyMzQ1Njc4",
+    "username": "012345678"
 }
 ```
 
-##Courses
-
-A single participant's course list.
+### 2. Courses
 
 ```
-/{instance}/participants/{participantID}/courses/
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/
+Returns: A list of courses for a participant with the provided instance and ID
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/`
+
 ```
 [
-  {
-    "id":"WFhYLW9ocGUta2VydGF1cw==",
-    "name":"XXX-ohpe-kertaus"
-  },
-  {
-    "id":"WFhYLW9oamEta2VydGF1cw",
-    "name":"XXX-ohja-kertaus"
-  }
+    {
+        "id": "WFhYLW9oamEta2VydGF1cw",
+        "name": "XXX-ohja-kertaus"
+    }
 ]
 ```
 
-##Single course
-
-Information about a single participant's single course.
+### 2.2. Course
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/
+Returns: A single course for a participant with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/`
+
 ```
 {
-  "id":"WFhYLW9oamEta2VydGF1cw",
-  "name":"XXX-ohja-kertaus"
+    "id": "WFhYLW9oamEta2VydGF1cw",
+    "name": "XXX-ohja-kertaus"
 }
 ```
 
-##Exercises
-
-A list containing all the exercises of a single course for the requested participant.
+### 3. Exercises
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/
+Returns: A list of exercises for a participant and course with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/`
+
 ```
 [
-  {
-    "id":"c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
-    "name":"setti1-01.TavaraMatkalaukkuJaLastiruuma"
-  },
-  {
-    "id":"c2V0dGkxLTAyLkxlbXBpbmltZXQ=",
-    "name":"setti1-02.Lempinimet"
-  }
+    {
+        "id": "c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
+        "name": "setti1-01.TavaraMatkalaukkuJaLastiruuma"
+    },
+    {
+        "id": "c2V0dGkxLTAyLkxlbXBpbmltZXQ",
+        "name": "setti1-02.Lempinimet"
+    }
 ]
 ```
 
-##Single Exercise
-
-An exercise of the requested participant.
+### 3.2. Exercise
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/
+Returns: A single exercise for a participant and course with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/`
+
 ```
 {
-  "id":"c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
-  "name":"setti1-01.TavaraMatkalaukkuJaLastiruuma"
+    "id": "c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
+    "name": "setti1-01.TavaraMatkalaukkuJaLastiruuma"
 }
 ```
 
-##Snapshots
-
-A list of all the snapshots of the requested participants requested exercise.
+### 4. Snapshots
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
+Returns: A list of snapshots for a participant, course and exercise with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/`
+
 ```
 [
-  {
-    "id":"14067100104316662619414800",
-    "timestamp":1406710010431,
+    {
+        "id": "14067100104316662619414800",
+        "timestamp": 1406710010431,
+        "files":
+            [
+                "/src/Main.java"
+            ]
+    },
+    {
+        "id": "14067100104546662642970893",
+        "timestamp": 1406710010454,
+        "files":
+            [
+                "/src/Main.java"
+            ]
+    },
+    {
+        "id": "14067100562006708388460953",
+        "timestamp": 1406710056200,
+        "files":
+            [
+                "/src/Main.java",
+                "/src/testi/TestiLuokka.java"
+            ]
+    }
+]
+```
+
+### 4.2. Snapshot
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/
+Returns: A single snapshot for a participant, course and exercise with the provided instance and IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/`
+
+```
+{
+    "id": "14067100562006708388460953",
+    "timestamp": 1406710056200,
     "files":
-      [
-        "/src/Main.java"
-      ]
-  },
-  {
-    "id":"14067100104546662642970893",
-    "timestamp":1406710010454,
-    "files":
-      [
-        "/src/Main.java"
-      ]
-  },
-  {
-    "id":"14067100562006708388460953",
-    "timestamp":1406710056200,
-    "files":
-      [
-        "/src/Main.java",
-        "/src/testi/TestiLuokka.java"
-      ]
-  }
-]
-```
-
-##Single snapshots
-
-A single snapshot.
-
-```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}
-```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953
-```
-```
-{
-  "id":"14067100562006708388460953",
-  "timestamp":1406710056200,
-  "files":
-    [
-      "/src/Main.java",
-      "/src/testi/TestiLuokka.java"
-    ]
+        [
+            "/src/Main.java",
+            "/src/testi/TestiLuokka.java"
+        ]
 }
 ```
 
-##Files
-
-A list of all the files in the requested snapshot.
+### 5. Files
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
+Returns: A list of files for a participant, course, exercise and snapshot with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/`
+
 ```
 [
-  "/src/Main.java",
-  "/src/testi/TestiLuokka.java"
+    "/src/Main.java",
+    "/src/testi/TestiLuokka.java"
 ]
 ```
 
-##Single file
-
-The content of the requested file at the time the requested snapshot was taken, as plain text.
+### 5.2. File
 
 ```
-/{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{filePath}
+Method: GET
+Content-Type: text/plain
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{filePath}
+Returns: The content for a file for a participant, course, exercise and snapshot with the provided instance and IDs
 ```
-```
-/hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/src/Main.java
-```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/src/Main.java`
+
 ```
 public class Main {
 
