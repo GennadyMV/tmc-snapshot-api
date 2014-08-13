@@ -13,7 +13,7 @@ import org.springframework.mock.http.MockHttpOutputMessage;
 
 import static org.junit.Assert.*;
 
-public class PlainErrorMessageConverterTest {
+public final class PlainErrorMessageConverterTest {
 
     private PlainErrorMessageConverter plainErrorMessageConverter;
 
@@ -74,5 +74,4 @@ public class PlainErrorMessageConverterTest {
 
         plainErrorMessageConverter.writeInternal(null, null);
     }
-
 }
