@@ -41,7 +41,7 @@ public final class DefaultSnapshotOrganiserServiceTest {
         final SnapshotEvent eventA = createEvent("mooc", "exerciseA", 1L, "text_insert");
         final SnapshotEvent eventB = createEvent("mooc", "exerciseB", 2L, "text_insert");
         final SnapshotEvent eventC = createEvent("mooc", "exerciseC", 3L, "text_insert");
-        final SnapshotEvent eventD = createEvent("mooc", "exerciseD", 4L, "text_insert");
+        final SnapshotEvent eventD = createEvent("mooc", "exerciseC", 4L, "text_insert");
 
         final Collection<SnapshotEvent> events = new ArrayList<>();
 
