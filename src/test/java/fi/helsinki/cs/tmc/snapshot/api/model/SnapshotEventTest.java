@@ -76,28 +76,28 @@ public final class SnapshotEventTest {
     @Test
     public void eventWithSmallerHappenedAtIsFirstWhenOrdered() {
 
-        final SnapshotEvent e1 = new SnapshotEvent();
-        e1.setHappenedAt(1L);
+        final SnapshotEvent eventA = new SnapshotEvent();
+        eventA.setHappenedAt(1L);
 
-        final SnapshotEvent e2 = new SnapshotEvent();
-        e2.setHappenedAt(2L);
+        final SnapshotEvent eventB = new SnapshotEvent();
+        eventB.setHappenedAt(2L);
 
-        assertTrue(e1.compareTo(e2) < 0);
-        assertTrue(e2.compareTo(e1) > 0);
+        assertTrue(eventA.compareTo(eventB) < 0);
+        assertTrue(eventB.compareTo(eventA) > 0);
     }
 
     @Test
     public void eventsWithSameHappenedAtAreOrderedBasedOnNanotime() {
 
-        final SnapshotEvent e1 = new SnapshotEvent();
-        e1.setHappenedAt(1L);
-        e1.setSystemNanotime(1L);
+        final SnapshotEvent eventA = new SnapshotEvent();
+        eventA.setHappenedAt(1L);
+        eventA.setSystemNanotime(1L);
 
-        final SnapshotEvent e2 = new SnapshotEvent();
-        e2.setHappenedAt(1L);
-        e2.setSystemNanotime(2L);
+        final SnapshotEvent eventB = new SnapshotEvent();
+        eventB.setHappenedAt(1L);
+        eventB.setSystemNanotime(2L);
 
-        assertTrue(e1.compareTo(e2) < 0);
-        assertTrue(e2.compareTo(e1) > 0);
+        assertTrue(eventA.compareTo(eventB) < 0);
+        assertTrue(eventB.compareTo(eventA) > 0);
     }
 }

@@ -92,8 +92,6 @@ public final class SnapshotFileControllerTest {
     @Test
     public void shouldReturnSnapshotFile() throws Exception {
 
-        final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-
         when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, "/path")).thenReturn("testContent");
 
         mockMvc.perform(get(FILE_BASE_URL + "/path"))

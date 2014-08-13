@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultSnapshotEventService implements SnapshotEventService {
+public final class DefaultSnapshotEventService implements SnapshotEventService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultSnapshotEventService.class);
 

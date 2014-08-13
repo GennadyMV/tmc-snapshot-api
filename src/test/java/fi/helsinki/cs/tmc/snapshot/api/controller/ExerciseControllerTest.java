@@ -69,6 +69,7 @@ public final class ExerciseControllerTest {
     public void listShouldReturnExercises() throws Exception {
 
         final List<Exercise> exercises = new ArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             exercises.add(new Exercise("ex" + i));
         }
@@ -102,6 +103,7 @@ public final class ExerciseControllerTest {
     public void readShouldReturnExercise() throws Exception {
 
         final Exercise exercise = new Exercise(EXERCISE);
+
         for (int i = 0; i < 5; i++) {
             exercise.addSnapshotEvent(new SnapshotEvent());
         }

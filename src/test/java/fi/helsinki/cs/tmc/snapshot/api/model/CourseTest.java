@@ -38,21 +38,21 @@ public final class CourseTest {
     @Test
     public void addedExercisesCanBeFetched() {
 
-        final Exercise e = new Exercise("ex1");
-        course.addExercise(e);
+        final Exercise exercise = new Exercise("ex1");
+        course.addExercise(exercise);
 
         assertEquals(1, course.getExercises().size());
-        assertEquals(e, course.getExercises().iterator().next());
+        assertEquals(exercise, course.getExercises().iterator().next());
 
-        assertEquals(e, course.getExercise("ex1"));
+        assertEquals(exercise, course.getExercise("ex1"));
     }
 
     @Test
     public void canNotAddSameExerciseMultipleTimes() {
 
-        final Exercise e = new Exercise("ex1");
-        course.addExercise(e);
-        course.addExercise(e);
+        final Exercise exercise = new Exercise("ex1");
+        course.addExercise(exercise);
+        course.addExercise(exercise);
 
         assertEquals(1, course.getExercises().size());
 

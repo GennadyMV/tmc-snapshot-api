@@ -27,9 +27,9 @@ public final class DefaultExerciseService implements ExerciseService {
 
     @Override
     public Exercise find(final String instance,
-                             final String userId,
-                             final String courseId,
-                             final String exerciseId) throws IOException {
+                         final String userId,
+                         final String courseId,
+                         final String exerciseId) throws IOException {
 
         final String exerciseName = new String(Base64.decodeBase64(exerciseId));
         final Exercise exercise = courseService.find(instance, userId, courseId).getExercise(exerciseName);
