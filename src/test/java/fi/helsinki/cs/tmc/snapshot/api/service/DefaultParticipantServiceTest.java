@@ -1,14 +1,17 @@
-
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.apache.commons.codec.binary.Base64;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

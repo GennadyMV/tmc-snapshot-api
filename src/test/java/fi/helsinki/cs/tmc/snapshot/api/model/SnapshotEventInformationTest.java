@@ -8,35 +8,35 @@ import static org.junit.Assert.assertTrue;
 
 public final class SnapshotEventInformationTest {
 
-    private SnapshotEventInformation info;
+    private SnapshotEventInformation eventInformation;
 
     @Before
     public void setUp() {
 
-        info = new SnapshotEventInformation();
+        eventInformation = new SnapshotEventInformation();
     }
 
     @Test
     public void canSetFile() {
 
-        info.setFile("myFile");
+        eventInformation.setFile("myFile");
 
-        assertEquals("myFile", info.getFile());
+        assertEquals("myFile", eventInformation.getFile());
     }
 
     @Test
     public void canSetPatches() {
 
-        info.setPatches("myPatches");
+        eventInformation.setPatches("myPatches");
 
-        assertEquals("myPatches", info.getPatches());
+        assertEquals("myPatches", eventInformation.getPatches());
     }
 
     @Test
     public void canSetAsFullDocument() {
 
-        info.setFullDocument(true);
+        eventInformation.setFullDocument(true);
 
-        assertTrue(info.isFullDocument());
+        assertTrue(eventInformation.isFullDocument());
     }
 }

@@ -195,7 +195,7 @@ public final class DefaultSpywareServiceTest {
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
 
         try {
-            spywareService.fetchIndex("inst", "user");
+            spywareService.fetchIndex("instance", "user");
         } catch (NotFoundException exception) {
             verify(mockResponse).close();
             throw exception;
@@ -208,7 +208,7 @@ public final class DefaultSpywareServiceTest {
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
 
         try {
-            spywareService.fetchIndex("inst", "user");
+            spywareService.fetchIndex("instance", "user");
         } catch (IOException exception) {
             verify(mockResponse).close();
             throw exception;
@@ -221,7 +221,7 @@ public final class DefaultSpywareServiceTest {
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
 
         try {
-            spywareService.fetchIndex("inst", "user");
+            spywareService.fetchIndex("instance", "user");
         } catch (IOException exception) {
             verify(mockResponse).close();
             throw exception;
@@ -233,7 +233,7 @@ public final class DefaultSpywareServiceTest {
 
         final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.OK);
 
-        spywareService.fetchIndex("inst", "user");
+        spywareService.fetchIndex("instance", "user");
 
         verify(mockResponse).close();
     }

@@ -68,6 +68,7 @@ public final class CourseControllerTest {
     public void listShouldReturnExercises() throws Exception {
 
         final List<Course> courses = new ArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             courses.add(new Course("course" + i));
         }
@@ -101,6 +102,7 @@ public final class CourseControllerTest {
     public void readShouldReturnExercise() throws Exception {
 
         final Course course = new Course(COURSE);
+
         for (int i = 0; i < 5; i++) {
             course.addExercise(new Exercise("ex" + i));
         }

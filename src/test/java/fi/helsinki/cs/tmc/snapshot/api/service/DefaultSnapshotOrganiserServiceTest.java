@@ -38,17 +38,17 @@ public final class DefaultSnapshotOrganiserServiceTest {
 
         final Participant participant = new Participant("user");
 
-        final SnapshotEvent event1 = createEvent("mooc", "ex1", 1L, "text_insert");
-        final SnapshotEvent event2 = createEvent("mooc", "ex2", 2L, "text_insert");
-        final SnapshotEvent event3 = createEvent("mooc", "ex3", 3L, "text_insert");
-        final SnapshotEvent event4 = createEvent("mooc", "ex3", 4L, "text_insert");
+        final SnapshotEvent eventA = createEvent("mooc", "exerciseA", 1L, "text_insert");
+        final SnapshotEvent eventB = createEvent("mooc", "exerciseB", 2L, "text_insert");
+        final SnapshotEvent eventC = createEvent("mooc", "exerciseC", 3L, "text_insert");
+        final SnapshotEvent eventD = createEvent("mooc", "exerciseD", 4L, "text_insert");
 
         final Collection<SnapshotEvent> events = new ArrayList<>();
 
-        events.add(event1);
-        events.add(event2);
-        events.add(event3);
-        events.add(event4);
+        events.add(eventA);
+        events.add(eventB);
+        events.add(eventC);
+        events.add(eventD);
 
         organiserService.organise(participant, events);
 
@@ -63,7 +63,7 @@ public final class DefaultSnapshotOrganiserServiceTest {
         final List<Exercise> exercises = new ArrayList(exerciseCollection);
 
         for (Exercise exercise : exercises) {
-            if (exercise.getName().equals("ex3")) {
+            if (exercise.getName().equals("exerciseC")) {
                 assertEquals(2, exercise.getSnapshotEvents().size());
             } else {
                 assertEquals(1, exercise.getSnapshotEvents().size());
