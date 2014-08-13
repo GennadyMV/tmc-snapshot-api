@@ -2,9 +2,12 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Error;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,9 +23,23 @@ public final class ExceptionController {
     @ResponseBody
     public Error handleException(final Exception exception) {
 
-        LOG.error(exception.getMessage());
+        final Throwable cause = exception.getCause();
+
+        if (cause == null) {
+            LOG.error("{}: {}.", exception.getClass().getName(), exception.getMessage());
+        } else {
+            LOG.error("{}: {} caused by {}.", exception.getClass().getName(), exception.getMessage(), cause.getMessage());
+        }
 
         return new Error("Something went wrong.");
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ResponseBody
+    public Error handleHttpMediaTypeNotAcceptableException() {
+
+        return new Error("Unsupported media type for request.");
     }
 
     @ExceptionHandler(NotFoundException.class)
