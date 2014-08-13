@@ -2,6 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,6 +12,27 @@ public final class GZipTest {
     private byte[] stringToByteArray(final String data) {
 
         return data.getBytes();
+    }
+
+    /*
+     * Make sure constructor is private
+     */
+    @Test(expected = IllegalAccessException.class)
+    public void shouldHavePrivateConstructor() throws InstantiationException, IllegalAccessException {
+
+        GZip.class.newInstance();
+        fail("Should have private constructor");
+    }
+
+    /*
+     * Make sure cobertura knows we visited the private constructor...
+     */
+    @Test
+    public void coverageForPrivateConstructor() throws Exception {
+
+        final Constructor<?>[] constructor = GZip.class.getDeclaredConstructors();
+        constructor[0].setAccessible(true);
+        constructor[0].newInstance((Object[]) null);
     }
 
     @Test
@@ -46,26 +68,5 @@ public final class GZipTest {
         final byte[] expResult = stringToByteArray("{\"json\":\"test\"}");
 
         assertArrayEquals(expResult, GZip.decompress(content));
-    }
-
-    /*
-     * Make sure constructor is private
-     */
-    @Test(expected = IllegalAccessException.class)
-    public void shouldHavePrivateConstructor() throws InstantiationException, IllegalAccessException {
-
-        GZip.class.newInstance();
-        fail("Should have private constructor");
-    }
-
-    /*
-     * Make sure cobertura knows we visited the private constructor...
-     */
-    @Test
-    public void coverageForPrivateConstructor() throws Exception {
-
-        final Constructor<?>[] constructor = GZip.class.getDeclaredConstructors();
-        constructor[0].setAccessible(true);
-        constructor[0].newInstance((Object[]) null);
     }
 }

@@ -21,6 +21,27 @@ public final class ZipTest {
         return data.getBytes();
     }
 
+    /*
+     * Make sure constructor is private
+     */
+    @Test(expected = IllegalAccessException.class)
+    public void shouldHavePrivateConstructor() throws InstantiationException, IllegalAccessException {
+
+        Zip.class.newInstance();
+        fail("Should have private constructor");
+    }
+
+    /*
+     * Make sure cobertura knows we visited the private constructor...
+     */
+    @Test
+    public void coverageForPrivateConstructor() throws Exception {
+
+        final Constructor<?>[] constructor = Zip.class.getDeclaredConstructors();
+        constructor[0].setAccessible(true);
+        constructor[0].newInstance((Object[]) null);
+    }
+
     @Test
     public void testDecompressZipContainingOneFile() throws IOException {
 
@@ -130,26 +151,5 @@ public final class ZipTest {
         assertEquals(2, result.size());
         checkZipContainsFileWithContents(result, "Main.java", stringToByteArray("mornings"));
         checkZipContainsFileWithContents(result, "Doge.java", stringToByteArray("wuff"));
-    }
-
-    /*
-     * Make sure constructor is private
-     */
-    @Test(expected = IllegalAccessException.class)
-    public void shouldHavePrivateConstructor() throws InstantiationException, IllegalAccessException {
-
-        Zip.class.newInstance();
-        fail("Should have private constructor");
-    }
-
-    /*
-     * Make sure cobertura knows we visited the private constructor...
-     */
-    @Test
-    public void coverageForPrivateConstructor() throws Exception {
-
-        final Constructor<?>[] constructor = Zip.class.getDeclaredConstructors();
-        constructor[0].setAccessible(true);
-        constructor[0].newInstance((Object[]) null);
     }
 }

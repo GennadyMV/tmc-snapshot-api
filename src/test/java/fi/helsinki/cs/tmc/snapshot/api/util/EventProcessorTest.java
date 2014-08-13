@@ -91,8 +91,8 @@ public final class EventProcessorTest {
 
         try {
             processor.process(events);
-        } catch (UnsupportedEncodingException ex) {
-            fail("Problem reading zip");
+        } catch (UnsupportedEncodingException exception) {
+            fail("Problem reading ZIP");
         }
     }
 

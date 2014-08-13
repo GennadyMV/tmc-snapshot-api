@@ -157,9 +157,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchChunkByRange("foo", "bar", 1, 2);
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
@@ -170,9 +170,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchChunkByRange("foo", "bar", 1, 2);
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
@@ -183,9 +183,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchChunkByRange("foo", "bar", 1, 2);
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
@@ -196,9 +196,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchIndex("inst", "user");
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
@@ -209,9 +209,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchIndex("inst", "user");
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
@@ -222,9 +222,9 @@ public final class DefaultSpywareServiceTest {
 
         try {
             spywareService.fetchIndex("inst", "user");
-        } catch (IOException ex) {
+        } catch (IOException exception) {
             verify(mockResponse).close();
-            throw ex;
+            throw exception;
         }
     }
 
