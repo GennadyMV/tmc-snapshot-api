@@ -38,6 +38,12 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
 
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Commons Codec -->
         <dependency>
             <groupId>commons-codec</groupId>
