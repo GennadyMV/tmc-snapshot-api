@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.junit.Test;
@@ -65,7 +66,7 @@ public final class ZipTest {
     @Test
     public void testDecompressZipContainingTwoFiles() throws IOException {
 
-        // ZIP Achive containing 'test.java' file with content 'test'
+        // ZIP Achive containing 'Main.java' file with content 'mornings' and 'Doge.java' with content 'wuff'
         final byte[] content = { (byte) 0x50, (byte) 0x4b, (byte) 0x03, (byte) 0x04,
                                  (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                                  (byte) 0x08, (byte) 0x00, (byte) 0x24, (byte) 0x61,
@@ -129,5 +130,26 @@ public final class ZipTest {
         assertEquals(2, result.size());
         checkZipContainsFileWithContents(result, "Main.java", stringToByteArray("mornings"));
         checkZipContainsFileWithContents(result, "Doge.java", stringToByteArray("wuff"));
+    }
+
+    /*
+     * Make sure constructor is private
+     */
+    @Test(expected = IllegalAccessException.class)
+    public void shouldHavePrivateConstructor() throws InstantiationException, IllegalAccessException {
+
+        Zip.class.newInstance();
+        fail("Should have private constructor");
+    }
+
+    /*
+     * Make sure cobertura knows we visited the private constructor...
+     */
+    @Test
+    public void coverageForPrivateConstructor() throws Exception {
+
+        final Constructor<?>[] constructor = Zip.class.getDeclaredConstructors();
+        constructor[0].setAccessible(true);
+        constructor[0].newInstance((Object[]) null);
     }
 }

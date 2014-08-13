@@ -14,6 +14,10 @@ import static org.junit.Assert.*;
 public final class EventProcessorTest {
 
     private static final String FILENAME = "/src/Nimi.java";
+    private static final String PATCH = "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d";
+    private static final String PATCHFILECONTENT = "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}";
+    private static final String ZIP = "UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pLwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAmAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFNj0FOw0AMRfc5xVdXrYQy+7JGAiHYlB1iYYppnHpmotiJFKHeJjfJxRhKBf0LW/L395O74V1lj72SGZ4lCr4qFJ1L92uak5c2ZvlAJEnrnfeSDq9voP5gm0viRyHgUfo2ixNy07JGMoEvc7PMCaTKl9XrxJMcl1kF7BiFdZmRlTFSwaY0/A2Pk7FOU7qBM8MY93cvD9d3shVu8cxoi8a924agRD7ULcVcf0r4x+4mc451Hrzuyi+uab1abW7P/qmqTt9QSwcI4k6l3sMAAAAXAQAAUEsBAhQAFAAICAgAWWwuRAAAAAACAAAAAAAAABkAAAAAAAAAAAAAAAAAAAAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9QSwECFAAUAAgICABZbC5EAAAAAAIAAAAAAAAAHQAAAAAAAAAAAAAAAABJAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9QSwECFAAUAAgICABZbC5E4k6l3sMAAAAXAQAAJgAAAAAAAAAAAAAAAACWAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFQSwUGAAAAAAMAAwDmAAAArQEAAAAA";
+    private static final String EMPTYZIP = "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==";
 
     private EventProcessor processor;
     private List<SnapshotEvent> events;
@@ -53,6 +57,45 @@ public final class EventProcessorTest {
         events.add(snapshotEvent);
     }
 
+    private String generateFileChangeMetadata(final String file) {
+
+        return generateMetadata("file_change", file);
+    }
+
+    private String generateFileRemoveMetadata(final String file) {
+
+        return generateMetadata("file_delete", file);
+    }
+
+    private String generateMetadata(final String cause, final String file) {
+
+        return "{\"cause\":\"" + cause + "\",\"file\":\"" + file + "\"}";
+    }
+
+    private void verifyEventFileContentForExampleFile(final int index, final String content) {
+
+        verifyEventFileContent(index, FILENAME, content);
+    }
+
+    private void verifyEventFileContent(final int index, final String filename, final String content) {
+
+        assertEquals(content, events.get(index).getFiles().get(filename));
+    }
+
+    private void verifyEventFilesCount(final int index, final int fileCount) {
+
+        assertEquals(fileCount, events.get(index).getFiles().size());
+    }
+
+    private void process() {
+
+        try {
+            processor.process(events);
+        } catch (UnsupportedEncodingException ex) {
+            fail("Problem reading zip");
+        }
+    }
+
     @Before
     public void setUp() {
 
@@ -61,9 +104,34 @@ public final class EventProcessorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    public void testPatchFullDocumentShouldReturnFileContent() {
 
-        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d");
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFilesCount(0, 1);
+        verifyEventFileContent(0, FILENAME, PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingFullDocumentShouldReturnPatchedFileContent() {
+
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
+
+        process();
+
+        verifyEventFilesCount(0, 1);
+        verifyEventFileContent(0, FILENAME, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 1);
+        verifyEventFileContent(1, FILENAME, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        s\n    }\n\n}");
+    }
+
+    @Test
+    public void testPatchingFullDocumentWithMultiplePatchesShouldReturnFileContent() {
+
+        generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzNiwxNiArMjM2LDE3IEBAXG4gICAgICAgIHNcbitvXG4gJTBBICAgICU3RCUwQSUwQVxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzNywxNiArMjM3LDE3IEBAXG4gICAgICAgc29cbit1XG4gJTBBICAgICU3RCUwQSUwQVxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
@@ -71,90 +139,200 @@ public final class EventProcessorTest {
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzOSwxMiArMjM5LDggQEBcbiAgICAgXG4tc291dFxuICUwQSAgIFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDQ0IEBAXG4gaS8gJTBBICAgICAgICBcbitTeXN0ZW0ub3V0LnByaW50bG4oJTIyJTIyKTtcbiAlMEEgICAgJTdEJTBBJTBBJTdEXG4iLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0\\u003d");
 
-        processor.process(events);
+        process();
 
-        for (SnapshotEvent snapshotEvent : events) {
-            assertEquals(1, snapshotEvent.getFiles().size());
-        }
-
-        assertEquals("public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}",
-                     events.get(0).getFiles().get(FILENAME));
-
-        assertEquals("public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        sout\n    }\n\n}",
-                     events.get(4).getFiles().get(FILENAME));
-
-        assertEquals("public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
-                     events.get(6).getFiles().get(FILENAME));
+        verifyEventFileContentForExampleFile(1, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        s\n    }\n\n}");
+        verifyEventFileContentForExampleFile(2, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        so\n    }\n\n}");
+        verifyEventFileContentForExampleFile(3, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        sou\n    }\n\n}");
+        verifyEventFileContentForExampleFile(4, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        sout\n    }\n\n}");
+        verifyEventFileContentForExampleFile(5, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
+        verifyEventFileContentForExampleFile(6, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}");
     }
 
     @Test
-    public void testErrorDataProcess() throws Exception {
+    public void testPatchingWithEmptyPatch() {
 
-        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d");
-        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pMi5qYXZhIiwicGF0Y2hlcyI6IkBAIC0wLDAgKzEsMjUxIEBAXG4rcHVibGljIGNsYXNzIE5pbWkgJTdCJTBBICAgICUwQSAgICBwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmclNUIlNUQgYXJncykgJTdCJTBBICAgICAgICAvLyBLaXJqb2l0YSBvaGplbG1hc2kgdCVDMyVBNGglQzMlQTRuIGFsbGUlMEEgICAgICAlMEEgICAgICAgIC8vIE1payVDMyVBNGxpIGV0IHZpZWwlQzMlQTQgb2xlIHZhc3Rhbm51dCB2aWVsJUMzJUE0IGt5c2VseXluLCB0ZWUgc2UgSEVUSSUwQSAgICAgICAgLy8gb3NvaXR0ZWVzc2E6IGh0dHA6Ly9sYWF0dS5qYW1vLmZpLyAlMEEgICAgICAgICUwQSAgICAlN0QlMEElMEElN0RcbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
+        generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
+    }
+
+    @Test
+    public void testPatchingWithDifferentFilenames() {
+
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pMi5qYXZhIiwicGF0Y2hlcyI6IkBAIC0wLDAgKzEsMjUxIEBAXG4rcHVibGljIGNsYXNzIE5pbWkgJTdCJTBBICAgICUwQSAgICBwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmclNUIlNUQgYXJncykgJTdCJTBBICAgICAgICAvLyBLaXJqb2l0YSBvaGplbG1hc2kgdCVDMyVBNGglQzMlQTRuIGFsbGUlMEEgICAgICAlMEEgICAgICAgIC8vIE1payVDMyVBNGxpIGV0IHZpZWwlQzMlQTQgb2xlIHZhc3Rhbm51dCB2aWVsJUMzJUE0IGt5c2VseXluLCB0ZWUgc2UgSEVUSSUwQSAgICAgICAgLy8gb3NvaXR0ZWVzc2E6IGh0dHA6Ly9sYWF0dS5qYW1vLmZpLyAlMEEgICAgICAgICUwQSAgICAlN0QlMEElMEElN0RcbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContent(1, "/src/Nimi2.java", PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingWithNullPatch() {
+
+        generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjpudWxsLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0=");
-        generatePatchForExampleExercise("UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1p\n" +
-                                                "LwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAA\n" +
-                                                "AAAmAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFNj0FOw0AMRfc5xVdXrYQy" +
-                                                "+7JGAiHYlB1iYYppnHpmotiJFKHeJjfJxRhKBf0LW/L395O74V1lj72SGZ4lCr4qFJ1L92uak5c2ZvlA" +
-                                                "JEnrnfeSDq9voP5gm0viRyHgUfo2ixNy07JGMoEvc7PMCaTKl9XrxJMcl1kF7BiFdZmRlTFSwaY0/A2P" +
-                                                "k7FOU7qBM8MY93cvD9d3shVu8cxoi8a924agRD7ULcVcf0r4x+4mc451Hrzuyi+uab1abW7P/qmqTt9Q" +
-                                                "SwcI4k6l3sMAAAAXAQAAUEsBAhQAFAAICAgAWWwuRAAAAAACAAAAAAAAABkAAAAAAAAAAAAAAAAAAAAA" +
-                                                "AHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9QSwECFAAUAAgICABZbC5EAAAAAAIAAAAAAAAAHQAAAAAA" +
-                                                "AAAAAAAAAABJAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9QSwECFAAUAAgICABZbC5E4k6l" +
-                                                "3sMAAAAXAQAAJgAAAAAAAAAAAAAAAACWAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1p" +
-                                                "LmphdmFQSwUGAAAAAAMAAwDmAAAArQEAAAAA");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
+    }
+
+    @Test
+    public void testPatchingWithNonBase64Data() {
+
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("fail===={");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
+    }
+
+    @Test
+    public void testPatchingWithNullJsonData() {
+
+        generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("bnVsbA==");
-        generateCodeSnapshotForExampleExercise("{\"cause\":\"folder_create\",\"file\":\"/nbproject/private\"}", "UEsDBBQACAgIADxsLkQAAAAAAAAAAAAAAAAaAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAAB4AAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAACgAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9LdXVzaS5qYXZhRUw7DsIwDN1zCqtTy9AegCMwlg0xmGK1gcSJaqcSQr0NN+FiGBDiLe89vU8up+AHGAKKwK4U8XB3Dgz5m4iiGi3JnyGi57rX2fN4OALOozS/9htdB3si0OeD2YgmU4sZZE4MsVxtTgxpulCI6P7D/iZKsU1F22znGriuNlWz/RRW59YXUEsHCMDfbXyEAAAApgAAAFBLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL1BLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAeAAAAAAAAAAAAAAAAAEoAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9QSwECFAAUAAgICAA8bC5EwN9tfIQAAACmAAAAKAAAAAAAAAAAAAAAAACYAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS9zcmMvS3V1c2kuamF2YVBLBQYAAAAAAwADAOoAAAByAQAAAAA\\u003d");
-        generateCodeSnapshotForExampleExercise("{\"cause\":\"file_delete\",\"file\":\"/src/Nimi2.java\"}", "UEsDBBQACAgIADxsLkQAAAAAAAAAAAAAAAAaAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAAB4AAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAACgAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9LdXVzaS5qYXZhRUw7DsIwDN1zCqtTy9AegCMwlg0xmGK1gcSJaqcSQr0NN+FiGBDiLe89vU8up+AHGAKKwK4U8XB3Dgz5m4iiGi3JnyGi57rX2fN4OALOozS/9htdB3si0OeD2YgmU4sZZE4MsVxtTgxpulCI6P7D/iZKsU1F22znGriuNlWz/RRW59YXUEsHCMDfbXyEAAAApgAAAFBLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL1BLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAeAAAAAAAAAAAAAAAAAEoAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9QSwECFAAUAAgICAA8bC5EwN9tfIQAAACmAAAAKAAAAAAAAAAAAAAAAACYAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS9zcmMvS3V1c2kuamF2YVBLBQYAAAAAAwADAOoAAAByAQAAAAA\\u003d");
-        generateCodeSnapshotForExampleExercise(null, "UEsDBBQACAgIADxsLkQAAAAAAAAAAAAAAAAaAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAAB4AAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy8DAFBLBwgAAAAAAgAAAAAAAABQSwMEFAAICAgAPGwuRAAAAAAAAAAAAAAAACgAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9LdXVzaS5qYXZhRUw7DsIwDN1zCqtTy9AegCMwlg0xmGK1gcSJaqcSQr0NN+FiGBDiLe89vU8up+AHGAKKwK4U8XB3Dgz5m4iiGi3JnyGi57rX2fN4OALOozS/9htdB3si0OeD2YgmU4sZZE4MsVxtTgxpulCI6P7D/iZKsU1F22znGriuNlWz/RRW59YXUEsHCMDfbXyEAAAApgAAAFBLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL1BLAQIUABQACAgIADxsLkQAAAAAAgAAAAAAAAAeAAAAAAAAAAAAAAAAAEoAAAB2aWlra28xLVZpaWtrbzFfMDAzLkt1dXNpL3NyYy9QSwECFAAUAAgICAA8bC5EwN9tfIQAAACmAAAAKAAAAAAAAAAAAAAAAACYAAAAdmlpa2tvMS1WaWlra28xXzAwMy5LdXVzaS9zcmMvS3V1c2kuamF2YVBLBQYAAAAAAwADAOoAAAByAQAAAAA\\u003d");
-        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDQ0IEBAXG4gaS8gJTBBICAgICAgICBcbitTeXN0ZW0ub3V0LnByaW50bG4oJTIyJTIyKTtcbiAlMEEgICAgJTdEJTBBJTBBJTdEXG4iLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0\\u003d");
 
-        processor.process(events);
+        process();
 
-        assertEquals(1, events.get(1).getFiles().size());
-        assertEquals(1, events.get(events.size() - 1).getFiles().size());
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
+    }
 
-        assertEquals(
-                "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}",
-                events.get(0).getFiles().get(FILENAME));
+    @Test
+    public void testPatchingWithNonJsonData() {
 
-        assertEquals(
-                "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
-                events.get(events.size() - 1).getFiles().get(FILENAME));
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("ZmFpbD09PT17Cg==");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
+    }
+
+    @Test
+    public void testPatchingAfterFileDelete() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise(generateFileRemoveMetadata(FILENAME), EMPTYZIP);
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingAfterFileDeleteWithoutMetadata() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise(null, EMPTYZIP);
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT + PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingAfterFileDeleteWithNullMetadata() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise("null", EMPTYZIP);
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT + PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingAfterDeletingDifferentFile() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise(generateFileRemoveMetadata("/src/Nimi2.java"), EMPTYZIP);
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        s\n    }\n\n}");
+
+    }
+
+    @Test
+    public void testPatchingAfterNonJsonMetadata() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise("fail===={", EMPTYZIP);
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT + PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testPatchingAfterEmptyMetadata() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise("", EMPTYZIP);
+        generatePatchForExampleExercise(PATCH);
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT + PATCHFILECONTENT);
     }
 
     @Test
     public void testCodeSnapshotPatching() {
 
-        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d");
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), ZIP);
 
-        generateCodeSnapshotForExampleExercise("\"cause\":\"file_change\",\"file\":\"/src/Nimi.java\"",
-                                                "UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1p\n" +
-                                                "LwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAA\n" +
-                                                "AAAmAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFNj0FOw0AMRfc5xVdXrYQy" +
-                                                "+7JGAiHYlB1iYYppnHpmotiJFKHeJjfJxRhKBf0LW/L395O74V1lj72SGZ4lCr4qFJ1L92uak5c2ZvlA" +
-                                                "JEnrnfeSDq9voP5gm0viRyHgUfo2ixNy07JGMoEvc7PMCaTKl9XrxJMcl1kF7BiFdZmRlTFSwaY0/A2P" +
-                                                "k7FOU7qBM8MY93cvD9d3shVu8cxoi8a924agRD7ULcVcf0r4x+4mc451Hrzuyi+uab1abW7P/qmqTt9Q" +
-                                                "SwcI4k6l3sMAAAAXAQAAUEsBAhQAFAAICAgAWWwuRAAAAAACAAAAAAAAABkAAAAAAAAAAAAAAAAAAAAA" +
-                                                "AHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9QSwECFAAUAAgICABZbC5EAAAAAAIAAAAAAAAAHQAAAAAA" +
-                                                "AAAAAAAAAABJAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9QSwECFAAUAAgICABZbC5E4k6l" +
-                                                "3sMAAAAXAQAAJgAAAAAAAAAAAAAAAACWAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1p" +
-                                                "LmphdmFQSwUGAAAAAAMAAwDmAAAArQEAAAAA");
+        process();
 
-        try {
-            processor.process(events);
-        } catch (UnsupportedEncodingException ex) {
-            fail("Problem reading zip");
-        }
+        verifyEventFileContentForExampleFile(0, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
+        verifyEventFileContentForExampleFile(1, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}");
+    }
 
-        System.out.println(events.get(0).getFiles());
+    @Test
+    public void testCodeSnapshotPatchingForDifferentFileNames() {
 
-        assertEquals(1, events.get(0).getFiles().size());
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pMi5qYXZhIiwicGF0Y2hlcyI6IkBAIC0wLDAgKzEsMjUxIEBAXG4rcHVibGljIGNsYXNzIE5pbWkgJTdCJTBBICAgICUwQSAgICBwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmclNUIlNUQgYXJncykgJTdCJTBBICAgICAgICAvLyBLaXJqb2l0YSBvaGplbG1hc2kgdCVDMyVBNGglQzMlQTRuIGFsbGUlMEEgICAgICAlMEEgICAgICAgIC8vIE1payVDMyVBNGxpIGV0IHZpZWwlQzMlQTQgb2xlIHZhc3Rhbm51dCB2aWVsJUMzJUE0IGt5c2VseXluLCB0ZWUgc2UgSEVUSSUwQSAgICAgICAgLy8gb3NvaXR0ZWVzc2E6IGh0dHA6Ly9sYWF0dS5qYW1vLmZpLyAlMEEgICAgICAgICUwQSAgICAlN0QlMEElMEElN0RcbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
+        generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), ZIP);
 
-        assertEquals(
-                "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}",
-                events.get(events.size() - 1).getFiles().get(FILENAME));
+        process();
+
+        verifyEventFileContent(0, "/src/Nimi2.java", "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
+        verifyEventFilesCount(1, 0);
+    }
+
+    @Test
+    public void testCodeSnapshotPatchingWithCorruptedZip() {
+
+        generatePatchForExampleExercise(PATCH);
+        generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), "UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pLwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAmAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFNj0FOw0AMRfc5xVdXrYQy+7JGAiHYlB1iYYppnHpmotiJFKHeJjfJxRhKBf0LW/L395O74V1lj72SGZ4lYXNkCg==");
+
+        process();
+
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+        verifyEventFilesCount(1, 0);
     }
 }
