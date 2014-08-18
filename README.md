@@ -4,7 +4,7 @@ tmc-snapshot-api
 [![Build Status](https://travis-ci.org/kesapojat/tmc-snapshot-api.svg?branch=master)](https://travis-ci.org/kesapojat/tmc-snapshot-api/)
 [![Coverage Status](https://img.shields.io/coveralls/kesapojat/tmc-snapshot-api.svg)](https://coveralls.io/r/kesapojat/tmc-snapshot-api/)
 
-A Spring Boot Web API for accessing TMC exercise snapshots (Java 7 + Java EE 7 + Spring Boot 1.1.4.RELEASE).
+A Spring Boot Web API for accessing TMC exercise snapshots (Java 7 + Java EE 7 + Spring Boot 1.1.4.RELEASE) from the [tmc-spyware-server](https://github.com/testmycode/tmc-spyware-server/).
 
 ## Start Server
 
@@ -17,6 +17,16 @@ Run tests with `mvn test`.
 ## Build
 
 Build the project with `mvn package`.
+
+## Configuration
+
+You need to configure a few properties to get the API running — mainly setting the credentials for the [tmc-spyware-server](https://github.com/testmycode/tmc-spyware-server/) and the credentials for the service itself.
+
+1. Modify the active profile `spring.profiles.active` to `production` in `src/main/resources/application.properties`.
+2. Create a configuration-file `src/main/resources/application-production.properties` for the production-profile. See a sample configuration in `src/main/resources/application-development.properties.sample`.
+3. Modify the properties to set the credentials for the service and `tmc-spyware-server`.
+
+You can also set additional properties as declared in the `.properties`-files.
 
 ## REST API
 
