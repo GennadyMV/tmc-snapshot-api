@@ -32,6 +32,10 @@ You can also set additional properties as declared in the `.properties`-files.
 
 The REST API provides mostly JSON-responses as `application/json`. Files are returned as `text/plain`. Incase of an error, an error response is returned with the related status code and requested content-type. The API uses basic access for authentication.
 
+### IDs
+
+All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a file path.
+
 ### 1. Participant
 
 ```
