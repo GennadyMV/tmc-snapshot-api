@@ -101,7 +101,9 @@ public final class SnapshotControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is("1")))
                 .andExpect(jsonPath("$.files", hasSize(1)))
-                .andExpect(jsonPath("$.files[0]", is("/src/HeiMaailma.java")));
+                .andExpect(jsonPath("$.files[0].path", is("/src/HeiMaailma.java")))
+                .andExpect(jsonPath("$.files[0].name", is("HeiMaailma.java")))
+                .andExpect(jsonPath("$.files[0].id", is("SGVpTWFhaWxtYS5qYXZh")));
 
         verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
         verifyNoMoreInteractions(snapshotService);

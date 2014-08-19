@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public final class EventTransformerTest {
 
@@ -54,11 +55,17 @@ public final class EventTransformerTest {
 
         assertEquals(2, snapshots.size());
 
-        assertNotNull(snapshots.get(0).getFile("example.java"));
-        assertNotNull(snapshots.get(0).getFile("test.java"));
+        assertNull(snapshots.get(1).getFile("example.java"));
+        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZh"));
 
-        assertNotNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("trial.java"));
+        assertNull(snapshots.get(1).getFile("test.java"));
+        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZh"));
+
+        assertNull(snapshots.get(1).getFile("experiment.java"));
+        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZh"));
+
+        assertNull(snapshots.get(1).getFile("trial.java"));
+        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YQ"));
     }
 
     @Test
@@ -112,9 +119,16 @@ public final class EventTransformerTest {
         assertEquals(2, snapshots.get(0).getFiles().size());
         assertEquals(4, snapshots.get(1).getFiles().size());
 
-        assertNotNull(snapshots.get(1).getFile("example.java"));
-        assertNotNull(snapshots.get(1).getFile("test.java"));
-        assertNotNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("trial.java"));
+        assertNull(snapshots.get(1).getFile("example.java"));
+        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZh"));
+
+        assertNull(snapshots.get(1).getFile("test.java"));
+        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZh"));
+
+        assertNull(snapshots.get(1).getFile("experiment.java"));
+        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZh"));
+
+        assertNull(snapshots.get(1).getFile("trial.java"));
+        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YQ"));
     }
 }

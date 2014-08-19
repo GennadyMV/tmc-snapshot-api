@@ -26,7 +26,7 @@ public final class Snapshot {
         this.files = new HashMap<>();
 
         for (SnapshotFile file : files) {
-            this.files.put(file.getPath(), file);
+            this.files.put(file.getId(), file);
         }
     }
 
@@ -58,12 +58,12 @@ public final class Snapshot {
 
     public void addFile(final SnapshotFile file) {
 
-        files.put(file.getPath(), file);
+        files.put(file.getId(), file);
     }
 
-    public SnapshotFile getFile(final String path) {
+    public SnapshotFile getFile(final String id) {
 
-        return files.get(path);
+        return files.get(id);
     }
 
     public Collection<SnapshotFile> getFiles() {

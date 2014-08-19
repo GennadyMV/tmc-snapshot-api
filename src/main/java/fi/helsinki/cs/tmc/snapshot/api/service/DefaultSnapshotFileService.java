@@ -38,15 +38,15 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                        final String courseId,
                        final String exerciseId,
                        final String snapshotId,
-                       final String path) throws IOException {
+                       final String fileId) throws IOException {
 
         final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
 
-        if (snapshot.getFile(path) == null) {
+        if (snapshot.getFile(fileId) == null) {
             throw new NotFoundException();
         }
 
-        final String content = snapshot.getFile(path).getContent();
+        final String content = snapshot.getFile(fileId).getContent();
 
         if (content == null) {
             throw new NotFoundException();

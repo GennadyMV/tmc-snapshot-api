@@ -6,8 +6,6 @@ import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotFileService;
 import java.io.IOException;
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,19 +30,15 @@ public final class SnapshotFileController {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-                    value = "**",
+                    value = "{fileId}",
                     produces = "text/plain")
-    public String read(final HttpServletRequest request,
-                       @PathVariable final String instance,
+    public String read(@PathVariable final String instance,
                        @PathVariable final String userId,
                        @PathVariable final String courseId,
                        @PathVariable final String exerciseId,
-                       @PathVariable final String snapshotId) throws IOException {
+                       @PathVariable final String snapshotId,
+                       @PathVariable final String fileId) throws IOException {
 
-        final String url = request.getRequestURI();
-        final String separator = "/files/";
-        final String path = "/" + url.substring(url.indexOf(separator) + separator.length());
-
-        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, path);
+        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, fileId);
     }
 }

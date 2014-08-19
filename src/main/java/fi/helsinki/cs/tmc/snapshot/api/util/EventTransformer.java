@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +40,11 @@ public final class EventTransformer {
             final Map<String, SnapshotFile> files = new HashMap<>();
 
             for (Map.Entry<String, String> entry : event.getFiles().entrySet()) {
-                files.put(entry.getKey(), new SnapshotFile(entry.getKey(), entry.getValue()));
+
+                final String filename = entry.getKey().substring(entry.getKey().lastIndexOf("/") + 1);
+                final String id = Base64.encodeBase64URLSafeString(filename.getBytes());
+
+                files.put(id, new SnapshotFile(entry.getKey(), entry.getValue()));
             }
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
