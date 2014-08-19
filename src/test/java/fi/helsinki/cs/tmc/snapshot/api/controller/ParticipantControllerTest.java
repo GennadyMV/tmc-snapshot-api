@@ -63,9 +63,9 @@ public final class ParticipantControllerTest {
         when(participantService.find(HY_INSTANCE, "hiphei")).thenReturn(participant);
 
         mockMvc.perform(get("/hy/participants/hiphei"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username", is("hiphei")));
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.username", is("hiphei")));
 
         verify(participantService).find("hy", "hiphei");
         verifyNoMoreInteractions(participantService);
@@ -77,6 +77,6 @@ public final class ParticipantControllerTest {
         when(participantService.find(HY_INSTANCE, "noSuchUser")).thenThrow(new NotFoundException());
 
         mockMvc.perform(get("/hy/participants/noSuchUser"))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 }

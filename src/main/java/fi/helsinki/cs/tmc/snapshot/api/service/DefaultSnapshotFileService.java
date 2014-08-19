@@ -33,12 +33,12 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
     }
 
     @Override
-    public String find(final String instance,
-                       final String userId,
-                       final String courseId,
-                       final String exerciseId,
-                       final String snapshotId,
-                       final String fileId) throws IOException {
+    public SnapshotFile find(final String instance,
+                             final String userId,
+                             final String courseId,
+                             final String exerciseId,
+                             final String snapshotId,
+                             final String fileId) throws IOException {
 
         final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
 
@@ -46,7 +46,20 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
             throw new NotFoundException();
         }
 
-        final String content = snapshot.getFile(fileId).getContent();
+        return snapshot.getFile(fileId);
+    }
+
+    @Override
+    public String findContent(final String instance,
+                              final String userId,
+                              final String courseId,
+                              final String exerciseId,
+                              final String snapshotId,
+                              final String fileId) throws IOException {
+
+        final SnapshotFile file = find(instance, userId, courseId, exerciseId, snapshotId, fileId);
+
+        final String content = file.getContent();
 
         if (content == null) {
             throw new NotFoundException();

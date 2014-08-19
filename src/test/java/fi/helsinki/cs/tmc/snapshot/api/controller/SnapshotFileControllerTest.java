@@ -93,14 +93,32 @@ public final class SnapshotFileControllerTest {
     @Test
     public void shouldReturnSnapshotFile() throws Exception {
 
-        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn("testContent");
+        final SnapshotFile file = new SnapshotFile("src/test", "testContent");
+
+        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn(file);
 
         mockMvc.perform(get(FILE_BASE_URL + "/path"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("path", is("src/test")))
+               .andExpect(jsonPath("name", is("test")))
+               .andExpect(jsonPath("id", is("dGVzdA")));
+
+        verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
+        verifyNoMoreInteractions(snapshotFileService);
+    }
+
+    @Test
+    public void shouldReturnSnapshotFileContent() throws Exception {
+
+        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn("testContent");
+
+        mockMvc.perform(get(FILE_BASE_URL + "/path/content"))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.TEXT_PLAIN))
                .andExpect(content().string("testContent"));
 
-        verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
+        verify(snapshotFileService).findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
         verifyNoMoreInteractions(snapshotFileService);
     }
 
@@ -110,7 +128,7 @@ public final class SnapshotFileControllerTest {
         when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(FILE_BASE_URL))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 
     @Test
@@ -119,6 +137,15 @@ public final class SnapshotFileControllerTest {
         when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(FILE_BASE_URL + "/path"))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
+    }
+
+    @Test
+    public void readContentShouldHandleNotFoundException() throws Exception {
+
+        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenThrow(new NotFoundException());
+
+        mockMvc.perform(get(FILE_BASE_URL + "/path/content"))
+               .andExpect(status().is(404));
     }
 }

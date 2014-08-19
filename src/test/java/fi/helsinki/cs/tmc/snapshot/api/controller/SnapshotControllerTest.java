@@ -80,9 +80,9 @@ public final class SnapshotControllerTest {
         when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(snapshotData);
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(5)));
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", hasSize(5)));
 
         verify(snapshotService).findAll(INSTANCE, USER, COURSE, EXERCISE);
         verifyNoMoreInteractions(snapshotService);
@@ -97,13 +97,13 @@ public final class SnapshotControllerTest {
         when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(snapshotData);
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is("1")))
-                .andExpect(jsonPath("$.files", hasSize(1)))
-                .andExpect(jsonPath("$.files[0].path", is("/src/HeiMaailma.java")))
-                .andExpect(jsonPath("$.files[0].name", is("HeiMaailma.java")))
-                .andExpect(jsonPath("$.files[0].id", is("SGVpTWFhaWxtYS5qYXZh")));
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id", is("1")))
+               .andExpect(jsonPath("$.files", hasSize(1)))
+               .andExpect(jsonPath("$.files[0].path", is("/src/HeiMaailma.java")))
+               .andExpect(jsonPath("$.files[0].name", is("HeiMaailma.java")))
+               .andExpect(jsonPath("$.files[0].id", is("SGVpTWFhaWxtYS5qYXZh")));
 
         verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
         verifyNoMoreInteractions(snapshotService);
@@ -115,7 +115,7 @@ public final class SnapshotControllerTest {
         when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 
     @Test
@@ -124,6 +124,6 @@ public final class SnapshotControllerTest {
         when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 }

@@ -33,6 +33,8 @@ import static org.mockito.Mockito.when;
 @PrepareForTest({ DefaultSnapshotService.class, DefaultSnapshotFileService.class, Snapshot.class })
 public final class DefaultSnapshotFileServiceTest {
 
+    private static final String FILE = "test.java";
+
     @Mock
     private DefaultSnapshotService snapshotService;
 
@@ -49,7 +51,30 @@ public final class DefaultSnapshotFileServiceTest {
     public void shouldFindSnapshotFile() throws IOException {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
-        files.put("test.java", new SnapshotFile("test.java", "public class Test { }"));
+        files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
+
+        final Snapshot snapshot = new Snapshot("11", 3L, files);
+
+        when(snapshotService.find(any(String.class),
+                                  any(String.class),
+                                  any(String.class),
+                                  any(String.class),
+                                  any(String.class)))
+                                 .thenReturn(snapshot);
+
+        final SnapshotFile file = fileService.find("hy", "user", "course", "exercise", "3", FILE);
+
+        assertEquals(FILE, file.getPath());
+        assertEquals(FILE, file.getName());
+        assertEquals("dGVzdC5qYXZh", file.getId());
+        assertEquals("public class Test { }", file.getContent());
+    }
+
+    @Test
+    public void shouldFindSnapshotFileContent() throws IOException {
+
+        final Map<String, SnapshotFile> files = new HashMap<>();
+        files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
 
         final Snapshot snapshot = new Snapshot("11", 2L, files);
 
@@ -60,7 +85,7 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class)))
                                  .thenReturn(snapshot);
 
-        final String content = fileService.find("hy", "user", "course", "exercise", "2", "test.java");
+        final String content = fileService.findContent("hy", "user", "course", "exercise", "2", FILE);
 
         assertEquals("public class Test { }", content);
     }
@@ -95,7 +120,7 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class)))
                                  .thenReturn(snapshot);
 
-        fileService.find("hy", "user", "course", "exercise", "2", "trial.java");
+        fileService.findContent("hy", "user", "course", "exercise", "2", "trial.java");
     }
 
     @Test

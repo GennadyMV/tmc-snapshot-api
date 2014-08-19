@@ -29,16 +29,27 @@ public final class SnapshotFileController {
         return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId);
     }
 
-    @RequestMapping(method = RequestMethod.GET,
-                    value = "{fileId}",
-                    produces = "text/plain")
-    public String read(@PathVariable final String instance,
-                       @PathVariable final String userId,
-                       @PathVariable final String courseId,
-                       @PathVariable final String exerciseId,
-                       @PathVariable final String snapshotId,
-                       @PathVariable final String fileId) throws IOException {
+    @RequestMapping(method = RequestMethod.GET, value = "{fileId}")
+    public SnapshotFile read(@PathVariable final String instance,
+                             @PathVariable final String userId,
+                             @PathVariable final String courseId,
+                             @PathVariable final String exerciseId,
+                             @PathVariable final String snapshotId,
+                             @PathVariable final String fileId) throws IOException {
 
         return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, fileId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "{fileId}/content",
+                    produces = "text/plain")
+    public String readContent(@PathVariable final String instance,
+                              @PathVariable final String userId,
+                              @PathVariable final String courseId,
+                              @PathVariable final String exerciseId,
+                              @PathVariable final String snapshotId,
+                              @PathVariable final String fileId) throws IOException {
+
+        return snapshotFileService.findContent(instance, userId, courseId, exerciseId, snapshotId, fileId);
     }
 }
