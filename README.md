@@ -22,6 +22,13 @@ Build the project with `mvn package`.
 
 You need to configure a few properties to get the API running — mainly setting the credentials for the [tmc-spyware-server](https://github.com/testmycode/tmc-spyware-server/) and the credentials for the service itself.
 
+### Development
+
+1. For development purposes create a configuration-file `src/main/resources/application-development.properties`. See a sample configuration in `src/main/resources/application-development.properties.sample`.
+2. Modify the properties to set the credentials for the service and `tmc-spyware-server`.
+
+### Production
+
 1. Modify the active profile `spring.profiles.active` to `production` in `src/main/resources/application.properties`.
 2. Create a configuration-file `src/main/resources/application-production.properties` for the production-profile. See a sample configuration in `src/main/resources/application-development.properties.sample`.
 3. Modify the properties to set the credentials for the service and `tmc-spyware-server`.
