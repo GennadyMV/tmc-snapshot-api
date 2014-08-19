@@ -21,10 +21,10 @@ public final class SnapshotFileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<SnapshotFile> list(@PathVariable final String instance,
-                               @PathVariable final String userId,
-                               @PathVariable final String courseId,
-                               @PathVariable final String exerciseId,
-                               @PathVariable final String snapshotId) throws IOException {
+                                         @PathVariable final String userId,
+                                         @PathVariable final String courseId,
+                                         @PathVariable final String exerciseId,
+                                         @PathVariable final String snapshotId) throws IOException {
 
         return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId);
     }
