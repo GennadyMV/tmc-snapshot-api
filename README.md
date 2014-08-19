@@ -41,7 +41,7 @@ The REST API provides mostly JSON-responses as `application/json`. Files are ret
 
 ### IDs
 
-All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a file path.
+All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string from a file path.
 
 ### 1. Participant
 
@@ -171,7 +171,11 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710010431,
         "files":
             [
-                "/src/Main.java"
+                {
+                    "path": "/src/Main.java",
+                    "id": "L3NyYy9NYWluLmphdmE",
+                    "name": "Main.java"
+                }
             ]
     },
     {
@@ -179,7 +183,11 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710010454,
         "files":
             [
-                "/src/Main.java"
+                {
+                    "path": "/src/Main.java",
+                    "id": "L3NyYy9NYWluLmphdmE",
+                    "name": "Main.java"
+                }
             ]
     },
     {
@@ -187,8 +195,16 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710056200,
         "files":
             [
-                "/src/Main.java",
-                "/src/testi/TestiLuokka.java"
+                {
+                    "path": "/src/Main.java",
+                    "id": "L3NyYy9NYWluLmphdmE",
+                    "name": "Main.java"
+                },
+                {
+                    "path": "/src/testi/TestiLuokka.java",
+                    "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+                    "name": "TestiLuokka.java"
+                }
             ]
     }
 ]
@@ -213,8 +229,16 @@ Returns: A single snapshot for a participant, course and exercise with the provi
     "timestamp": 1406710056200,
     "files":
         [
-            "/src/Main.java",
-            "/src/testi/TestiLuokka.java"
+            {
+                "path": "/src/Main.java",
+                "id": "L3NyYy9NYWluLmphdmE",
+                "name": "Main.java"
+            },
+            {
+                "path": "/src/testi/TestiLuokka.java",
+                "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+                "name": "TestiLuokka.java"
+            }
         ]
 }
 ```
@@ -234,8 +258,16 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 
 ```
 [
-    "/src/Main.java",
-    "/src/testi/TestiLuokka.java"
+    {
+        "path": "/src/Main.java",
+        "id": "L3NyYy9NYWluLmphdmE",
+        "name": "Main.java"
+    },
+    {
+        "path": "/src/testi/TestiLuokka.java",
+        "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+        "name": "TestiLuokka.java"
+    }
 ]
 ```
 
@@ -243,14 +275,35 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 
 ```
 Method: GET
-Content-Type: text/plain
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{filePath}
-Returns: The content for a file for a participant, course, exercise and snapshot with the provided instance and IDs
+Content-Type: application/json
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/
+Returns: A single file for a participant, course, exercise, snapshot and file with the provided instance and IDs
 ```
 
 #### Example Request
 
-`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/src/Main.java`
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmE/`
+
+```
+{
+    "path": "/src/Main.java",
+    "id": "L3NyYy9NYWluLmphdmE",
+    "name": "Main.java"
+}
+```
+
+### 5.3. File Content
+
+```
+Method: GET
+Content-Type: text/plain
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/content/
+Returns: The content for a file for a participant, course, exercise, snapshot and file with the provided instance and IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmE/content/`
 
 ```
 public class Main {
