@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.app;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.util.List;
 
 import net.sf.ehcache.Cache;
@@ -51,14 +53,19 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
 
-        configurer.favorPathExtension(false)
-                  .defaultContentType(MediaType.APPLICATION_JSON);
+        configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
 
     @Override
     public void configureMessageConverters(final List<HttpMessageConverter<?>> messageConverters) {
 
-        messageConverters.add(new MappingJackson2HttpMessageConverter());
+        // Jackson
+        final MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+
+        // Configure ObjectMapper
+        jacksonConverter.getObjectMapper().configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
+
+        messageConverters.add(jacksonConverter);
         messageConverters.add(new StringHttpMessageConverter());
         messageConverters.add(new PlainErrorMessageConverter());
     }

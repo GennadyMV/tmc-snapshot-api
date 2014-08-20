@@ -237,4 +237,65 @@ public final class DefaultSpywareServiceTest {
 
         verify(mockResponse).close();
     }
+
+    @Test
+    public void shouldFetchAllParticipants() throws IOException {
+
+        final String participants = "013333435\n012345678\n019876543";
+        prepareRequestResponse(participants.getBytes(), HttpStatus.OK);
+
+        final String data = spywareService.fetchParticipants("hy");
+
+        assertNotNull(data);
+        assertEquals(participants, data);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void fetchParticipantsShouldCloseResponseBodyStreamAfterNotFound() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.NOT_FOUND);
+
+        try {
+            spywareService.fetchParticipants("hy");
+        } catch (NotFoundException exception) {
+            verify(mockResponse).close();
+            throw exception;
+        }
+    }
+
+    @Test(expected = IOException.class)
+    public void fetchParticipantsShouldCloseResponseBodyStreamAfterServerError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        try {
+            spywareService.fetchParticipants("hy");
+        } catch (IOException exception) {
+            verify(mockResponse).close();
+            throw exception;
+        }
+    }
+
+    @Test(expected = IOException.class)
+    public void fetchParticipantsShouldCloseResponseBodyStreamAfterClientError() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.FORBIDDEN);
+
+        try {
+            spywareService.fetchParticipants("hy");
+        } catch (IOException exception) {
+            verify(mockResponse).close();
+            throw exception;
+        }
+    }
+
+    @Test
+    public void fetchParticipantsShouldCloseResponseBodyStreamAfterSuccess() throws IOException {
+
+        final ClientHttpResponse mockResponse = prepareMockResponse(HttpStatus.OK);
+
+        spywareService.fetchParticipants("hy");
+
+        verify(mockResponse).close();
+    }
 }
