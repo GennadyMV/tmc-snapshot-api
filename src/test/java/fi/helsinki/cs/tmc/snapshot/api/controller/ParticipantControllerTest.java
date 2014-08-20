@@ -5,6 +5,9 @@ import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import static org.mockito.Mockito.verify;
@@ -57,6 +61,25 @@ public final class ParticipantControllerTest {
     }
 
     @Test
+    public void shouldFetchAllParticipantsFromService() throws Exception {
+
+        final List<Participant> participants = new ArrayList<>();
+
+        participants.add(new Participant("teacher"));
+        participants.add(new Participant("apprentice"));
+
+        when(participantService.findAll(HY_INSTANCE)).thenReturn(participants);
+
+        mockMvc.perform(get("/hy/participants"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", hasSize(2)));
+
+        verify(participantService).findAll(HY_INSTANCE);
+        verifyNoMoreInteractions(participantService);
+    }
+
+    @Test
     public void shouldFetchParticipantFromService() throws Exception {
 
         final Participant participant = new Participant("hiphei");
@@ -67,7 +90,7 @@ public final class ParticipantControllerTest {
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.username", is("hiphei")));
 
-        verify(participantService).find("hy", "hiphei");
+        verify(participantService).find(HY_INSTANCE, "hiphei");
         verifyNoMoreInteractions(participantService);
     }
 
