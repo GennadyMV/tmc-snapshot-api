@@ -73,7 +73,11 @@ public final class ParticipantControllerTest {
         mockMvc.perform(get("/hy/participants"))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$", hasSize(2)));
+               .andExpect(jsonPath("$", hasSize(2)))
+               .andExpect(jsonPath("$[0].username", is("teacher")))
+               .andExpect(jsonPath("$[0].id", is("dGVhY2hlcg")))
+               .andExpect(jsonPath("$[1].username", is("apprentice")))
+               .andExpect(jsonPath("$[1].id", is("YXBwcmVudGljZQ")));
 
         verify(participantService).findAll(HY_INSTANCE);
         verifyNoMoreInteractions(participantService);
