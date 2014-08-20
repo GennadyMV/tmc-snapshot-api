@@ -1,21 +1,16 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-import fi.helsinki.cs.tmc.snapshot.api.util.RequestHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.codec.binary.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,23 +22,8 @@ public final class DefaultParticipantService implements ParticipantService {
     @Autowired
     private SnapshotOrganiserService snapshotOrganiser;
 
-    @Value("${spyware.url}")
-    private String spywareUrl;
-
-    @Value("${spyware.username}")
-    private String spywareUsername;
-
-    @Value("${spyware.password}")
-    private String spywarePassword;
-
-    private HttpRequestBuilder requestBuilder;
-
-    @PostConstruct
-    private void initialise() {
-
-        requestBuilder = new HttpRequestBuilder(spywareUrl, 80, "http")
-                             .authenticate(spywareUsername, spywarePassword);
-    }
+    @Autowired
+    private SpywareService spywareService;
 
     private Collection<Participant> parseParticipants(final String data) {
 
@@ -60,9 +40,7 @@ public final class DefaultParticipantService implements ParticipantService {
     @Override
     public Collection<Participant> findAll(final String instance) throws IOException {
 
-        requestBuilder.setPath(String.format("/%s/index.txt", instance));
-
-        return parseParticipants(RequestHandler.fetch(requestBuilder));
+        return parseParticipants(spywareService.fetchParticipants(instance));
     }
 
     @Override
