@@ -102,7 +102,7 @@ public final class SnapshotFileControllerTest {
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("path", is("src/test")))
                .andExpect(jsonPath("name", is("test")))
-               .andExpect(jsonPath("id", is("dGVzdA")));
+               .andExpect(jsonPath("id", is("c3JjL3Rlc3Q")));
 
         verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
         verifyNoMoreInteractions(snapshotFileService);

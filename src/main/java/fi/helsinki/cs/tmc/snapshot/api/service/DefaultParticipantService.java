@@ -1,9 +1,9 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.util.RequestHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +13,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,24 +60,9 @@ public final class DefaultParticipantService implements ParticipantService {
     @Override
     public Collection<Participant> findAll(final String instance) throws IOException {
 
-        final ClientHttpResponse response = requestBuilder.setPath(String.format("/%s/index.txt", instance))
-                                                          .get()
-                                                          .execute();
+        requestBuilder.setPath(String.format("/%s/index.txt", instance));
 
-        if (response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            response.close();
-            throw new NotFoundException();
-        }
-
-        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
-            response.close();
-            throw new IOException("Remote server returned status " + response.getRawStatusCode());
-        }
-
-        final String index = IOUtils.toString(response.getBody());
-        response.close();
-
-        return parseParticipants(index);
+        return parseParticipants(RequestHandler.fetch(requestBuilder));
     }
 
     @Override
