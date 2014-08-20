@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public final class Course {
         return name;
     }
 
+    @JsonProperty
     public Collection<Exercise> getExercises() {
 
         return exercises.values();

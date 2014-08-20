@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +29,6 @@ public final class Participant {
         return username;
     }
 
-    @JsonIgnore
     public Collection<Course> getCourses() {
 
         return courses.values();

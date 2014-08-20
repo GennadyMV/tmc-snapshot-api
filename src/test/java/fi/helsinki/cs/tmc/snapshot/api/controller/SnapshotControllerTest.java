@@ -103,7 +103,7 @@ public final class SnapshotControllerTest {
                .andExpect(jsonPath("$.files", hasSize(1)))
                .andExpect(jsonPath("$.files[0].path", is("/src/HeiMaailma.java")))
                .andExpect(jsonPath("$.files[0].name", is("HeiMaailma.java")))
-               .andExpect(jsonPath("$.files[0].id", is("SGVpTWFhaWxtYS5qYXZh")));
+               .andExpect(jsonPath("$.files[0].id", is("L3NyYy9IZWlNYWFpbG1hLmphdmE")));
 
         verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
         verifyNoMoreInteractions(snapshotService);
