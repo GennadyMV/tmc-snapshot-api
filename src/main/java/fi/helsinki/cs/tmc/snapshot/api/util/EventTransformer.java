@@ -41,8 +41,7 @@ public final class EventTransformer {
 
             for (Map.Entry<String, String> entry : event.getFiles().entrySet()) {
 
-                final String filename = entry.getKey().substring(entry.getKey().lastIndexOf("/") + 1);
-                final String id = Base64.encodeBase64URLSafeString(filename.getBytes());
+                final String id = Base64.encodeBase64URLSafeString(entry.getKey().getBytes());
 
                 files.put(id, new SnapshotFile(entry.getKey(), entry.getValue()));
             }
