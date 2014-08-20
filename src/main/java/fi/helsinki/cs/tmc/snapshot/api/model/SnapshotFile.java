@@ -20,7 +20,7 @@ public final class SnapshotFile {
         this.content = content;
 
         name = path.substring(path.lastIndexOf("/") + 1);
-        id = Base64.encodeBase64URLSafeString(name.getBytes());
+        id = Base64.encodeBase64URLSafeString(path.getBytes());
     }
 
     public String getId() {
