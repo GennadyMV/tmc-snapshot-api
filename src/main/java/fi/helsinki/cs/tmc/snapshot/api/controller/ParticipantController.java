@@ -4,6 +4,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
 import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,12 @@ public final class ParticipantController {
 
     @Autowired
     private ParticipantService participantService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public Collection<Participant> list(@PathVariable final String instance) throws IOException {
+
+        return participantService.findAll(instance);
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "{id}")
     public Participant read(@PathVariable final String instance, @PathVariable final String id) throws IOException {
