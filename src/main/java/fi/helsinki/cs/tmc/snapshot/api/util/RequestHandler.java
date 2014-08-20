@@ -1,7 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
-import fi.helsinki.cs.tmc.snapshot.api.http.HttpRequestBuilder;
 
 import java.io.IOException;
 
@@ -48,19 +47,9 @@ public final class RequestHandler {
         return bytes;
     }
 
-    public static String fetchAsString(final HttpRequestBuilder requestBuilder) throws IOException {
-
-        return fetchAsString(requestBuilder.get());
-    }
-
     public static String fetchAsString(final ClientHttpRequest request) throws IOException {
 
         return responseToString(fetchData(request));
-    }
-
-    public static byte[] fetchAsByteArray(final HttpRequestBuilder requestBuilder) throws IOException {
-
-        return fetchAsByteArray(requestBuilder.get());
     }
 
     public static byte[] fetchAsByteArray(final ClientHttpRequest request) throws IOException {

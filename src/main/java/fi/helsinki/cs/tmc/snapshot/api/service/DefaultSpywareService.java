@@ -47,7 +47,7 @@ public final class DefaultSpywareService implements SpywareService {
 
         requestBuilder.setPath(String.format("/%s/%s.idx", instance, username));
 
-        final String data = RequestHandler.fetchAsString(requestBuilder);
+        final String data = RequestHandler.fetchAsString(requestBuilder.get());
 
         LOG.info("Spyware-index fetched.");
 
@@ -79,6 +79,6 @@ public final class DefaultSpywareService implements SpywareService {
 
         requestBuilder.setPath(String.format("/%s/index.txt", instance));
 
-        return RequestHandler.fetchAsString(requestBuilder);
+        return RequestHandler.fetchAsString(requestBuilder.get());
     }
 }
