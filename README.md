@@ -43,7 +43,33 @@ The REST API provides mostly JSON-responses as `application/json`. Files are ret
 
 All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string from a file path.
 
-### 1. Participant
+### 1. Participants
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instance}/participants/
+Returns: A list of participants with the provided instance
+```
+
+#### Example Request
+
+`GET /hy/participants/`
+
+```
+[
+    {
+        "id": "MDEyMzQ1Njc4",
+        "username": "012345678"
+    },
+    {
+        "id": "MDIyMzQ1Njc4",
+        "username": "022345678"
+    }
+]
+```
+
+### 1.2. Participant
 
 ```
 Method: GET
@@ -59,7 +85,23 @@ Returns: A single participant with the provided instance and ID
 ```
 {
     "id": "MDEyMzQ1Njc4",
-    "username": "012345678"
+    "username": "012345678",
+    "courses": [
+        {
+            "id": "WFhYLW9oamEta2VydGF1cw",
+            "name": "XXX-ohja-kertaus",
+            "exercises": [
+                {
+                    "id": "c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
+                    "name": "setti1-01.TavaraMatkalaukkuJaLastiruuma"
+                },
+                {
+                    "id": "c2V0dGkxLTAyLkxlbXBpbmltZXQ",
+                    "name": "setti1-02.Lempinimet"
+                }
+            ]
+        }
+    ]
 }
 ```
 
@@ -80,7 +122,17 @@ Returns: A list of courses for a participant with the provided instance and ID
 [
     {
         "id": "WFhYLW9oamEta2VydGF1cw",
-        "name": "XXX-ohja-kertaus"
+        "name": "XXX-ohja-kertaus",
+        "exercises": [
+            {
+                "id": "c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
+                "name": "setti1-01.TavaraMatkalaukkuJaLastiruuma"
+            },
+            {
+                "id": "c2V0dGkxLTAyLkxlbXBpbmltZXQ",
+                "name": "setti1-02.Lempinimet"
+            }
+        ]
     }
 ]
 ```
@@ -101,7 +153,17 @@ Returns: A single course for a participant with the provided instance and IDs
 ```
 {
     "id": "WFhYLW9oamEta2VydGF1cw",
-    "name": "XXX-ohja-kertaus"
+    "name": "XXX-ohja-kertaus",
+    "exercises": [
+        {
+            "id": "c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h",
+            "name": "setti1-01.TavaraMatkalaukkuJaLastiruuma"
+        },
+        {
+            "id": "c2V0dGkxLTAyLkxlbXBpbmltZXQ",
+            "name": "setti1-02.Lempinimet"
+        }
+    ]
 }
 ```
 
@@ -169,43 +231,40 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
     {
         "id": "14067100104316662619414800",
         "timestamp": 1406710010431,
-        "files":
-            [
-                {
-                    "path": "/src/Main.java",
-                    "id": "L3NyYy9NYWluLmphdmE",
-                    "name": "Main.java"
-                }
-            ]
+        "files": [
+            {
+                "path": "/src/Main.java",
+                "id": "L3NyYy9NYWluLmphdmE",
+                "name": "Main.java"
+            }
+        ]
     },
     {
         "id": "14067100104546662642970893",
         "timestamp": 1406710010454,
-        "files":
-            [
-                {
-                    "path": "/src/Main.java",
-                    "id": "L3NyYy9NYWluLmphdmE",
-                    "name": "Main.java"
-                }
-            ]
+        "files": [
+            {
+                "path": "/src/Main.java",
+                "id": "L3NyYy9NYWluLmphdmE",
+                "name": "Main.java"
+            }
+        ]
     },
     {
         "id": "14067100562006708388460953",
         "timestamp": 1406710056200,
-        "files":
-            [
-                {
-                    "path": "/src/Main.java",
-                    "id": "L3NyYy9NYWluLmphdmE",
-                    "name": "Main.java"
-                },
-                {
-                    "path": "/src/testi/TestiLuokka.java",
-                    "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
-                    "name": "TestiLuokka.java"
-                }
-            ]
+        "files": [
+            {
+                "path": "/src/Main.java",
+                "id": "L3NyYy9NYWluLmphdmE",
+                "name": "Main.java"
+            },
+            {
+                "path": "/src/testi/TestiLuokka.java",
+                "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+                "name": "TestiLuokka.java"
+            }
+        ]
     }
 ]
 ```
@@ -227,19 +286,18 @@ Returns: A single snapshot for a participant, course and exercise with the provi
 {
     "id": "14067100562006708388460953",
     "timestamp": 1406710056200,
-    "files":
-        [
-            {
-                "path": "/src/Main.java",
-                "id": "L3NyYy9NYWluLmphdmE",
-                "name": "Main.java"
-            },
-            {
-                "path": "/src/testi/TestiLuokka.java",
-                "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
-                "name": "TestiLuokka.java"
-            }
-        ]
+    "files": [
+        {
+            "path": "/src/Main.java",
+            "id": "L3NyYy9NYWluLmphdmE",
+            "name": "Main.java"
+        },
+        {
+            "path": "/src/testi/TestiLuokka.java",
+            "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+            "name": "TestiLuokka.java"
+        }
+    ]
 }
 ```
 
