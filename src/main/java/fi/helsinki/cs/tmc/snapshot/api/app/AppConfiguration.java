@@ -51,8 +51,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
 
-        configurer.favorPathExtension(false)
-                  .defaultContentType(MediaType.APPLICATION_JSON);
+        configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
 
     @Override
