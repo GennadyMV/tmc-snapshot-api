@@ -17,7 +17,7 @@ public final class SnapshotTest {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
 
-        final SnapshotFile file = new SnapshotFile("path", "content");
+        final SnapshotFile file = new SnapshotFile("id", "path", "content");
         files.put(file.getId(), file);
 
         final Snapshot snapshot = new Snapshot("13", 13L, files, false);
@@ -32,7 +32,7 @@ public final class SnapshotTest {
 
         final Snapshot snapshot = new Snapshot("12", 12L, new HashMap<String, SnapshotFile>(), false);
 
-        snapshot.addFile(new SnapshotFile("example", "test"));
+        snapshot.addFile(new SnapshotFile("id", "example", "test"));
 
         final SnapshotFile file = snapshot.getFiles().iterator().next();
 

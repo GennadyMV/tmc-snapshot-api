@@ -92,7 +92,7 @@ public final class SnapshotControllerTest {
     @Test
     public void shouldReturnSnapshot() throws Exception {
 
-        final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
+        final SnapshotFile file = new SnapshotFile("L3NyYy9IZWlNYWFpbG1hLmphdmE", "/src/HeiMaailma.java", "public class HeiMaailma { }");
         final Snapshot snapshotData = new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false);
 
         snapshotData.addFile(file);

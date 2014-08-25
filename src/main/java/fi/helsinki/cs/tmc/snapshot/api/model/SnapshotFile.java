@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.apache.tomcat.util.codec.binary.Base64;
-
 public final class SnapshotFile {
 
     private final String id;
@@ -14,13 +12,15 @@ public final class SnapshotFile {
     private final String content;
 
     @JsonCreator
-    public SnapshotFile(@JsonProperty("path") final String path, @JsonProperty("content") final String content) {
+    public SnapshotFile(@JsonProperty("id") final String id,
+                        @JsonProperty("path") final String path,
+                        @JsonProperty("content") final String content) {
 
+        this.id = id;
         this.path = path;
         this.content = content;
 
         name = path.substring(path.lastIndexOf("/") + 1);
-        id = Base64.encodeBase64URLSafeString(path.getBytes());
     }
 
     public String getId() {

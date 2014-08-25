@@ -56,16 +56,16 @@ public final class EventTransformerTest {
         assertEquals(2, snapshots.size());
 
         assertNull(snapshots.get(1).getFile("example.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZhMTAx"));
 
         assertNull(snapshots.get(1).getFile("test.java"));
-        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZhMTAw"));
 
         assertNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZhMTAw"));
 
         assertNull(snapshots.get(1).getFile("trial.java"));
-        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YQ"));
+        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YTEwMQ"));
     }
 
     @Test
@@ -120,15 +120,15 @@ public final class EventTransformerTest {
         assertEquals(4, snapshots.get(1).getFiles().size());
 
         assertNull(snapshots.get(1).getFile("example.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZhMTAy"));
 
         assertNull(snapshots.get(1).getFile("test.java"));
-        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZhMTAw"));
 
         assertNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZh"));
+        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZhMTAw"));
 
         assertNull(snapshots.get(1).getFile("trial.java"));
-        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YQ"));
+        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YTEwMg"));
     }
 }

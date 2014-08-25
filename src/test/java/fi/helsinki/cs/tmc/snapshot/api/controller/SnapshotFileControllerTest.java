@@ -70,9 +70,9 @@ public final class SnapshotFileControllerTest {
     public void shouldReturnSnapshotFiles() throws Exception {
 
         final List<SnapshotFile> files = new ArrayList<>();
-        files.add(new SnapshotFile("path1", "content1"));
-        files.add(new SnapshotFile("path2", "content2"));
-        files.add(new SnapshotFile("path3", "content3"));
+        files.add(new SnapshotFile("ad", "path1", "content1"));
+        files.add(new SnapshotFile("hd", "path2", "content2"));
+        files.add(new SnapshotFile("id", "path3", "content3"));
 
 
         when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenReturn(files);
@@ -93,7 +93,7 @@ public final class SnapshotFileControllerTest {
     @Test
     public void shouldReturnSnapshotFile() throws Exception {
 
-        final SnapshotFile file = new SnapshotFile("src/test", "testContent");
+        final SnapshotFile file = new SnapshotFile("c3JjL3Rlc3Q", "src/test", "testContent");
 
         when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn(file);
 

@@ -9,7 +9,7 @@ public final class SnapshotFileTest {
     @Test
     public void constructorSetsValues() {
 
-        final SnapshotFile file = new SnapshotFile("src/myPath", "myContent");
+        final SnapshotFile file = new SnapshotFile("c3JjL215UGF0aA", "src/myPath", "myContent");
 
         assertEquals("src/myPath", file.getPath());
         assertEquals("myContent", file.getContent());

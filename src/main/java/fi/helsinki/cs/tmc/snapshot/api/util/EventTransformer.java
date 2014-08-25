@@ -41,9 +41,10 @@ public final class EventTransformer {
 
             for (Map.Entry<String, String> entry : event.getFiles().entrySet()) {
 
-                final String id = Base64.encodeBase64URLSafeString(entry.getKey().getBytes());
+                final byte[] byteId = (entry.getKey() + event.getHappenedAt().toString()).getBytes();
+                final String id = Base64.encodeBase64URLSafeString(byteId);
 
-                files.put(id, new SnapshotFile(entry.getKey(), entry.getValue()));
+                files.put(id, new SnapshotFile(id, entry.getKey(), entry.getValue()));
             }
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");

@@ -51,7 +51,7 @@ public final class DefaultSnapshotFileServiceTest {
     public void shouldFindSnapshotFile() throws IOException {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
-        files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
+        files.put(FILE, new SnapshotFile("dGVzdC5qYXZh", FILE, "public class Test { }"));
 
         final Snapshot snapshot = new Snapshot("11", 3L, files, false);
 
@@ -74,7 +74,7 @@ public final class DefaultSnapshotFileServiceTest {
     public void shouldFindSnapshotFileContent() throws IOException {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
-        files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
+        files.put(FILE, new SnapshotFile("id", FILE, "public class Test { }"));
 
         final Snapshot snapshot = new Snapshot("11", 2L, files, false);
 
@@ -109,7 +109,7 @@ public final class DefaultSnapshotFileServiceTest {
     public void shouldThrowExceptionOnNonExistentContent() throws IOException {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
-        files.put("trial.java", new SnapshotFile("trial.java", null));
+        files.put("trial.java", new SnapshotFile("id", "trial.java", null));
 
         final Snapshot snapshot = new Snapshot("33", 2L, files, false);
 
@@ -127,8 +127,8 @@ public final class DefaultSnapshotFileServiceTest {
     public void shouldFindAllSnapshotFiles() throws IOException {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
-        files.put("example.java", new SnapshotFile("example.java", "public class Example { }"));
-        files.put("exercise.java", new SnapshotFile("exercise.java", "public class Exercise { }"));
+        files.put("example.java", new SnapshotFile("hd", "example.java", "public class Example { }"));
+        files.put("exercise.java", new SnapshotFile("cd", "exercise.java", "public class Exercise { }"));
 
         final Snapshot snapshot = new Snapshot("44", 2L, files, false);
 
