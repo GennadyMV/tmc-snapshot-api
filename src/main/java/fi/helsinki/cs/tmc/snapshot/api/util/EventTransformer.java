@@ -72,7 +72,7 @@ public final class EventTransformer {
             if (!current.isFromCompleteSnapshot() && previous != null) {
 
                 for (SnapshotFile file : previous.getFiles()) {
-                    if (current.getFile(file.getPath()) == null) {
+                    if (current.getFile(file.getId()) == null) {
                         current.addFile(file);
                     }
                 }
