@@ -9,5 +9,6 @@ public interface SnapshotService {
 
     List<Snapshot> findAll(final String instance, final String userId, final String courseId, final String exerciseId) throws IOException;
     Snapshot find(final String instance, final String userId, final String courseId, final String exerciseId, final String snapshotId) throws IOException;
+    byte[] findAllFilesAsZip(final String instance, final String userId, final String courseId, final String exerciseId) throws IOException;
 
 }
