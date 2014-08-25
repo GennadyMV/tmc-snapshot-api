@@ -54,8 +54,8 @@ public final class DefaultSpywareService implements SpywareService {
         return data;
     }
 
-    @Cacheable("spyware")
     @Override
+    @Cacheable("spyware")
     public byte[] fetchChunkByRange(final String instance, final String username, final int start, final int end) throws IOException {
 
         LOG.info("Fetching Spyware-data for {} from instance {} with range {}–{}...",
