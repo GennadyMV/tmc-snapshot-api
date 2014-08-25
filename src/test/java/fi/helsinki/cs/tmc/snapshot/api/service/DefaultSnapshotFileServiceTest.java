@@ -144,11 +144,11 @@ public final class DefaultSnapshotFileServiceTest {
 
         assertEquals(2, snapshotFiles.size());
 
-        assertEquals("exercise.java", snapshotFiles.get(0).getPath());
-        assertEquals("public class Exercise { }", snapshotFiles.get(0).getContent());
+        assertEquals("example.java", snapshotFiles.get(0).getPath());
+        assertEquals("public class Example { }", snapshotFiles.get(0).getContent());
 
-        assertEquals("example.java", snapshotFiles.get(1).getPath());
-        assertEquals("public class Example { }", snapshotFiles.get(1).getContent());
+        assertEquals("exercise.java", snapshotFiles.get(1).getPath());
+        assertEquals("public class Exercise { }", snapshotFiles.get(1).getContent());
     }
 
     @Test(expected = NotFoundException.class)
