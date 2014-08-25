@@ -64,11 +64,6 @@ public final class Snapshot {
         return idsToFiles.values();
     }
 
-    public Collection<SnapshotFile> getF() {
-
-        return pathsToFiles.values();
-    }
-
     public boolean isFromCompleteSnapshot() {
 
         return fromCompleteSnapshot;
