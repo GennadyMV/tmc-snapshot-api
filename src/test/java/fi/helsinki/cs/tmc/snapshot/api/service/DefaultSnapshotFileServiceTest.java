@@ -62,7 +62,7 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class)))
                                  .thenReturn(snapshot);
 
-        final SnapshotFile file = fileService.find("hy", "user", "course", "exercise", "3", FILE);
+        final SnapshotFile file = fileService.find("hy", "user", "course", "exercise", "3", "dGVzdC5qYXZh");
 
         assertEquals(FILE, file.getPath());
         assertEquals(FILE, file.getName());
@@ -85,7 +85,7 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class)))
                                  .thenReturn(snapshot);
 
-        final String content = fileService.findContent("hy", "user", "course", "exercise", "2", FILE);
+        final String content = fileService.findContent("hy", "user", "course", "exercise", "2", "id");
 
         assertEquals("public class Test { }", content);
     }

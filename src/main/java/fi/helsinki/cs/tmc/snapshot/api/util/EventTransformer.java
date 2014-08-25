@@ -41,10 +41,13 @@ public final class EventTransformer {
 
             for (Map.Entry<String, String> entry : event.getFiles().entrySet()) {
 
-                final byte[] byteId = (entry.getKey() + event.getHappenedAt().toString()).getBytes();
+                final byte[] byteId = (entry.getKey() +
+                                       Long.toString(event.getHappenedAt()) +
+                                       Long.toString(event.getSystemNanotime())).getBytes();
+
                 final String id = Base64.encodeBase64URLSafeString(byteId);
 
-                files.put(id, new SnapshotFile(id, entry.getKey(), entry.getValue()));
+                files.put(entry.getKey(), new SnapshotFile(id, entry.getKey(), entry.getValue()));
             }
 
             final boolean isComplete = event.getEventType().equals("code_snapshot");
@@ -73,7 +76,7 @@ public final class EventTransformer {
             if (!current.isFromCompleteSnapshot() && previous != null) {
 
                 for (SnapshotFile file : previous.getFiles()) {
-                    if (current.getFile(file.getId()) == null) {
+                    if (current.getFileForPath(file.getPath()) == null) {
                         current.addFile(file);
                     }
                 }

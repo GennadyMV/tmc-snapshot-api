@@ -55,17 +55,17 @@ public final class EventTransformerTest {
 
         assertEquals(2, snapshots.size());
 
-        assertNull(snapshots.get(1).getFile("example.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZhMTAx"));
+        assertNull(snapshots.get(1).getFileForId("example.java"));
+        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMTEwMQ"));
 
-        assertNull(snapshots.get(1).getFile("test.java"));
-        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZhMTAw"));
+        assertNull(snapshots.get(1).getFileForId("test.java"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAxMTAx"));
 
-        assertNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZhMTAw"));
+        assertNull(snapshots.get(1).getFileForId("experiment.java"));
+        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAwMTAw"));
 
-        assertNull(snapshots.get(1).getFile("trial.java"));
-        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YTEwMQ"));
+        assertNull(snapshots.get(1).getFileForId("trial.java"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAwMTAw"));
     }
 
     @Test
@@ -119,16 +119,16 @@ public final class EventTransformerTest {
         assertEquals(2, snapshots.get(0).getFiles().size());
         assertEquals(4, snapshots.get(1).getFiles().size());
 
-        assertNull(snapshots.get(1).getFile("example.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhwZXJpbWVudC5qYXZhMTAy"));
+        assertNull(snapshots.get(1).getFileForId("example.java"));
+        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMjEwMg"));
 
-        assertNull(snapshots.get(1).getFile("test.java"));
-        assertNotNull(snapshots.get(1).getFile("dGVzdC5qYXZhMTAw"));
+        assertNull(snapshots.get(1).getFileForId("test.java"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAyMTAy"));
 
-        assertNull(snapshots.get(1).getFile("experiment.java"));
-        assertNotNull(snapshots.get(1).getFile("ZXhhbXBsZS5qYXZhMTAw"));
+        assertNull(snapshots.get(1).getFileForId("experiment.java"));
+        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAwMTAw"));
 
-        assertNull(snapshots.get(1).getFile("trial.java"));
-        assertNotNull(snapshots.get(1).getFile("dHJpYWwuamF2YTEwMg"));
+        assertNull(snapshots.get(1).getFileForId("trial.java"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAwMTAw"));
     }
 }

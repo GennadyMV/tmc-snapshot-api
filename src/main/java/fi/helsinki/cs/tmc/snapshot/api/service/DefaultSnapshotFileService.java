@@ -42,11 +42,11 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
 
         final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
 
-        if (snapshot.getFile(fileId) == null) {
+        if (snapshot.getFileForId(fileId) == null) {
             throw new NotFoundException();
         }
 
-        return snapshot.getFile(fileId);
+        return snapshot.getFileForId(fileId);
     }
 
     @Override
