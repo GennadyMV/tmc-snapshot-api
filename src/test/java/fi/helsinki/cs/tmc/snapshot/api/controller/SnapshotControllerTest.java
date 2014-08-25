@@ -7,7 +7,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -74,7 +74,8 @@ public final class SnapshotControllerTest {
         for (int i = 0; i < 5; i++) {
             snapshotData.add(new Snapshot(Integer.toString(i),
                                           (long) i,
-                                          new ArrayList<SnapshotFile>()));
+                                          new HashMap<String, SnapshotFile>(),
+                                          false));
         }
 
         when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(snapshotData);
@@ -92,7 +93,9 @@ public final class SnapshotControllerTest {
     public void shouldReturnSnapshot() throws Exception {
 
         final SnapshotFile file = new SnapshotFile("/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final Snapshot snapshotData = new Snapshot("1", 1L, Arrays.asList(file));
+        final Snapshot snapshotData = new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false);
+
+        snapshotData.addFile(file);
 
         when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(snapshotData);
 

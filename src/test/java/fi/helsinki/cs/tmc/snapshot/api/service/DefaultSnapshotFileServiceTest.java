@@ -53,7 +53,7 @@ public final class DefaultSnapshotFileServiceTest {
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
 
-        final Snapshot snapshot = new Snapshot("11", 3L, files);
+        final Snapshot snapshot = new Snapshot("11", 3L, files, false);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -76,7 +76,7 @@ public final class DefaultSnapshotFileServiceTest {
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put(FILE, new SnapshotFile(FILE, "public class Test { }"));
 
-        final Snapshot snapshot = new Snapshot("11", 2L, files);
+        final Snapshot snapshot = new Snapshot("11", 2L, files, false);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -93,7 +93,7 @@ public final class DefaultSnapshotFileServiceTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionOnNonExistentPath() throws IOException {
 
-        final Snapshot snapshot = new Snapshot("22", 2L, new HashMap<String, SnapshotFile>());
+        final Snapshot snapshot = new Snapshot("22", 2L, new HashMap<String, SnapshotFile>(), false);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -111,7 +111,7 @@ public final class DefaultSnapshotFileServiceTest {
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put("trial.java", new SnapshotFile("trial.java", null));
 
-        final Snapshot snapshot = new Snapshot("33", 2L, files);
+        final Snapshot snapshot = new Snapshot("33", 2L, files, false);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -130,7 +130,7 @@ public final class DefaultSnapshotFileServiceTest {
         files.put("example.java", new SnapshotFile("example.java", "public class Example { }"));
         files.put("exercise.java", new SnapshotFile("exercise.java", "public class Exercise { }"));
 
-        final Snapshot snapshot = new Snapshot("44", 2L, files);
+        final Snapshot snapshot = new Snapshot("44", 2L, files, false);
 
         when(snapshotService.find(any(String.class),
                                   any(String.class),
@@ -154,7 +154,7 @@ public final class DefaultSnapshotFileServiceTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionOnNonExistentSnapshotFiles() throws IOException {
 
-        final Snapshot snapshot = new Snapshot("55", 2L, new HashMap<String, SnapshotFile>());
+        final Snapshot snapshot = new Snapshot("55", 2L, new HashMap<String, SnapshotFile>(), false);
         final Snapshot spy = spy(snapshot);
 
         when(snapshotService.find(any(String.class),

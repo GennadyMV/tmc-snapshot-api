@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class Snapshot {
@@ -16,24 +14,6 @@ public final class Snapshot {
 
     @JsonIgnore
     private final boolean fromCompleteSnapshot;
-
-    public Snapshot(final String id, final Long timestamp, final List<SnapshotFile> files) {
-
-        this.id = id;
-        this.timestamp = new Date(timestamp);
-        fromCompleteSnapshot = false;
-
-        this.files = new HashMap<>();
-
-        for (SnapshotFile file : files) {
-            this.files.put(file.getId(), file);
-        }
-    }
-
-    public Snapshot(final String id, final Long timestamp, final Map<String, SnapshotFile> files) {
-
-        this(id, timestamp, files, false);
-    }
 
     public Snapshot(final String id,
                     final Long timestamp,

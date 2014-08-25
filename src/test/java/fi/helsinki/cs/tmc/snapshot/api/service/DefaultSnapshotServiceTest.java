@@ -11,6 +11,7 @@ import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -25,6 +26,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.assertEquals;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -68,9 +70,9 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot("1", 1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("2", 2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("3", 3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("2", 2L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("3", 3L, new HashMap<String, SnapshotFile>(), false));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
@@ -100,12 +102,12 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        final Snapshot snapshot = new Snapshot("0", 0L, new ArrayList<SnapshotFile>());
+        final Snapshot snapshot = new Snapshot("0", 0L, new HashMap<String, SnapshotFile>(), false);
         snapshots.add(snapshot);
 
-        snapshots.add(new Snapshot("1", 1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("2", 2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("3", 3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("2", 2L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("3", 3L, new HashMap<String, SnapshotFile>(), false));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
@@ -119,9 +121,9 @@ public final class DefaultSnapshotServiceTest {
 
         final List<Snapshot> snapshots = new ArrayList<>();
 
-        snapshots.add(new Snapshot("1", 1L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("2", 2L, new ArrayList<SnapshotFile>()));
-        snapshots.add(new Snapshot("3", 3L, new ArrayList<SnapshotFile>()));
+        snapshots.add(new Snapshot("1", 1L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("2", 2L, new HashMap<String, SnapshotFile>(), false));
+        snapshots.add(new Snapshot("3", 3L, new HashMap<String, SnapshotFile>(), false));
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
