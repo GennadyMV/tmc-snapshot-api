@@ -41,7 +41,7 @@ The REST API provides mostly JSON-responses as `application/json`. Files are ret
 
 ### IDs
 
-All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string from a file path.
+All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string concatenated from a file path, snapshot timestamp and nanotime.
 
 ### 1. Participants
 
@@ -234,7 +234,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "files": [
             {
                 "path": "/src/Main.java",
-                "id": "L3NyYy9NYWluLmphdmE",
+                "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDEwNDMxMA",
                 "name": "Main.java"
             }
         ]
@@ -245,7 +245,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "files": [
             {
                 "path": "/src/Main.java",
-                "id": "L3NyYy9NYWluLmphdmE",
+                "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDEwNDU0MA",
                 "name": "Main.java"
             }
         ]
@@ -256,12 +256,12 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "files": [
             {
                 "path": "/src/Main.java",
-                "id": "L3NyYy9NYWluLmphdmE",
+                "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
                 "name": "Main.java"
             },
             {
                 "path": "/src/testi/TestiLuokka.java",
-                "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+                "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
                 "name": "TestiLuokka.java"
             }
         ]
@@ -269,7 +269,27 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ]
 ```
 
-### 4.2. Snapshot
+### 4.2. Snapshot File Contents
+
+```
+Method: GET
+Content-Type: application/zip
+URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/files.zip
+Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided instance and IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/files.zip`
+
+```
+.
+└── 14067100562006708388460953 # Snapshot ID
+    ├── L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA # File ID
+    └── L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA
+```
+
+### 4.3. Snapshot
 
 ```
 Method: GET
@@ -289,12 +309,12 @@ Returns: A single snapshot for a participant, course and exercise with the provi
     "files": [
         {
             "path": "/src/Main.java",
-            "id": "L3NyYy9NYWluLmphdmE",
+            "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
             "name": "Main.java"
         },
         {
             "path": "/src/testi/TestiLuokka.java",
-            "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+            "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
             "name": "TestiLuokka.java"
         }
     ]
@@ -318,12 +338,12 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 [
     {
         "path": "/src/Main.java",
-        "id": "L3NyYy9NYWluLmphdmE",
+        "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
         "name": "Main.java"
     },
     {
         "path": "/src/testi/TestiLuokka.java",
-        "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZh",
+        "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
         "name": "TestiLuokka.java"
     }
 ]
@@ -340,12 +360,12 @@ Returns: A single file for a participant, course, exercise, snapshot and file wi
 
 #### Example Request
 
-`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmE/`
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA/`
 
 ```
 {
     "path": "/src/Main.java",
-    "id": "L3NyYy9NYWluLmphdmE",
+    "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
     "name": "Main.java"
 }
 ```
@@ -361,7 +381,7 @@ Returns: The content for a file for a participant, course, exercise, snapshot an
 
 #### Example Request
 
-`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmE/content/`
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA/content/`
 
 ```
 public class Main {
