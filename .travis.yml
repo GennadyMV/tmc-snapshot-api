@@ -19,4 +19,3 @@ notifications:
 
 after_success:
     - mvn clean cobertura:cobertura coveralls:cobertura
-
