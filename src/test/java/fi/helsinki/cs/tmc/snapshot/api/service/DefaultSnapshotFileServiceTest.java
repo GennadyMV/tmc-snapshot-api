@@ -168,4 +168,20 @@ public final class DefaultSnapshotFileServiceTest {
 
         fileService.findAll("mooc", "admin", "java-course", "ex", "2");
     }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowErrorOnEmptyContentForSnapshotFile() throws IOException {
+
+        final Snapshot snapshot = new Snapshot("55", 2L, new HashMap<String, SnapshotFile>(), false);
+        snapshot.addFile(new SnapshotFile("1", "path", null));
+
+        when(snapshotService.find(any(String.class),
+                                  any(String.class),
+                                  any(String.class),
+                                  any(String.class),
+                                  any(String.class)))
+                                 .thenReturn(snapshot);
+
+        fileService.findContent("mooc", "admin", "java-course", "ex", "15", "1");
+    }
 }
