@@ -128,7 +128,6 @@ public final class DefaultSnapshotFileServiceTest {
 
         final Map<String, SnapshotFile> files = new HashMap<>();
         files.put("example.java", new SnapshotFile("hd", "example.java", "public class Example { }"));
-        files.put("exercise.java", new SnapshotFile("cd", "exercise.java", "public class Exercise { }"));
 
         final Snapshot snapshot = new Snapshot("44", 2L, files, false);
 
@@ -142,13 +141,10 @@ public final class DefaultSnapshotFileServiceTest {
         final Collection<SnapshotFile> filesCollection = fileService.findAll("mooc", "admin", "java-course", "ex", "2");
         final List<SnapshotFile> snapshotFiles = new ArrayList(filesCollection);
 
-        assertEquals(2, snapshotFiles.size());
+        assertEquals(1, snapshotFiles.size());
 
         assertEquals("example.java", snapshotFiles.get(0).getPath());
         assertEquals("public class Example { }", snapshotFiles.get(0).getContent());
-
-        assertEquals("exercise.java", snapshotFiles.get(1).getPath());
-        assertEquals("public class Exercise { }", snapshotFiles.get(1).getContent());
     }
 
     @Test(expected = NotFoundException.class)
