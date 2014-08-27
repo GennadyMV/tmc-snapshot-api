@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -113,6 +115,40 @@ public final class EventProcessor {
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
+    private boolean isDuplicate(final Map<String, String> diff, final Map<String, String> diff2) {
+
+        if (diff.size() != diff2.size()) {
+            return false;
+        }
+
+        for (Entry<String, String> file : diff.entrySet()) {
+            if (!diff2.containsKey(file.getKey()) || !file.getValue().equals(diff2.get(file.getKey()))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void removeDuplicates(final Collection<SnapshotEvent> events) {
+
+        final Iterator<SnapshotEvent> iterator = events.iterator();
+
+        SnapshotEvent prev = null;
+
+        while (iterator.hasNext()) {
+
+            final SnapshotEvent event = iterator.next();
+            if (prev != null && isDuplicate(prev.getFiles(), event.getFiles())) {
+                iterator.remove();
+                LOG.info("Duplicate event for course {} exercise {} snapshot {}{}", event.getCourseName(), event.getExerciseName(), event.getHappenedAt(), event.getSystemNanotime());
+            }
+            prev = event;
+        }
+    }
+
+
+
     public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
 
         LOG.info("Processing {} events...", events.size());
@@ -126,6 +162,8 @@ public final class EventProcessor {
                 patchFile(event);
             }
         }
+
+        removeDuplicates(events);
 
         LOG.info("Events processed.");
     }
