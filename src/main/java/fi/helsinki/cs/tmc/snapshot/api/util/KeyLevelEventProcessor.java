@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class KeyLevelEventProcessor {
+public final class KeyLevelEventProcessor implements EventProsessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeyLevelEventProcessor.class);
 
@@ -141,7 +141,8 @@ public final class KeyLevelEventProcessor {
         }
     }
 
-    public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
+    @Override
+    public void process(final Collection<SnapshotEvent> events) {
 
         LOG.info("Processing {} events...", events.size());
 

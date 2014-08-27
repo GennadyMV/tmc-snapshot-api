@@ -5,6 +5,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 
@@ -44,7 +45,7 @@ public final class DefaultSnapshotServiceTest {
     private ExerciseService exerciseService;
 
     @Mock
-    private KeyLevelEventProcessor eventProcessor;
+    private EventProcessorService eventProcessorService;
 
     @Mock
     private EventTransformer eventTransformer;
@@ -81,7 +82,7 @@ public final class DefaultSnapshotServiceTest {
 
         verify(exerciseService).find(INSTANCE, USERNAME, COURSE, EXERCISE);
         verify(eventTransformer).toSnapshotList(events);
-        verify(eventProcessor).process(events);
+        verify(eventProcessorService).processEvents(events, SnapshotLevel.KEY);
 
         assertEquals(returnedSnapshots, snapshots);
     }

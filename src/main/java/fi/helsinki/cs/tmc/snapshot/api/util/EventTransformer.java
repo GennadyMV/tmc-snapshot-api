@@ -31,11 +31,11 @@ public final class EventTransformer {
         for (SnapshotEvent event : events) {
 
             // Only process complete snapshots of type file_delete
-            if (event.getEventType().equals("code_snapshot")) {
+            /*if (event.isCodeSnapshot()) {
                 if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
                     continue;
                 }
-            }
+            }*/
 
             final Map<String, SnapshotFile> files = new HashMap<>();
 
@@ -50,7 +50,7 @@ public final class EventTransformer {
                 files.put(entry.getKey(), new SnapshotFile(id, entry.getKey(), entry.getValue()));
             }
 
-            final boolean isComplete = event.getEventType().equals("code_snapshot");
+            final boolean isComplete = event.isCodeSnapshot();
 
             snapshots.add(new Snapshot(event.getHappenedAt() + Long.toString(event.getSystemNanotime()),
                                        event.getHappenedAt(),

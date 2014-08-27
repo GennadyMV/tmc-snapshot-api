@@ -4,8 +4,8 @@ import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
-import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public final class DefaultSnapshotService implements SnapshotService {
 
     @Autowired
-    private KeyLevelEventProcessor eventProcessor;
+    private EventProcessorService eventProcessorService;
 
     @Autowired
     private ExerciseService exerciseService;
@@ -35,10 +35,20 @@ public final class DefaultSnapshotService implements SnapshotService {
                                   final String courseId,
                                   final String exerciseId) throws IOException {
 
+        return findAll(instance, userId, courseId, exerciseId, SnapshotLevel.KEY);
+    }
+
+    @Override
+    public List<Snapshot> findAll(final String instance,
+                                  final String userId,
+                                  final String courseId,
+                                  final String exerciseId,
+                                  final SnapshotLevel level) throws IOException {
+
         final Collection<SnapshotEvent> events = exerciseService.find(instance, userId, courseId, exerciseId)
                                                                 .getSnapshotEvents();
 
-        eventProcessor.process(events);
+        eventProcessorService.processEvents(events, level);
 
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
@@ -55,6 +65,17 @@ public final class DefaultSnapshotService implements SnapshotService {
                          final String courseId,
                          final String exerciseId,
                          final String snapshotId) throws IOException {
+
+        return find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.KEY);
+    }
+
+    @Override
+    public Snapshot find(final String instance,
+                         final String userId,
+                         final String courseId,
+                         final String exerciseId,
+                         final String snapshotId,
+                         final SnapshotLevel level) throws IOException {
 
         final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
 
@@ -73,7 +94,17 @@ public final class DefaultSnapshotService implements SnapshotService {
                                     final String courseId,
                                     final String exerciseId) throws IOException {
 
-        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
+        return findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.KEY);
+    }
+
+    @Override
+    public byte[] findAllFilesAsZip(final String instance,
+                                    final String userId,
+                                    final String courseId,
+                                    final String exerciseId,
+                                    final SnapshotLevel level) throws IOException {
+
+        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId, level);
 
         final ByteArrayOutputStream files = new ByteArrayOutputStream();
         final ZipOutputStream zip = new ZipOutputStream(files);

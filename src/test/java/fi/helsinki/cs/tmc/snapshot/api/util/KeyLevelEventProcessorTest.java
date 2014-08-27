@@ -2,7 +2,6 @@ package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,11 +88,7 @@ public final class KeyLevelEventProcessorTest {
 
     private void process() {
 
-        try {
-            processor.process(events);
-        } catch (UnsupportedEncodingException exception) {
-            fail("Problem reading ZIP");
-        }
+        processor.process(events);
     }
 
     @Before

@@ -19,6 +19,11 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
         return eventType.contains("project_action");
     }
 
+    public boolean isCodeSnapshot() {
+
+        return "code_snapshot".equals(eventType);
+    }
+
     public void setCourseName(final String courseName) {
 
         this.courseName = courseName;
