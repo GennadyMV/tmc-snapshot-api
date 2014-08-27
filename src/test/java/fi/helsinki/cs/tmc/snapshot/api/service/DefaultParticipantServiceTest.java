@@ -57,14 +57,14 @@ public final class DefaultParticipantServiceTest {
 
         assertEquals(3, participants.size());
 
-        assertEquals("013333435", participants.get(0).getUsername());
-        assertEquals("MDEzMzMzNDM1", participants.get(0).getId());
+        assertEquals("019876543", participants.get(0).getUsername());
+        assertEquals("MDE5ODc2NTQz", participants.get(0).getId());
 
         assertEquals("012345678", participants.get(1).getUsername());
         assertEquals("MDEyMzQ1Njc4", participants.get(1).getId());
 
-        assertEquals("019876543", participants.get(2).getUsername());
-        assertEquals("MDE5ODc2NTQz", participants.get(2).getId());
+        assertEquals("013333435", participants.get(2).getUsername());
+        assertEquals("MDEzMzMzNDM1", participants.get(2).getId());
     }
 
     @Test

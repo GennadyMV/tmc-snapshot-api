@@ -69,9 +69,9 @@ public final class DefaultSnapshotService implements SnapshotService {
 
     @Override
     public byte[] findAllFilesAsZip(final String instance,
-                                     final String userId,
-                                     final String courseId,
-                                     final String exerciseId) throws IOException {
+                                    final String userId,
+                                    final String courseId,
+                                    final String exerciseId) throws IOException {
 
         final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
 
