@@ -76,6 +76,7 @@ public final class EventTransformerTest {
         assertNotNull(snapshots);
     }
 
+    /*
     @Test
     public void shouldNotProcessCompleteSnapshotsIfNotTypeFileDelete() {
 
@@ -94,7 +95,7 @@ public final class EventTransformerTest {
 
         assertEquals(1, snapshots.size());
         assertEquals("5555", snapshots.get(0).getId());
-    }
+    }*/
 
     @Test
     public void shouldBuildExerciseContinuum() {
