@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -22,7 +22,7 @@ public final class Course {
 
         id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
-        exercises = new HashMap<>();
+        exercises = new TreeMap<>();
     }
 
     public String getId() {

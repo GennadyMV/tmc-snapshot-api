@@ -6,6 +6,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -38,9 +39,12 @@ public final class DefaultParticipantService implements ParticipantService {
     }
 
     @Override
-    public Collection<Participant> findAll(final String instance) throws IOException {
+    public List<Participant> findAll(final String instance) throws IOException {
 
-        return parseParticipants(spywareService.fetchParticipants(instance));
+        final List<Participant> sortedParticipants = new ArrayList<>(parseParticipants(spywareService.fetchParticipants(instance)));
+        Collections.sort(sortedParticipants);
+
+        return sortedParticipants;
     }
 
     @Override
