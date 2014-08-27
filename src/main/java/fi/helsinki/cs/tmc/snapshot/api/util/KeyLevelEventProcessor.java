@@ -92,7 +92,7 @@ public final class KeyLevelEventProcessor implements EventProsessor {
     private void processCompleteSnapshot(final SnapshotEvent event) throws IOException {
 
         if (!processData(event) && !processMetadata(event)) {
-            throw new IOException("Nothing new in zip");
+            throw new IOException("Nothing new in ZIP.");
         }
     }
 
@@ -116,14 +116,13 @@ public final class KeyLevelEventProcessor implements EventProsessor {
         final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
 
         // Current file content from cache
-        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.
-                get(information.getFile()) : "";
+        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
 
         // Apply patches to content
         final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
 
         if (currentContent.equals(updatedContent)) {
-            throw new IOException("Corrupted patch data");
+            throw new IOException("Corrupted patch data.");
         }
 
         fileCache.put(information.getFile(), updatedContent);
@@ -161,13 +160,12 @@ public final class KeyLevelEventProcessor implements EventProsessor {
 
                 iterator.remove();
 
-                LOG.warn(
-                        "Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
-                        exception.getMessage(),
-                        event.getCourseName(),
-                        event.getExerciseName(),
-                        event.getHappenedAt(),
-                        event.getSystemNanotime());
+                LOG.warn("Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
+                         exception.getMessage(),
+                         event.getCourseName(),
+                         event.getExerciseName(),
+                         event.getHappenedAt(),
+                         event.getSystemNanotime());
             }
         }
 

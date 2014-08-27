@@ -1,13 +1,17 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.apache.commons.codec.binary.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +20,7 @@ public final class CodeLevelEventProcessor implements EventProsessor {
     private static final Logger LOG = LoggerFactory.getLogger(KeyLevelEventProcessor.class);
 
     private void processSnapshot(final SnapshotEvent previousEvent, final SnapshotEvent event) throws IOException {
+
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         final Map<String, byte[]> data;
 
@@ -55,7 +60,7 @@ public final class CodeLevelEventProcessor implements EventProsessor {
         // This is somehow pretty ugly
         if (event.getFiles().isEmpty() ||
             (previousEvent != null && !hasChanges && previousEvent.getFiles().size() == event.getFiles().size())) {
-            throw new IOException("Nothing new in zip");
+            throw new IOException("Nothing new in ZIP.");
         }
     }
 
@@ -78,24 +83,24 @@ public final class CodeLevelEventProcessor implements EventProsessor {
             }
 
             try {
+
                 processSnapshot(previous, event);
                 previous = event;
+
             } catch (IOException exception) {
 
                 iterator.remove();
 
-                LOG.warn(
-                        "Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
-                        exception.getMessage(),
-                        event.getCourseName(),
-                        event.getExerciseName(),
-                        event.getHappenedAt(),
-                        event.getSystemNanotime());
+                LOG.warn("Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
+                         exception.getMessage(),
+                         event.getCourseName(),
+                         event.getExerciseName(),
+                         event.getHappenedAt(),
+                         event.getSystemNanotime());
             }
 
         }
 
         LOG.info("Events processed.");
     }
-
 }

@@ -7,6 +7,6 @@ import java.util.Collection;
 
 public interface SnapshotOrganiserService {
 
-    void organise(final Participant participant, final Collection<SnapshotEvent> snapshotEvents);
+    void organise(Participant participant, Collection<SnapshotEvent> snapshotEvents);
 
 }

@@ -7,6 +7,6 @@ import java.util.Collection;
 
 public interface SnapshotEventService {
 
-    Collection<SnapshotEvent> findAll(final String instance, final String username) throws IOException;
+    Collection<SnapshotEvent> findAll(String instance, String username) throws IOException;
 
 }
