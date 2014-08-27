@@ -5,8 +5,8 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
+import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ EventProcessor.class, EventTransformer.class })
+@PrepareForTest({ KeyLevelEventProcessor.class, EventTransformer.class })
 public final class DefaultSnapshotServiceTest {
 
     private static final String INSTANCE = "testInstance";
@@ -44,7 +44,7 @@ public final class DefaultSnapshotServiceTest {
     private ExerciseService exerciseService;
 
     @Mock
-    private EventProcessor eventProcessor;
+    private KeyLevelEventProcessor eventProcessor;
 
     @Mock
     private EventTransformer eventTransformer;

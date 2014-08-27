@@ -4,8 +4,8 @@ import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
-import fi.helsinki.cs.tmc.snapshot.api.util.EventProcessor;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
+import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,10 +21,10 @@ import org.springframework.stereotype.Service;
 public final class DefaultSnapshotService implements SnapshotService {
 
     @Autowired
-    private ExerciseService exerciseService;
+    private KeyLevelEventProcessor eventProcessor;
 
     @Autowired
-    private EventProcessor eventProcessor;
+    private ExerciseService exerciseService;
 
     @Autowired
     private EventTransformer eventTransformer;

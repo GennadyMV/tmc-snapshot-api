@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -26,15 +25,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class EventProcessor {
+public final class KeyLevelEventProcessor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EventProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KeyLevelEventProcessor.class);
 
     private Map<String, String> fileCache;
     private final ObjectMapper mapper = new ObjectMapper();
     private final DiffMatchPatch patcher = new DiffMatchPatch();
 
-    private void processData(final SnapshotEvent event) throws UnsupportedEncodingException {
+    private boolean processData(final SnapshotEvent event) throws UnsupportedEncodingException {
 
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         final Map<String, byte[]> data;
@@ -42,8 +41,10 @@ public final class EventProcessor {
         try {
             data = Zip.decompress(decodedData);
         } catch (IOException exception) {
-            return;
+            return true;
         }
+
+        boolean hasNotChanged = true;
 
         for (String filename : data.keySet()) {
 
@@ -51,13 +52,20 @@ public final class EventProcessor {
             final String fileContent = new String(data.get(filename), "UTF-8");
 
             if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
-                fileCache.put(fileKey, fileContent);
+
+                if (!fileContent.equals(fileCache.get(fileKey))) {
+                    hasNotChanged = false;
+                    fileCache.put(fileKey, fileContent);
+                }
+
                 event.getFiles().put(fileKey, fileContent);
             }
         }
+
+        return hasNotChanged;
     }
 
-    private void processMetadata(final SnapshotEvent event) {
+    private boolean processMetadata(final SnapshotEvent event) {
 
         final SnapshotEventMetadata metadata;
 
@@ -65,27 +73,30 @@ public final class EventProcessor {
             metadata = mapper.readValue(event.getMetadata(), SnapshotEventMetadata.class);
         } catch (IOException | NullPointerException exception) {
             LOG.info("Unable to parse metadata for event {}: {}.", event.getHappenedAt(), exception.getMessage());
-            return;
+            return true;
         }
 
         if (metadata == null) {
-            return;
+            return true;
         }
 
         final String file = metadata.getFile();
 
         if (metadata.getCause().equals("file_delete")) {
             fileCache.remove(file);
+            return false;
+        }
+        return true;
+    }
+
+    private void processCompleteSnapshot(final SnapshotEvent event) throws IOException {
+
+        if (processData(event) && processMetadata(event)) {
+            throw new IOException("Nothing new in zip");
         }
     }
 
-    private void processCompleteSnapshot(final SnapshotEvent event) throws UnsupportedEncodingException {
-
-        processData(event);
-        processMetadata(event);
-    }
-
-    private void patchFile(final SnapshotEvent event) throws UnsupportedEncodingException {
+    private void patchFile(final SnapshotEvent event) throws IOException {
 
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         SnapshotEventInformation information;
@@ -93,65 +104,40 @@ public final class EventProcessor {
         try {
             information = mapper.readValue(new String(decodedData, "UTF-8"), SnapshotEventInformation.class);
         } catch (IOException exception) {
-            return;
+            throw new IOException("Unreadable data");
         }
 
         // No patches to apply
         if (information == null || information.getPatches() == null || information.getPatches().isEmpty()) {
-            return;
+            throw new IOException("No patch data available");
         }
 
         // Parse patches
         final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
 
         // Current file content from cache
-        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
+        final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.
+                get(information.getFile()) : "";
 
         // Apply patches to content
         final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
+
+        if (currentContent.equals(updatedContent)) {
+            throw new IOException("Corrupted patch data");
+        }
+
         fileCache.put(information.getFile(), updatedContent);
 
         // Save content to specific event
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
-    private boolean isDuplicate(final Map<String, String> previousFiles, final Map<String, String> files) {
+    private void processSnapshotEvent(final SnapshotEvent event) throws IOException {
 
-        if (previousFiles.size() != files.size()) {
-            return false;
-        }
-
-        for (Entry<String, String> file : previousFiles.entrySet()) {
-            if (!files.containsKey(file.getKey()) || !file.getValue().equals(files.get(file.getKey()))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void removeDuplicates(final Collection<SnapshotEvent> events) {
-
-        final Iterator<SnapshotEvent> iterator = events.iterator();
-
-        SnapshotEvent previous = null;
-
-        while (iterator.hasNext()) {
-
-            final SnapshotEvent event = iterator.next();
-
-            if (previous != null && isDuplicate(previous.getFiles(), event.getFiles())) {
-
-                LOG.warn("Filtering snapshot due to corrupted patch. Duplicate content for course {} exercise {} snapshot {}{}.",
-                         event.getCourseName(),
-                         event.getExerciseName(),
-                         event.getHappenedAt(),
-                         event.getSystemNanotime());
-
-                iterator.remove();
-            }
-
-            previous = event;
+        if (event.getEventType().equals("code_snapshot")) {
+            processCompleteSnapshot(event);
+        } else {
+            patchFile(event);
         }
     }
 
@@ -161,15 +147,28 @@ public final class EventProcessor {
 
         fileCache = new HashMap<>();
 
-        for (SnapshotEvent event : events) {
-            if (event.getEventType().equals("code_snapshot")) {
-                processCompleteSnapshot(event);
-            } else {
-                patchFile(event);
+        final Iterator<SnapshotEvent> iterator = events.iterator();
+
+        while (iterator.hasNext()) {
+
+            final SnapshotEvent event = iterator.next();
+
+            try {
+
+                processSnapshotEvent(event);
+            } catch (IOException exception) {
+
+                iterator.remove();
+
+                LOG.warn(
+                        "Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
+                        exception.getMessage(),
+                        event.getCourseName(),
+                        event.getExerciseName(),
+                        event.getHappenedAt(),
+                        event.getSystemNanotime());
             }
         }
-
-        removeDuplicates(events);
 
         LOG.info("Events processed.");
     }
