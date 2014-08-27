@@ -41,10 +41,10 @@ public final class KeyLevelEventProcessor {
         try {
             data = Zip.decompress(decodedData);
         } catch (IOException exception) {
-            return true;
+            return false;
         }
 
-        boolean hasNotChanged = true;
+        boolean hasChanged = false;
 
         for (String filename : data.keySet()) {
 
@@ -54,7 +54,7 @@ public final class KeyLevelEventProcessor {
             if (!fileKey.endsWith("/") && fileCache.containsKey(fileKey)) {
 
                 if (!fileContent.equals(fileCache.get(fileKey))) {
-                    hasNotChanged = false;
+                    hasChanged = true;
                     fileCache.put(fileKey, fileContent);
                 }
 
@@ -62,7 +62,7 @@ public final class KeyLevelEventProcessor {
             }
         }
 
-        return hasNotChanged;
+        return hasChanged;
     }
 
     private boolean processMetadata(final SnapshotEvent event) {
@@ -73,25 +73,25 @@ public final class KeyLevelEventProcessor {
             metadata = mapper.readValue(event.getMetadata(), SnapshotEventMetadata.class);
         } catch (IOException | NullPointerException exception) {
             LOG.info("Unable to parse metadata for event {}: {}.", event.getHappenedAt(), exception.getMessage());
-            return true;
+            return false;
         }
 
         if (metadata == null) {
-            return true;
+            return false;
         }
 
         final String file = metadata.getFile();
 
         if (metadata.getCause().equals("file_delete")) {
             fileCache.remove(file);
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void processCompleteSnapshot(final SnapshotEvent event) throws IOException {
 
-        if (processData(event) && processMetadata(event)) {
+        if (!processData(event) && !processMetadata(event)) {
             throw new IOException("Nothing new in zip");
         }
     }
