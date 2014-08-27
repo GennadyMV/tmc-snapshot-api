@@ -3,14 +3,16 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 import org.apache.commons.codec.binary.Base64;
 
-public final class Course {
+public final class Course implements Comparable<Course> {
 
     private final String id;
     private final String name;
@@ -22,7 +24,7 @@ public final class Course {
 
         id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
-        exercises = new TreeMap<>();
+        exercises = new HashMap<>();
     }
 
     public String getId() {
@@ -36,9 +38,12 @@ public final class Course {
     }
 
     @JsonProperty
-    public Collection<Exercise> getExercises() {
+    public List<Exercise> getExercises() {
 
-        return exercises.values();
+        final List<Exercise> sortedExercises = new ArrayList<>(exercises.values());
+        Collections.sort(sortedExercises);
+
+        return sortedExercises;
     }
 
     public void addExercise(final Exercise exercise) {
@@ -71,5 +76,11 @@ public final class Course {
         final Course other = (Course) object;
 
         return id.equals(other.getId());
+    }
+
+    @Override
+    public int compareTo(final Course other) {
+
+        return id.compareTo(other.getId());
     }
 }

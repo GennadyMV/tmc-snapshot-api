@@ -1,8 +1,10 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -16,7 +18,7 @@ public final class Participant implements Comparable<Participant> {
 
         id = Base64.encodeBase64URLSafeString(username.getBytes());
         this.username = username;
-        courses = new TreeMap<>();
+        courses = new HashMap<>();
     }
 
     public String getId() {
@@ -29,9 +31,12 @@ public final class Participant implements Comparable<Participant> {
         return username;
     }
 
-    public Collection<Course> getCourses() {
+    public List<Course> getCourses() {
 
-        return courses.values();
+        final List sortedCourses = new ArrayList<>(courses.values());
+        Collections.sort(sortedCourses);
+
+        return sortedCourses;
     }
 
     public void addCourse(final Course course) {

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
-public final class Exercise {
+public final class Exercise implements Comparable<Exercise> {
 
     private final String id;
     private final String name;
@@ -63,5 +63,11 @@ public final class Exercise {
         final Exercise other = (Exercise) object;
 
         return id.equals(other.getId());
+    }
+
+    @Override
+    public int compareTo(final Exercise other) {
+
+        return id.compareTo(other.getId());
     }
 }
