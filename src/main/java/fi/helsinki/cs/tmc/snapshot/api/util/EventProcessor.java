@@ -115,14 +115,14 @@ public final class EventProcessor {
         event.getFiles().put(information.getFile(), updatedContent);
     }
 
-    private boolean isDuplicate(final Map<String, String> diff, final Map<String, String> diff2) {
+    private boolean isDuplicate(final Map<String, String> previousFiles, final Map<String, String> files) {
 
-        if (diff.size() != diff2.size()) {
+        if (previousFiles.size() != files.size()) {
             return false;
         }
 
-        for (Entry<String, String> file : diff.entrySet()) {
-            if (!diff2.containsKey(file.getKey()) || !file.getValue().equals(diff2.get(file.getKey()))) {
+        for (Entry<String, String> file : previousFiles.entrySet()) {
+            if (!files.containsKey(file.getKey()) || !file.getValue().equals(files.get(file.getKey()))) {
                 return false;
             }
         }
@@ -134,20 +134,26 @@ public final class EventProcessor {
 
         final Iterator<SnapshotEvent> iterator = events.iterator();
 
-        SnapshotEvent prev = null;
+        SnapshotEvent previous = null;
 
         while (iterator.hasNext()) {
 
             final SnapshotEvent event = iterator.next();
-            if (prev != null && isDuplicate(prev.getFiles(), event.getFiles())) {
+
+            if (previous != null && isDuplicate(previous.getFiles(), event.getFiles())) {
+
+                LOG.warn("Filtering snapshot due to corrupted patch. Duplicate content for course {} exercise {} snapshot {}{}.",
+                         event.getCourseName(),
+                         event.getExerciseName(),
+                         event.getHappenedAt(),
+                         event.getSystemNanotime());
+
                 iterator.remove();
-                LOG.info("Duplicate event for course {} exercise {} snapshot {}{}", event.getCourseName(), event.getExerciseName(), event.getHappenedAt(), event.getSystemNanotime());
             }
-            prev = event;
+
+            previous = event;
         }
     }
-
-
 
     public void process(final Collection<SnapshotEvent> events) throws UnsupportedEncodingException {
 
