@@ -139,6 +139,20 @@ public final class EventTransformerTest {
 
         final List<SnapshotEvent> events = new ArrayList<>();
 
+        final SnapshotEvent event = createEvent("aalto", "hello", 100L, 100L, "code_snapshot");
+
+        events.add(event);
+
+        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
+
+        assertTrue(snapshots.isEmpty());
+    }
+
+    @Test
+    public void shouldRemoveEmptySnapshotsFromStart2() {
+
+        final List<SnapshotEvent> events = new ArrayList<>();
+
         final SnapshotEvent event1 = createEvent("aalto", "hello", 100L, 100L, "code_snapshot");
 
         final SnapshotEvent event2 = createEvent("aalto", "hello", 102L, 102L, "text_insert");
