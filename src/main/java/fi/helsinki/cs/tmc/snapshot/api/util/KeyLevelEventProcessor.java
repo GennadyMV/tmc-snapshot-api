@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class KeyLevelEventProcessor implements EventProsessor {
+public final class KeyLevelEventProcessor implements EventProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeyLevelEventProcessor.class);
 

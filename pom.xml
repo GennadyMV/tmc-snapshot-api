@@ -156,6 +156,7 @@
                             <exclude>com/google/*</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/app/App.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/CourseService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/EventProcessorService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ExerciseService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ParticipantService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotEventService.class</exclude>
@@ -163,6 +164,7 @@
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotOrganiserService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SpywareService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/util/EventProcessor.class</exclude>
                         </excludes>
                     </instrumentation>
                     <formats>
