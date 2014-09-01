@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public final class KeyLevelEventProcessorTest {
         assertEquals(fileCount, events.get(index).getFiles().size());
     }
 
-    private void process() {
+    private void process() throws UnsupportedEncodingException {
 
         processor.process(events);
     }
@@ -99,7 +100,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchFullDocumentShouldReturnFileContent() {
+    public void testPatchFullDocumentShouldReturnFileContent() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
 
@@ -110,7 +111,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingFullDocumentShouldReturnPatchedFileContent() {
+    public void testPatchingFullDocumentShouldReturnPatchedFileContent() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
@@ -124,7 +125,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingFullDocumentWithMultiplePatchesShouldReturnFileContent() {
+    public void testPatchingFullDocumentWithMultiplePatchesShouldReturnFileContent() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTIzMSwyMSArMjMxLDIyIEBAXG4gaS8gJTBBICAgICAgICBcbitzXG4gJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
@@ -145,7 +146,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithEmptyPatch() {
+    public void testPatchingWithEmptyPatch() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiIiwiZnVsbF9kb2N1bWVudCI6ZmFsc2V9");
@@ -158,7 +159,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithDifferentFilenames() {
+    public void testPatchingWithDifferentFilenames() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pMi5qYXZhIiwicGF0Y2hlcyI6IkBAIC0wLDAgKzEsMjUxIEBAXG4rcHVibGljIGNsYXNzIE5pbWkgJTdCJTBBICAgICUwQSAgICBwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmclNUIlNUQgYXJncykgJTdCJTBBICAgICAgICAvLyBLaXJqb2l0YSBvaGplbG1hc2kgdCVDMyVBNGglQzMlQTRuIGFsbGUlMEEgICAgICAlMEEgICAgICAgIC8vIE1payVDMyVBNGxpIGV0IHZpZWwlQzMlQTQgb2xlIHZhc3Rhbm51dCB2aWVsJUMzJUE0IGt5c2VseXluLCB0ZWUgc2UgSEVUSSUwQSAgICAgICAgLy8gb3NvaXR0ZWVzc2E6IGh0dHA6Ly9sYWF0dS5qYW1vLmZpLyAlMEEgICAgICAgICUwQSAgICAlN0QlMEElMEElN0RcbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
@@ -170,7 +171,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithNullPatch() {
+    public void testPatchingWithNullPatch() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjpudWxsLCJmdWxsX2RvY3VtZW50IjpmYWxzZX0=");
@@ -182,7 +183,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithNonBase64Data() {
+    public void testPatchingWithNonBase64Data() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("fail===={");
@@ -193,7 +194,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithNullJsonData() {
+    public void testPatchingWithNullJsonData() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("bnVsbA==");
@@ -204,7 +205,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingWithNonJsonData() {
+    public void testPatchingWithNonJsonData() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generatePatchForExampleExercise("ZmFpbD09PT17Cg==");
@@ -216,7 +217,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterFileDelete() {
+    public void testPatchingAfterFileDelete() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise(generateFileRemoveMetadata(FILENAME), EMPTYZIP);
@@ -229,7 +230,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterFileDeleteWithoutMetadata() {
+    public void testPatchingAfterFileDeleteWithoutMetadata() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise(null, EMPTYZIP);
@@ -243,7 +244,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterFileDeleteWithNullMetadata() {
+    public void testPatchingAfterFileDeleteWithNullMetadata() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise("null", EMPTYZIP);
@@ -256,7 +257,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterDeletingDifferentFile() {
+    public void testPatchingAfterDeletingDifferentFile() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise(generateFileRemoveMetadata("/src/Nimi2.java"), EMPTYZIP);
@@ -270,7 +271,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterNonJsonMetadata() {
+    public void testPatchingAfterNonJsonMetadata() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise("fail===={", EMPTYZIP);
@@ -284,7 +285,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testPatchingAfterEmptyMetadata() {
+    public void testPatchingAfterEmptyMetadata() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise("", EMPTYZIP);
@@ -298,7 +299,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testCodeSnapshotPatching() {
+    public void testCodeSnapshotPatching() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), ZIP);
@@ -310,7 +311,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testCodeSnapshotPatchingForDifferentFileNames() {
+    public void testCodeSnapshotPatchingForDifferentFileNames() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pMi5qYXZhIiwicGF0Y2hlcyI6IkBAIC0wLDAgKzEsMjUxIEBAXG4rcHVibGljIGNsYXNzIE5pbWkgJTdCJTBBICAgICUwQSAgICBwdWJsaWMgc3RhdGljIHZvaWQgbWFpbihTdHJpbmclNUIlNUQgYXJncykgJTdCJTBBICAgICAgICAvLyBLaXJqb2l0YSBvaGplbG1hc2kgdCVDMyVBNGglQzMlQTRuIGFsbGUlMEEgICAgICAlMEEgICAgICAgIC8vIE1payVDMyVBNGxpIGV0IHZpZWwlQzMlQTQgb2xlIHZhc3Rhbm51dCB2aWVsJUMzJUE0IGt5c2VseXluLCB0ZWUgc2UgSEVUSSUwQSAgICAgICAgLy8gb3NvaXR0ZWVzc2E6IGh0dHA6Ly9sYWF0dS5qYW1vLmZpLyAlMEEgICAgICAgICUwQSAgICAlN0QlMEElMEElN0RcbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
         generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), ZIP);
@@ -322,7 +323,7 @@ public final class KeyLevelEventProcessorTest {
     }
 
     @Test
-    public void testCodeSnapshotPatchingWithCorruptedZip() {
+    public void testCodeSnapshotPatchingWithCorruptedZip() throws UnsupportedEncodingException {
 
         generatePatchForExampleExercise(PATCH);
         generateCodeSnapshotForExampleExercise(generateFileChangeMetadata(FILENAME), "UEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAZAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pLwMAUEsHCAAAAAACAAAAAAAAAFBLAwQUAAgICABZbC5EAAAAAAAAAAAAAAAAHQAAAHZpaWtrbzEtVmlpa2tvMV8wMDEuTmltaS9zcmMvAwBQSwcIAAAAAAIAAAAAAAAAUEsDBBQACAgIAFlsLkQAAAAAAAAAAAAAAAAmAAAAdmlpa2tvMS1WaWlra28xXzAwMS5OaW1pL3NyYy9OaW1pLmphdmFNj0FOw0AMRfc5xVdXrYQy+7JGAiHYlB1iYYppnHpmotiJFKHeJjfJxRhKBf0LW/L395O74V1lj72SGZ4lYXNkCg==");

@@ -131,4 +131,35 @@ public final class DefaultSnapshotServiceTest {
 
         snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, "0");
     }
+
+    @Test
+    public void findAllFilesAsZipReturnsCorrectBytes() throws IOException {
+
+        final Exercise exercise = new Exercise(EXERCISE);
+
+        exercise.addSnapshotEvent(new SnapshotEvent());
+        exercise.addSnapshotEvent(new SnapshotEvent());
+
+        final Collection<SnapshotEvent> events = exercise.getSnapshotEvents();
+
+        final SnapshotFile file = new SnapshotFile("L3NyYy9IZWlNYWFpbG1hLmphdmE", "/src/HeiMaailma.java", "public class HeiMaailma { }");
+        final SnapshotFile file2 = new SnapshotFile("L3NyYy9IZWlNYWFpbG1hLmphdmE2", "/src/HeiMaailma.java", "public class HeiMaailma { private String hei; }");
+
+        final Snapshot snapshot = new Snapshot("2", 10L, new HashMap<String, SnapshotFile>(), false);
+        snapshot.addFile(file);
+
+        final Snapshot snapshot2 = new Snapshot("3", 11L, new HashMap<String, SnapshotFile>(), false);
+        snapshot2.addFile(file2);
+
+        final List<Snapshot> snapshots = new ArrayList<>();
+        snapshots.add(snapshot);
+        snapshots.add(snapshot2);
+
+        when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
+        when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
+
+        final byte[] bytes = snapshotService.findAllFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE);
+
+        assertEquals(402, bytes.length);
+    }
 }
