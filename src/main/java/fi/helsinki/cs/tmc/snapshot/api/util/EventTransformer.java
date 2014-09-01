@@ -7,6 +7,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,11 @@ public final class EventTransformer {
         for (Snapshot current : snapshots) {
 
             // Complete snapshots are already complete, no need to parse previous.
-            // Also skip if current snapshot is the first from this exercise.
+            // Also skip if current snapshot is the first from this exercise because
+            // The first file_save event contains a complete snapshot of the file with
+            // the exercise template, but the first text_insert is a patch from empty
+            // string to the exercise template. Not discarding the first complete snapshot
+            // for empty files results in file content duplication.
             if (!current.isFromCompleteSnapshot() && previous != null) {
 
                 for (SnapshotFile file : previous.getFiles()) {
@@ -87,6 +92,19 @@ public final class EventTransformer {
         LOG.info("Built exercise continuums.");
     }
 
+    private void stripEmptySnapshotsFromStart(final List<Snapshot> snapshots) {
+
+        for (final Iterator<Snapshot> it = snapshots.iterator(); it.hasNext();) {
+            final Snapshot snapshot = it.next();
+            if (snapshot.getFiles().isEmpty()) {
+                LOG.info("Removed snapshot with id {} for having no files", snapshot.getTimestamp());
+                it.remove();
+            } else {
+                return;
+            }
+        }
+    }
+
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
 
         if (events == null) {
@@ -95,6 +113,9 @@ public final class EventTransformer {
 
         final List<Snapshot> snapshots = toFileSnapshots(events);
         toExerciseSnapshots(snapshots);
+
+        // Get rid of TMC generated snapshots that have no relevant files.
+        stripEmptySnapshotsFromStart(snapshots);
 
         return snapshots;
     }
