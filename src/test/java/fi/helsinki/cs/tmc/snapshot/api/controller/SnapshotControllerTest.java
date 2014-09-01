@@ -4,6 +4,7 @@ import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 
 import java.util.ArrayList;
@@ -78,14 +79,14 @@ public final class SnapshotControllerTest {
                                           false));
         }
 
-        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(snapshotData);
+        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY)).thenReturn(snapshotData);
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$", hasSize(5)));
 
-        verify(snapshotService).findAll(INSTANCE, USER, COURSE, EXERCISE);
+        verify(snapshotService).findAll(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotService);
     }
 
@@ -97,7 +98,7 @@ public final class SnapshotControllerTest {
 
         snapshotData.addFile(file);
 
-        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(snapshotData);
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1", SnapshotLevel.KEY)).thenReturn(snapshotData);
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
                .andExpect(status().isOk())
@@ -108,14 +109,14 @@ public final class SnapshotControllerTest {
                .andExpect(jsonPath("$.files[0].name", is("HeiMaailma.java")))
                .andExpect(jsonPath("$.files[0].id", is("L3NyYy9IZWlNYWFpbG1hLmphdmE")));
 
-        verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
+        verify(snapshotService).find(INSTANCE, USER, COURSE, EXERCISE, "1", SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotService);
     }
 
     @Test
     public void listHandlesNotFoundException() throws Exception {
 
-        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenThrow(new NotFoundException());
+        when(snapshotService.findAll(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL))
                .andExpect(status().is(404));
@@ -124,7 +125,7 @@ public final class SnapshotControllerTest {
     @Test
     public void readHandlesNotFoundException() throws Exception {
 
-        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenThrow(new NotFoundException());
+        when(snapshotService.find(INSTANCE, USER, COURSE, EXERCISE, "1", SnapshotLevel.KEY)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(SNAPSHOT_BASE_URL + "/1"))
                .andExpect(status().is(404));
