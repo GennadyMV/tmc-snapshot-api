@@ -1,8 +1,8 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-import java.io.UnsupportedEncodingException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -11,6 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public final class EventTransformerTest {
 
@@ -131,5 +132,59 @@ public final class EventTransformerTest {
 
         assertNull(snapshots.get(1).getFileForId("trial.java"));
         assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAwMTAw"));
+    }
+
+    @Test
+    public void shouldRemoveEmptySnapshotsFromStart() {
+
+        final List<SnapshotEvent> events = new ArrayList<>();
+
+        final SnapshotEvent event = createEvent("aalto", "hello", 100L, 100L, "code_snapshot");
+
+        events.add(event);
+
+        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
+
+        assertTrue(snapshots.isEmpty());
+    }
+
+    @Test
+    public void shouldRemoveEmptySnapshotsFromStart2() {
+
+        final List<SnapshotEvent> events = new ArrayList<>();
+
+        final SnapshotEvent event1 = createEvent("aalto", "hello", 100L, 100L, "code_snapshot");
+
+        final SnapshotEvent event2 = createEvent("aalto", "hello", 102L, 102L, "text_insert");
+
+        event2.getFiles().put("hello.java", "public class Hello { }");
+
+        events.add(event1);
+        events.add(event2);
+
+        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
+
+        assertEquals(1, snapshots.size());
+        assertEquals("public class Hello { }", snapshots.get(0).getFiles().iterator().next().getContent());
+    }
+
+    @Test
+    public void shouldNotRemoveEmptySnapshotsAfterFirstNonEmptyOccurrence() {
+
+        final List<SnapshotEvent> events = new ArrayList<>();
+
+        final SnapshotEvent event1 = createEvent("aalto", "hello", 100L, 100L, "code_snapshot");
+
+        event1.getFiles().put("hello.java", "public class Hello { }");
+
+        final SnapshotEvent event2 = createEvent("aalto", "hello", 101L, 101L, "code_snapshot");
+
+        events.add(event1);
+        events.add(event2);
+
+        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
+
+        assertEquals(2, snapshots.size());
+        assertTrue(snapshots.get(1).getFiles().isEmpty());
     }
 }

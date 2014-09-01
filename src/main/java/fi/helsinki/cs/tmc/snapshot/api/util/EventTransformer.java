@@ -23,6 +23,23 @@ public final class EventTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventTransformer.class);
 
+    private void removeEmptySnapshotsFromStart(final List<Snapshot> snapshots) {
+
+        final Iterator<Snapshot> iterator = snapshots.iterator();
+
+        while (iterator.hasNext()) {
+
+            final Snapshot snapshot = iterator.next();
+
+            if (snapshot.getFiles().isEmpty()) {
+                LOG.info("Removed snapshot with ID {} for having no files.", snapshot.getId());
+                iterator.remove();
+            } else {
+                return;
+            }
+        }
+    }
+
     private List<Snapshot> toFileSnapshots(final Collection<SnapshotEvent> events) {
 
         LOG.info("Converting events to snapshots...");
@@ -73,9 +90,9 @@ public final class EventTransformer {
         for (Snapshot current : snapshots) {
 
             // Complete snapshots are already complete, no need to parse previous.
-            // Also skip if current snapshot is the first from this exercise because
-            // The first file_save event contains a complete snapshot of the file with
-            // the exercise template, but the first text_insert is a patch from empty
+            // Skip also if current snapshot is the first from this exercise, because
+            // the first "file_save" event contains a complete snapshot of the file with
+            // the exercise template, but the first "text_insert" is a patch from an empty
             // string to the exercise template. Not discarding the first complete snapshot
             // for empty files results in file content duplication.
             if (!current.isFromCompleteSnapshot() && previous != null) {
@@ -92,19 +109,6 @@ public final class EventTransformer {
         LOG.info("Built exercise continuums.");
     }
 
-    private void stripEmptySnapshotsFromStart(final List<Snapshot> snapshots) {
-
-        for (final Iterator<Snapshot> it = snapshots.iterator(); it.hasNext();) {
-            final Snapshot snapshot = it.next();
-            if (snapshot.getFiles().isEmpty()) {
-                LOG.info("Removed snapshot with id {} for having no files", snapshot.getTimestamp());
-                it.remove();
-            } else {
-                return;
-            }
-        }
-    }
-
     public List<Snapshot> toSnapshotList(final Collection<SnapshotEvent> events) {
 
         if (events == null) {
@@ -114,8 +118,8 @@ public final class EventTransformer {
         final List<Snapshot> snapshots = toFileSnapshots(events);
         toExerciseSnapshots(snapshots);
 
-        // Get rid of TMC generated snapshots that have no relevant files.
-        stripEmptySnapshotsFromStart(snapshots);
+        // Get rid of TMC generated snapshots that have no relevant files
+        removeEmptySnapshotsFromStart(snapshots);
 
         return snapshots;
     }
