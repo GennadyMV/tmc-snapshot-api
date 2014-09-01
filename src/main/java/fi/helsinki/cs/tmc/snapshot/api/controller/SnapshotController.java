@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,9 +26,10 @@ public final class SnapshotController {
     public List<Snapshot> list(@PathVariable final String instance,
                                @PathVariable final String userId,
                                @PathVariable final String courseId,
-                               @PathVariable final String exerciseId) throws IOException {
+                               @PathVariable final String exerciseId,
+                               @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
 
-        return snapshotService.findAll(instance, userId, courseId, exerciseId);
+        return snapshotService.findAll(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase()));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{snapshotId}")
@@ -34,9 +37,10 @@ public final class SnapshotController {
                          @PathVariable final String userId,
                          @PathVariable final String courseId,
                          @PathVariable final String exerciseId,
-                         @PathVariable final String snapshotId) throws IOException {
+                         @PathVariable final String snapshotId,
+                         @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
 
-        return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
+        return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.valueOf(level.toUpperCase()));
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -45,8 +49,9 @@ public final class SnapshotController {
     public HttpEntity<byte[]> readFiles(@PathVariable final String instance,
                                         @PathVariable final String userId,
                                         @PathVariable final String courseId,
-                                        @PathVariable final String exerciseId) throws IOException {
+                                        @PathVariable final String exerciseId,
+                                        @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
 
-        return new HttpEntity<>(snapshotService.findAllFilesAsZip(instance, userId, courseId, exerciseId));
+        return new HttpEntity<>(snapshotService.findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase())));
     }
 }
