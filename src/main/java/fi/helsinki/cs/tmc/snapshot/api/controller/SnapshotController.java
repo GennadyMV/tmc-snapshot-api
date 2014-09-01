@@ -27,7 +27,7 @@ public final class SnapshotController {
                                @PathVariable final String userId,
                                @PathVariable final String courseId,
                                @PathVariable final String exerciseId,
-                               @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
+                               @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
         return snapshotService.findAll(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase()));
     }
@@ -38,7 +38,7 @@ public final class SnapshotController {
                          @PathVariable final String courseId,
                          @PathVariable final String exerciseId,
                          @PathVariable final String snapshotId,
-                         @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
+                         @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
         return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.valueOf(level.toUpperCase()));
     }
@@ -50,7 +50,7 @@ public final class SnapshotController {
                                         @PathVariable final String userId,
                                         @PathVariable final String courseId,
                                         @PathVariable final String exerciseId,
-                                        @RequestParam(value = "level", defaultValue="KEY", required = false) final String level) throws IOException {
+                                        @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
         return new HttpEntity<>(snapshotService.findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase())));
     }
