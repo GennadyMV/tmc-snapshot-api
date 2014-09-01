@@ -92,13 +92,17 @@ public final class EventTransformer {
         LOG.info("Built exercise continuums.");
     }
 
-    private void stripEmptySnapshotsFromStart(final List<Snapshot> snapshots) {
+    private void removeEmptySnapshotsFromStart(final List<Snapshot> snapshots) {
 
-        for (final Iterator<Snapshot> it = snapshots.iterator(); it.hasNext();) {
-            final Snapshot snapshot = it.next();
+        final Iterator<Snapshot> iterator = snapshots.iterator();
+
+        while (iterator.hasNext()) {
+
+            final Snapshot snapshot = iterator.next();
+
             if (snapshot.getFiles().isEmpty()) {
-                LOG.info("Removed snapshot with id {} for having no files", snapshot.getTimestamp());
-                it.remove();
+                LOG.info("Removed snapshot with id {} for having no files", snapshot.getId());
+                iterator.remove();
             } else {
                 return;
             }
@@ -115,7 +119,7 @@ public final class EventTransformer {
         toExerciseSnapshots(snapshots);
 
         // Get rid of TMC generated snapshots that have no relevant files.
-        stripEmptySnapshotsFromStart(snapshots);
+        removeEmptySnapshotsFromStart(snapshots);
 
         return snapshots;
     }
