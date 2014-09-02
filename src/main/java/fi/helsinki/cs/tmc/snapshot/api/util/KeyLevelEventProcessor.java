@@ -134,7 +134,7 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
     private void processSnapshotEvent(final SnapshotEvent event) throws IOException {
 
-        if (event.getEventType().equals("code_snapshot")) {
+        if (event.isCodeSnapshot()) {
             processCompleteSnapshot(event);
         } else {
             patchFile(event);
