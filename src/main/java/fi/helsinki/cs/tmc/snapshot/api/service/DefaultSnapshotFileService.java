@@ -73,5 +73,4 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
 
         return content;
     }
-
 }
