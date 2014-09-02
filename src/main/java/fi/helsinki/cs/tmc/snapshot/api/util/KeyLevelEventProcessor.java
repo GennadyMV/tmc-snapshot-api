@@ -160,7 +160,7 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
                 iterator.remove();
 
-                LOG.warn("Filtering snapshot due to {}. Duplicate content for course {} exercise {} snapshot {}{}.",
+                LOG.warn("Filtering snapshot due to: {}. Duplicate content for course {} exercise {} snapshot {}{}.",
                          exception.getMessage(),
                          event.getCourseName(),
                          event.getExerciseName(),
