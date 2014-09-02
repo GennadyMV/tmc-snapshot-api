@@ -43,6 +43,10 @@ The REST API provides mostly JSON-responses as `application/json`. Files are ret
 
 All IDs in the API are specified as strings. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string concatenated from a file path, snapshot timestamp and nanotime.
 
+### Snapshot Level
+
+There are two levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution.
+
 ### 1. Participants
 
 ```
@@ -219,6 +223,7 @@ Returns: A single exercise for a participant and course with the provided instan
 Method: GET
 Content-Type: application/json
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: A list of snapshots for a participant, course and exercise with the provided instance and IDs
 ```
 
@@ -275,6 +280,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 Method: GET
 Content-Type: application/zip
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/files.zip
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided instance and IDs
 ```
 
@@ -295,6 +301,7 @@ Returns: The contents for each file in the snapshot as a ZIP for a participant, 
 Method: GET
 Content-Type: application/json
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: A single snapshot for a participant, course and exercise with the provided instance and IDs
 ```
 
@@ -327,6 +334,7 @@ Returns: A single snapshot for a participant, course and exercise with the provi
 Method: GET
 Content-Type: application/json
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: A list of files for a participant, course, exercise and snapshot with the provided instance and IDs
 ```
 
@@ -355,6 +363,7 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 Method: GET
 Content-Type: application/json
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: A single file for a participant, course, exercise, snapshot and file with the provided instance and IDs
 ```
 
@@ -376,6 +385,7 @@ Returns: A single file for a participant, course, exercise, snapshot and file wi
 Method: GET
 Content-Type: text/plain
 URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/content/
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: The content for a file for a participant, course, exercise, snapshot and file with the provided instance and IDs
 ```
 
