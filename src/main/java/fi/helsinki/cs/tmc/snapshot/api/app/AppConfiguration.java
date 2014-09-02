@@ -43,7 +43,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
 
         configuration.setMaxBytesLocalHeap(cacheMemory);
 
-        LOG.info("Configured spyware data cache with max size of {} bytes", cacheMemory);
+        LOG.info("Configured Spyware data cache with max size of {} bytes.", cacheMemory);
 
         return new Cache(configuration);
     }

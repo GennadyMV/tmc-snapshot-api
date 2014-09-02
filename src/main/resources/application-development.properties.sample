@@ -1,9 +1,7 @@
 # Security
-
 security.user.name = username
 security.user.password = password
 
 # Spyware
-
 spyware.username = username
 spyware.password = password
