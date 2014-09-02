@@ -77,7 +77,7 @@ public final class DefaultSnapshotService implements SnapshotService {
                          final String snapshotId,
                          final SnapshotLevel level) throws IOException {
 
-        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId);
+        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId, level);
 
         for (Snapshot snapshot : snapshots) {
             if (snapshot.getId().equals(snapshotId)) {

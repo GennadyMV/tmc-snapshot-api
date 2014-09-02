@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -21,9 +22,10 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                                             final String userId,
                                             final String courseId,
                                             final String exerciseId,
-                                            final String snapshotId) throws IOException {
+                                            final String snapshotId,
+                                            final SnapshotLevel level) throws IOException {
 
-        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId).getFiles();
+        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level).getFiles();
 
         if (snapshotFiles == null) {
             throw new NotFoundException();
@@ -38,9 +40,10 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                              final String courseId,
                              final String exerciseId,
                              final String snapshotId,
-                             final String fileId) throws IOException {
+                             final String fileId,
+                             final SnapshotLevel level) throws IOException {
 
-        final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId);
+        final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level);
 
         final SnapshotFile file = snapshot.getFileForId(fileId);
 
@@ -57,9 +60,10 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                               final String courseId,
                               final String exerciseId,
                               final String snapshotId,
-                              final String fileId) throws IOException {
+                              final String fileId,
+                              final SnapshotLevel level) throws IOException {
 
-        final SnapshotFile file = find(instance, userId, courseId, exerciseId, snapshotId, fileId);
+        final SnapshotFile file = find(instance, userId, courseId, exerciseId, snapshotId, fileId, level);
 
         final String content = file.getContent();
 
@@ -69,4 +73,5 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
 
         return content;
     }
+
 }

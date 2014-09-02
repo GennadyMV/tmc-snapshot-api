@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotFileService;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public final class SnapshotFileControllerTest {
         files.add(new SnapshotFile("id", "path3", "content3"));
 
 
-        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenReturn(files);
+        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, SnapshotLevel.KEY)).thenReturn(files);
 
         mockMvc.perform(get(FILE_BASE_URL))
                .andExpect(status().isOk())
@@ -85,7 +86,7 @@ public final class SnapshotFileControllerTest {
                .andExpect(jsonPath("$[1].path", is("path2")))
                .andExpect(jsonPath("$[2].path", is("path3")));
 
-        verify(snapshotFileService).findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT);
+        verify(snapshotFileService).findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotFileService);
 
     }
@@ -95,7 +96,7 @@ public final class SnapshotFileControllerTest {
 
         final SnapshotFile file = new SnapshotFile("c3JjL3Rlc3Q", "src/test", "testContent");
 
-        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn(file);
+        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY)).thenReturn(file);
 
         mockMvc.perform(get(FILE_BASE_URL + "/path"))
                .andExpect(status().isOk())
@@ -104,28 +105,28 @@ public final class SnapshotFileControllerTest {
                .andExpect(jsonPath("name", is("test")))
                .andExpect(jsonPath("id", is("c3JjL3Rlc3Q")));
 
-        verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
+        verify(snapshotFileService).find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotFileService);
     }
 
     @Test
     public void shouldReturnSnapshotFileContent() throws Exception {
 
-        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenReturn("testContent");
+        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY)).thenReturn("testContent");
 
         mockMvc.perform(get(FILE_BASE_URL + "/path/content"))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.TEXT_PLAIN))
                .andExpect(content().string("testContent"));
 
-        verify(snapshotFileService).findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE);
+        verify(snapshotFileService).findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotFileService);
     }
 
     @Test
     public void listShouldHandleNotFoundException() throws Exception {
 
-        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT)).thenThrow(new NotFoundException());
+        when(snapshotFileService.findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, SnapshotLevel.KEY)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(FILE_BASE_URL))
                .andExpect(status().is(404));
@@ -134,7 +135,7 @@ public final class SnapshotFileControllerTest {
     @Test
     public void readShouldHandleNotFoundException() throws Exception {
 
-        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenThrow(new NotFoundException());
+        when(snapshotFileService.find(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(FILE_BASE_URL + "/path"))
                .andExpect(status().is(404));
@@ -143,7 +144,7 @@ public final class SnapshotFileControllerTest {
     @Test
     public void readContentShouldHandleNotFoundException() throws Exception {
 
-        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE)).thenThrow(new NotFoundException());
+        when(snapshotFileService.findContent(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, FILE, SnapshotLevel.KEY)).thenThrow(new NotFoundException());
 
         mockMvc.perform(get(FILE_BASE_URL + "/path/content"))
                .andExpect(status().is(404));

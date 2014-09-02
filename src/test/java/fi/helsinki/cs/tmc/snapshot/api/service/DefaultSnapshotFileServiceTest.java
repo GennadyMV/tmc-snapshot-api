@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
+import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,10 +60,11 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        final SnapshotFile file = fileService.find("hy", "user", "course", "exercise", "3", "dGVzdC5qYXZh");
+        final SnapshotFile file = fileService.find("hy", "user", "course", "exercise", "3", "dGVzdC5qYXZh", SnapshotLevel.CODE);
 
         assertEquals(FILE, file.getPath());
         assertEquals(FILE, file.getName());
@@ -82,10 +84,11 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        final String content = fileService.findContent("hy", "user", "course", "exercise", "2", "id");
+        final String content = fileService.findContent("hy", "user", "course", "exercise", "2", "id", SnapshotLevel.KEY);
 
         assertEquals("public class Test { }", content);
     }
@@ -99,10 +102,11 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        fileService.find("hy", "user", "course", "exercise", "2", "404.java");
+        fileService.find("hy", "user", "course", "exercise", "2", "404.java", SnapshotLevel.KEY);
     }
 
     @Test(expected = NotFoundException.class)
@@ -117,10 +121,11 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        fileService.findContent("hy", "user", "course", "exercise", "2", "trial.java");
+        fileService.findContent("hy", "user", "course", "exercise", "2", "trial.java", SnapshotLevel.KEY);
     }
 
     @Test
@@ -135,10 +140,11 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        final Collection<SnapshotFile> filesCollection = fileService.findAll("mooc", "admin", "java-course", "ex", "2");
+        final Collection<SnapshotFile> filesCollection = fileService.findAll("mooc", "admin", "java-course", "ex", "2", SnapshotLevel.KEY);
         final List<SnapshotFile> snapshotFiles = new ArrayList(filesCollection);
 
         assertEquals(1, snapshotFiles.size());
@@ -157,12 +163,13 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(spy);
 
         doReturn(null).when(spy).getFiles();
 
-        fileService.findAll("mooc", "admin", "java-course", "ex", "2");
+        fileService.findAll("mooc", "admin", "java-course", "ex", "2", SnapshotLevel.KEY);
     }
 
     @Test(expected = NotFoundException.class)
@@ -175,9 +182,10 @@ public final class DefaultSnapshotFileServiceTest {
                                   any(String.class),
                                   any(String.class),
                                   any(String.class),
-                                  any(String.class)))
+                                  any(String.class),
+                                  any(SnapshotLevel.class)))
                                  .thenReturn(snapshot);
 
-        fileService.findContent("mooc", "admin", "java-course", "ex", "15", "1");
+        fileService.findContent("mooc", "admin", "java-course", "ex", "15", "1", SnapshotLevel.KEY);
     }
 }
