@@ -91,7 +91,8 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
     private void processCompleteSnapshot(final SnapshotEvent event) throws IOException {
 
-        if (!processData(event) && !processMetadata(event)) {
+        // Always try to process both data and metadata
+        if (!processData(event) & !processMetadata(event)) {
             throw new IOException("Nothing new in ZIP.");
         }
     }
