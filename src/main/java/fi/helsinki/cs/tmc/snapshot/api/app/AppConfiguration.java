@@ -7,6 +7,11 @@ import java.util.List;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.config.CacheConfiguration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -26,15 +31,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 public class AppConfiguration extends WebMvcConfigurerAdapter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AppConfiguration.class);
+
+    @Value("${spyware.cacheSize}")
+    private long cacheMemory;
+
     private Cache buildSpywareCache() {
 
         final CacheConfiguration configuration = new CacheConfiguration();
         configuration.setName("spyware");
 
-        // 50% of max heap size
-        final Long maxMemory = Runtime.getRuntime().maxMemory();
-        final Long cacheMemory = (long) (maxMemory * 0.5);
         configuration.setMaxBytesLocalHeap(cacheMemory);
+
+        LOG.info("Configured spyware data cache with max size of {} bytes", cacheMemory);
 
         return new Cache(configuration);
     }
