@@ -154,7 +154,6 @@ public final class KeyLevelEventProcessor implements EventProcessor {
             final SnapshotEvent event = iterator.next();
 
             try {
-
                 processSnapshotEvent(event);
             } catch (IOException exception) {
 
