@@ -47,13 +47,56 @@ All IDs in the API are specified as strings. The ID for a participant is a URL-s
 
 There are two levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution.
 
-### 1. Participants
+### 1. Instances
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/
-Returns: A list of participants with the provided instance
+URL: /
+Returns: A list of instances
+```
+
+#### Example Request
+
+`GET /`
+
+```
+[
+    {
+        "id": "hy"
+    },
+    {
+        "id": "mooc"
+    }
+]
+```
+
+### 1.2. Instance
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/
+Returns: A single instance with the provided ID
+```
+
+#### Example Request
+
+`GET /hy/`
+
+```
+{
+    "id": "hy"
+}
+```
+
+### 2. Participants
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/participants/
+Returns: A list of participants with the provided instance ID
 ```
 
 #### Example Request
@@ -73,13 +116,13 @@ Returns: A list of participants with the provided instance
 ]
 ```
 
-### 1.2. Participant
+### 2.2. Participant
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/
-Returns: A single participant with the provided instance and ID
+URL: /{instanceId}/participants/{participantID}/
+Returns: A single participant with the provided IDs
 ```
 
 #### Example Request
@@ -109,13 +152,13 @@ Returns: A single participant with the provided instance and ID
 }
 ```
 
-### 2. Courses
+### 3. Courses
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/
-Returns: A list of courses for a participant with the provided instance and ID
+URL: /{instanceId}/participants/{participantID}/courses/
+Returns: A list of courses for a participant with the provided IDs
 ```
 
 #### Example Request
@@ -141,13 +184,13 @@ Returns: A list of courses for a participant with the provided instance and ID
 ]
 ```
 
-### 2.2. Course
+### 3.2. Course
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/
-Returns: A single course for a participant with the provided instance and IDs
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/
+Returns: A single course for a participant with the provided IDs
 ```
 
 #### Example Request
@@ -171,13 +214,13 @@ Returns: A single course for a participant with the provided instance and IDs
 }
 ```
 
-### 3. Exercises
+### 4. Exercises
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/
-Returns: A list of exercises for a participant and course with the provided instance and IDs
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/
+Returns: A list of exercises for a participant and course with the provided IDs
 ```
 
 #### Example Request
@@ -197,13 +240,13 @@ Returns: A list of exercises for a participant and course with the provided inst
 ]
 ```
 
-### 3.2. Exercise
+### 4.2. Exercise
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/
-Returns: A single exercise for a participant and course with the provided instance and IDs
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/
+Returns: A single exercise for a participant and course with the provided IDs
 ```
 
 #### Example Request
@@ -217,14 +260,14 @@ Returns: A single exercise for a participant and course with the provided instan
 }
 ```
 
-### 4. Snapshots
+### 5. Snapshots
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: A list of snapshots for a participant, course and exercise with the provided instance and IDs
+Returns: A list of snapshots for a participant, course and exercise with the provided IDs
 ```
 
 #### Example Request
@@ -274,14 +317,14 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ]
 ```
 
-### 4.2. Snapshot File Contents
+### 5.2. Snapshot File Contents
 
 ```
 Method: GET
 Content-Type: application/zip
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/files.zip
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/files.zip
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided instance and IDs
+Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided IDs
 ```
 
 #### Example Request
@@ -295,14 +338,14 @@ Returns: The contents for each file in the snapshot as a ZIP for a participant, 
     └── L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA
 ```
 
-### 4.3. Snapshot
+### 5.3. Snapshot
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: A single snapshot for a participant, course and exercise with the provided instance and IDs
+Returns: A single snapshot for a participant, course and exercise with the provided IDs
 ```
 
 #### Example Request
@@ -328,14 +371,14 @@ Returns: A single snapshot for a participant, course and exercise with the provi
 }
 ```
 
-### 5. Files
+### 6. Files
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: A list of files for a participant, course, exercise and snapshot with the provided instance and IDs
+Returns: A list of files for a participant, course, exercise and snapshot with the provided IDs
 ```
 
 #### Example Request
@@ -357,14 +400,14 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 ]
 ```
 
-### 5.2. File
+### 6.2. File
 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: A single file for a participant, course, exercise, snapshot and file with the provided instance and IDs
+Returns: A single file for a participant, course, exercise, snapshot and file with the provided IDs
 ```
 
 #### Example Request
@@ -379,14 +422,14 @@ Returns: A single file for a participant, course, exercise, snapshot and file wi
 }
 ```
 
-### 5.3. File Content
+### 6.3. File Content
 
 ```
 Method: GET
 Content-Type: text/plain
-URL: /{instance}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/content/
+URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/content/
 Parameters: level [key or code], defaults to key when no level is defined
-Returns: The content for a file for a participant, course, exercise, snapshot and file with the provided instance and IDs
+Returns: The content for a file for a participant, course, exercise, snapshot and file with the provided IDs
 ```
 
 #### Example Request
