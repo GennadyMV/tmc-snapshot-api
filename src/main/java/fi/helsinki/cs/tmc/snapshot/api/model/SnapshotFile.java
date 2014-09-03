@@ -20,7 +20,7 @@ public final class SnapshotFile {
         this.path = path;
         this.content = content;
 
-        name = path.substring(path.lastIndexOf("/") + 1);
+        this.name = path.substring(path.lastIndexOf("/") + 1);
     }
 
     public String getId() {

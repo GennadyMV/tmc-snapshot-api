@@ -16,9 +16,9 @@ public final class Participant implements Comparable<Participant> {
 
     public Participant(final String username) {
 
-        id = Base64.encodeBase64URLSafeString(username.getBytes());
+        this.id = Base64.encodeBase64URLSafeString(username.getBytes());
         this.username = username;
-        courses = new HashMap<>();
+        this.courses = new HashMap<>();
     }
 
     public String getId() {

@@ -17,9 +17,9 @@ public final class Exercise implements Comparable<Exercise> {
 
     public Exercise(final String name) {
 
-        id = Base64.encodeBase64URLSafeString(name.getBytes());
+        this.id = Base64.encodeBase64URLSafeString(name.getBytes());
         this.name = name;
-        snapshotEvents = new ArrayList<>();
+        this.snapshotEvents = new ArrayList<>();
     }
 
     public String getId() {
