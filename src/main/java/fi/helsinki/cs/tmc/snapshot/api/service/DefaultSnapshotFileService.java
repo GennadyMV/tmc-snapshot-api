@@ -25,7 +25,8 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                                             final String snapshotId,
                                             final SnapshotLevel level) throws IOException {
 
-        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level).getFiles();
+        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level)
+                                                                      .getFiles();
 
         if (snapshotFiles == null) {
             throw new NotFoundException();

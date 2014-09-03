@@ -27,7 +27,8 @@ public final class DefaultCourseService implements CourseService {
     public Course find(final String instance, final String userId, final String courseId) throws IOException {
 
         final String courseName = new String(Base64.decodeBase64(courseId));
-        final Course course = participantService.find(instance, userId).getCourse(courseName);
+        final Course course = participantService.find(instance, userId)
+                                                .getCourse(courseName);
 
         if (course == null) {
             throw new NotFoundException();

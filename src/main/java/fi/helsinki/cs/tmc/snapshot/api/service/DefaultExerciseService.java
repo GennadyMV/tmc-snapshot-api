@@ -22,7 +22,8 @@ public final class DefaultExerciseService implements ExerciseService {
                                         final String userId,
                                         final String courseId) throws IOException {
 
-        return courseService.find(instance, userId, courseId).getExercises();
+        return courseService.find(instance, userId, courseId)
+                            .getExercises();
     }
 
     @Override
@@ -32,7 +33,8 @@ public final class DefaultExerciseService implements ExerciseService {
                          final String exerciseId) throws IOException {
 
         final String exerciseName = new String(Base64.decodeBase64(exerciseId));
-        final Exercise exercise = courseService.find(instance, userId, courseId).getExercise(exerciseName);
+        final Exercise exercise = courseService.find(instance, userId, courseId)
+                                               .getExercise(exerciseName);
 
         if (exercise == null) {
             throw new NotFoundException();
