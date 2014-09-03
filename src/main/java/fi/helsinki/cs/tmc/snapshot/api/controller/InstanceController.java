@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/", produces = "application/json")
-public class InstanceController {
+public final class InstanceController {
 
     @Autowired
     private InstanceService instanceService;
