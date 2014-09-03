@@ -7,5 +7,5 @@ import java.util.Collection;
 public interface EventProcessor {
 
     void process(Collection<SnapshotEvent> events);
-    
+
 }
