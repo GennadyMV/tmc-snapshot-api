@@ -29,7 +29,7 @@ public final class SnapshotFileController {
                                          @PathVariable final String snapshotId,
                                          @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.valueOf(level.toUpperCase()));
+        return snapshotFileService.findAll(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.fromString(level));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{fileId}")
@@ -41,7 +41,7 @@ public final class SnapshotFileController {
                              @PathVariable final String fileId,
                              @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, fileId, SnapshotLevel.valueOf(level.toUpperCase()));
+        return snapshotFileService.find(instance, userId, courseId, exerciseId, snapshotId, fileId, SnapshotLevel.fromString(level));
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -55,6 +55,6 @@ public final class SnapshotFileController {
                               @PathVariable final String fileId,
                               @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return snapshotFileService.findContent(instance, userId, courseId, exerciseId, snapshotId, fileId, SnapshotLevel.valueOf(level.toUpperCase()));
+        return snapshotFileService.findContent(instance, userId, courseId, exerciseId, snapshotId, fileId, SnapshotLevel.fromString(level));
     }
 }

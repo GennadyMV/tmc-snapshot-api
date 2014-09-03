@@ -29,7 +29,7 @@ public final class SnapshotController {
                                @PathVariable final String exerciseId,
                                @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return snapshotService.findAll(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase()));
+        return snapshotService.findAll(instance, userId, courseId, exerciseId, SnapshotLevel.fromString(level));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{snapshotId}")
@@ -40,7 +40,7 @@ public final class SnapshotController {
                          @PathVariable final String snapshotId,
                          @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.valueOf(level.toUpperCase()));
+        return snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.fromString(level));
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -52,6 +52,7 @@ public final class SnapshotController {
                                         @PathVariable final String exerciseId,
                                         @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
-        return new HttpEntity<>(snapshotService.findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.valueOf(level.toUpperCase())));
+        final byte[] zip = snapshotService.findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.fromString(level));
+        return new HttpEntity<>(zip);
     }
 }
