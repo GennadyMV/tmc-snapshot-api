@@ -318,7 +318,7 @@ public final class KeyLevelEventProcessorTest {
 
         process();
 
-        assertEquals(1, events.size());
+        assertEquals(2, events.size());
         verifyEventFileContent(0, "/src/Nimi2.java", "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
     }
 
