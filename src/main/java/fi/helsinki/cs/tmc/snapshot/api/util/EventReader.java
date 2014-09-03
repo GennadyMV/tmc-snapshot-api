@@ -75,10 +75,7 @@ public final class EventReader {
 
         for (byte[] compressed : data) {
 
-            // Decompress .dat content
             final byte[] decompressed = GZip.decompress(compressed);
-
-            // Generate events from decompressed string data
             final Collection<SnapshotEvent> generatedEvents = getEventsFromString(new String(decompressed, "UTF-8"));
 
             if (generatedEvents != null) {

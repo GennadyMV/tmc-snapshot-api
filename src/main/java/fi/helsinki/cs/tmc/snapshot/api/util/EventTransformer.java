@@ -117,8 +117,6 @@ public final class EventTransformer {
 
         final List<Snapshot> snapshots = toFileSnapshots(events);
         toExerciseSnapshots(snapshots);
-
-        // Get rid of TMC generated snapshots that have no relevant files
         removeEmptySnapshotsFromStart(snapshots);
 
         return snapshots;

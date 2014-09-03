@@ -116,7 +116,6 @@ public final class KeyLevelEventProcessor implements EventProcessor {
         // Parse patches
         final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
 
-        // Current file content from cache
         final String currentContent = fileCache.containsKey(information.getFile()) ? fileCache.get(information.getFile()) : "";
 
         // Apply patches to content
