@@ -240,7 +240,7 @@ public final class KeyLevelEventProcessorTest {
 
         assertEquals(2, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT + PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
     }
 
     @Test
@@ -253,7 +253,7 @@ public final class KeyLevelEventProcessorTest {
         process();
         assertEquals(2, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT + PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
     }
 
     @Test
@@ -281,7 +281,7 @@ public final class KeyLevelEventProcessorTest {
 
         assertEquals(2, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT + PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
     }
 
     @Test
@@ -295,7 +295,7 @@ public final class KeyLevelEventProcessorTest {
 
         assertEquals(2, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT + PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
     }
 
     @Test
