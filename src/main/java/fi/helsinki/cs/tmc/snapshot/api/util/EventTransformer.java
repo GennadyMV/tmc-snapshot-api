@@ -48,13 +48,6 @@ public final class EventTransformer {
 
         for (SnapshotEvent event : events) {
 
-            // Only process complete snapshots of type file_delete
-            /*if (event.isCodeSnapshot()) {
-                if (event.getMetadata() != null && !event.getMetadata().contains("file_delete")) {
-                    continue;
-                }
-            }*/
-
             final Map<String, SnapshotFile> files = new HashMap<>();
 
             for (Map.Entry<String, String> entry : event.getFiles().entrySet()) {
