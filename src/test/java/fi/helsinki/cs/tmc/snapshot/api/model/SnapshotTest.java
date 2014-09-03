@@ -31,7 +31,6 @@ public final class SnapshotTest {
     public void shouldAddFileToSnapshot() {
 
         final Snapshot snapshot = new Snapshot("12", 12L, new HashMap<String, SnapshotFile>(), false);
-
         snapshot.addFile(new SnapshotFile("id", "example", "test"));
 
         final SnapshotFile file = snapshot.getFiles().iterator().next();

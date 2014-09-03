@@ -88,7 +88,6 @@ public final class SnapshotFileControllerTest {
 
         verify(snapshotFileService).findAll(INSTANCE, USER, COURSE, EXERCISE, SNAPSHOT, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotFileService);
-
     }
 
     @Test
