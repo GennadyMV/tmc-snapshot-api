@@ -97,6 +97,11 @@ public final class KeyLevelEventProcessor implements EventProcessor {
         }
     }
 
+    private boolean containsNoPatches(final SnapshotEventInformation information) {
+
+        return information == null || information.getPatches() == null || information.getPatches().isEmpty();
+    }
+
     private void patchFile(final SnapshotEvent event) throws IOException {
 
         final byte[] decodedData = Base64.decodeBase64(event.getData());
@@ -108,8 +113,7 @@ public final class KeyLevelEventProcessor implements EventProcessor {
             throw new IOException("Unreadable data");
         }
 
-        // No patches to apply
-        if (information == null || information.getPatches() == null || information.getPatches().isEmpty()) {
+        if (containsNoPatches(information)) {
             throw new IOException("No patch data available");
         }
 

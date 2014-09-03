@@ -33,6 +33,13 @@ public final class EventReader {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private boolean isInvalid(final SnapshotEvent event) {
+        return event.getHappenedAt() == null ||
+               event.getCourseName() == null ||
+               event.getEventType() == null ||
+               event.getExerciseName() == null;
+    }
+
     private List<SnapshotEvent> getEventsFromString(final String eventsJson) throws UnsupportedEncodingException {
 
         try {
@@ -42,16 +49,7 @@ public final class EventReader {
 
             for (SnapshotEvent event : events) {
 
-                if (event == null) {
-                    continue;
-                }
-
-                // Invalid event
-                if (event.getHappenedAt() == null ||
-                    event.getCourseName() == null ||
-                    event.getEventType() == null ||
-                    event.getExerciseName() == null) {
-
+                if (event == null || isInvalid(event)) {
                     continue;
                 }
 
