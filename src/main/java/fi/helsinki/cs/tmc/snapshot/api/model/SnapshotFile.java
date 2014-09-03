@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class SnapshotFile {
+public final class SnapshotFile implements Comparable<SnapshotFile> {
 
     private final String id;
     private final String path;
@@ -42,5 +42,11 @@ public final class SnapshotFile {
     public String getContent() {
 
         return content;
+    }
+
+    @Override
+    public int compareTo(final SnapshotFile other) {
+
+        return id.compareTo(other.getId());
     }
 }

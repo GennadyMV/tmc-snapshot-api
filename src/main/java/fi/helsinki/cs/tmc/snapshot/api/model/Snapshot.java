@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public final class Snapshot {
 
     private final String id;
     private final Date timestamp;
 
-    private final Map<String, SnapshotFile> idsToFiles = new HashMap<>();
+    private final Map<String, SnapshotFile> idsToFiles = new TreeMap<>();
     private final Map<String, SnapshotFile> pathsToFiles;
 
     @JsonIgnore
