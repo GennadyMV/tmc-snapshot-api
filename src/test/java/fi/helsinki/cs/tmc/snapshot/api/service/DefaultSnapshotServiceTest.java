@@ -78,7 +78,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
 
-        final List<Snapshot> returnedSnapshots = snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE);
+        final List<Snapshot> returnedSnapshots = snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
 
         verify(exerciseService).find(INSTANCE, USERNAME, COURSE, EXERCISE);
         verify(eventTransformer).toSnapshotList(events);
@@ -95,7 +95,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(exercise.getSnapshotEvents())).thenReturn(null);
 
-        snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE);
+        snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
     }
 
     @Test
@@ -113,7 +113,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
 
-        final Snapshot retrieved = snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, "0");
+        final Snapshot retrieved = snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, "0", SnapshotLevel.KEY);
         assertEquals(snapshot, retrieved);
     }
 
@@ -129,7 +129,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(new Exercise(EXERCISE));
         when(eventTransformer.toSnapshotList(any(List.class))).thenReturn(snapshots);
 
-        snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, "0");
+        snapshotService.find(INSTANCE, USERNAME, COURSE, EXERCISE, "0", SnapshotLevel.KEY);
     }
 
     @Test
@@ -158,7 +158,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
 
-        final byte[] bytes = snapshotService.findAllFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE);
+        final byte[] bytes = snapshotService.findAllFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
 
         assertEquals(402, bytes.length);
     }

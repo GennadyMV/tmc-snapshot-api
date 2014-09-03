@@ -33,15 +33,6 @@ public final class DefaultSnapshotService implements SnapshotService {
     public List<Snapshot> findAll(final String instance,
                                   final String userId,
                                   final String courseId,
-                                  final String exerciseId) throws IOException {
-
-        return findAll(instance, userId, courseId, exerciseId, SnapshotLevel.KEY);
-    }
-
-    @Override
-    public List<Snapshot> findAll(final String instance,
-                                  final String userId,
-                                  final String courseId,
                                   final String exerciseId,
                                   final SnapshotLevel level) throws IOException {
 
@@ -64,16 +55,6 @@ public final class DefaultSnapshotService implements SnapshotService {
                          final String userId,
                          final String courseId,
                          final String exerciseId,
-                         final String snapshotId) throws IOException {
-
-        return find(instance, userId, courseId, exerciseId, snapshotId, SnapshotLevel.KEY);
-    }
-
-    @Override
-    public Snapshot find(final String instance,
-                         final String userId,
-                         final String courseId,
-                         final String exerciseId,
                          final String snapshotId,
                          final SnapshotLevel level) throws IOException {
 
@@ -86,15 +67,6 @@ public final class DefaultSnapshotService implements SnapshotService {
         }
 
         throw new NotFoundException();
-    }
-
-    @Override
-    public byte[] findAllFilesAsZip(final String instance,
-                                    final String userId,
-                                    final String courseId,
-                                    final String exerciseId) throws IOException {
-
-        return findAllFilesAsZip(instance, userId, courseId, exerciseId, SnapshotLevel.KEY);
     }
 
     @Override
