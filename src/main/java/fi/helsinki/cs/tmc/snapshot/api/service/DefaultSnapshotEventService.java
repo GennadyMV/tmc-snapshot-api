@@ -83,9 +83,7 @@ public final class DefaultSnapshotEventService implements SnapshotEventService {
         LOG.info("Finding snapshots for {} from instance {}...", username, instance);
 
         final String index = spywareService.fetchIndex(instance, username);
-
         final List<byte[]> content = fetchData(index, instance, username);
-
         final Collection<SnapshotEvent> events = eventReader.readEvents(content);
 
         LOG.info("Found {} events.", events.size());
