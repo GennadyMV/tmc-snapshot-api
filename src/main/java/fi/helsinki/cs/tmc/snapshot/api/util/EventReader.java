@@ -34,6 +34,7 @@ public final class EventReader {
     }
 
     private boolean isInvalid(final SnapshotEvent event) {
+
         return event.getHappenedAt() == null ||
                event.getCourseName() == null ||
                event.getEventType() == null ||

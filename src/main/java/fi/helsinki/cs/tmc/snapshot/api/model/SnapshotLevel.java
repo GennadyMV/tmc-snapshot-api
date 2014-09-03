@@ -4,8 +4,8 @@ public enum SnapshotLevel {
 
     KEY, CODE;
 
-    public static SnapshotLevel fromString(final String string) {
+    public static SnapshotLevel fromString(final String level) {
 
-        return valueOf(string.toUpperCase());
+        return valueOf(level.toUpperCase());
     }
 }
