@@ -77,27 +77,6 @@ public final class EventTransformerTest {
         assertNotNull(snapshots);
     }
 
-    /*
-    @Test
-    public void shouldNotProcessCompleteSnapshotsIfNotTypeFileDelete() {
-
-        final List<SnapshotEvent> events = new ArrayList<>();
-
-        final SnapshotEvent event1 = createEvent("hy", "ex", 50L, 50L, "code_snapshot");
-        event1.setMetadata("file_create");
-
-        final SnapshotEvent event2 = createEvent("hy", "ex", 55L, 55L, "code_snapshot");
-        event2.setMetadata("file_delete");
-
-        events.add(event1);
-        events.add(event2);
-
-        final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
-
-        assertEquals(1, snapshots.size());
-        assertEquals("5555", snapshots.get(0).getId());
-    }*/
-
     @Test
     public void shouldBuildExerciseContinuum() {
 
