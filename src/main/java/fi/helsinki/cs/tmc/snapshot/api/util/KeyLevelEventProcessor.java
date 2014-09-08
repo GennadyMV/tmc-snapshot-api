@@ -118,8 +118,14 @@ public final class KeyLevelEventProcessor implements EventProcessor {
             throw new IOException("No patch data available");
         }
 
+        List<DiffMatchPatch.Patch> patches = null;
+
         // Parse patches
-        final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
+        try {
+            patches = patcher.patch_fromText(information.getPatches());
+        } catch (IllegalArgumentException exception) {
+            throw new IOException(exception.getMessage());
+        }
 
         final String fileKey = information.getFile().startsWith("/") ? information.getFile().substring(1) : information.getFile();
 

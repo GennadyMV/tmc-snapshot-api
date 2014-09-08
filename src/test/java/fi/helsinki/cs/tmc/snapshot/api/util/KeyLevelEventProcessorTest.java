@@ -339,4 +339,28 @@ public final class KeyLevelEventProcessorTest {
         assertEquals(1, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
     }
+
+    @Test
+    public void testCodeSnapshotPatchingWithCorruptedPatch() throws UnsupportedEncodingException {
+
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiMTIzIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0=");
+
+        process();
+
+        verifyEventCount(1);
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+    }
+
+    @Test
+    public void testCodeSnapshotPatchingWithEmptyPatch() throws UnsupportedEncodingException {
+
+        generatePatchForExampleExercise(PATCH);
+        generatePatchForExampleExercise("eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMCwwIEBAXG5cbiIsImZ1bGxfZG9jdW1lbnQiOnRydWV9");
+
+        process();
+
+        verifyEventCount(1);
+        verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
+    }
 }
