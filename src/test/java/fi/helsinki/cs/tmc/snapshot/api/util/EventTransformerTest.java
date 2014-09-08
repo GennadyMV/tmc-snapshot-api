@@ -57,16 +57,16 @@ public final class EventTransformerTest {
         assertEquals(2, snapshots.size());
 
         assertNull(snapshots.get(1).getFileForId("example.java"));
-        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMTEwMQ"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAxMTAx"));
 
         assertNull(snapshots.get(1).getFileForId("test.java"));
-        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAxMTAx"));
+        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAxMTAx"));
 
         assertNull(snapshots.get(1).getFileForId("experiment.java"));
-        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAwMTAw"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAxMTAx"));
 
         assertNull(snapshots.get(1).getFileForId("trial.java"));
-        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAwMTAw"));
+        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMTEwMQ"));
     }
 
     @Test
@@ -101,16 +101,16 @@ public final class EventTransformerTest {
         assertEquals(4, snapshots.get(1).getFiles().size());
 
         assertNull(snapshots.get(1).getFileForId("example.java"));
-        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMjEwMg"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAyMTAy"));
 
         assertNull(snapshots.get(1).getFileForId("test.java"));
-        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAyMTAy"));
+        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAyMTAy"));
 
         assertNull(snapshots.get(1).getFileForId("experiment.java"));
-        assertNotNull(snapshots.get(1).getFileForId("dGVzdC5qYXZhMTAwMTAw"));
+        assertNotNull(snapshots.get(1).getFileForId("ZXhwZXJpbWVudC5qYXZhMTAyMTAy"));
 
         assertNull(snapshots.get(1).getFileForId("trial.java"));
-        assertNotNull(snapshots.get(1).getFileForId("ZXhhbXBsZS5qYXZhMTAwMTAw"));
+        assertNotNull(snapshots.get(1).getFileForId("dHJpYWwuamF2YTEwMjEwMg"));
     }
 
     @Test

@@ -121,8 +121,11 @@ public final class KeyLevelEventProcessor implements EventProcessor {
         // Parse patches
         final List<DiffMatchPatch.Patch> patches = patcher.patch_fromText(information.getPatches());
 
-        final String currentContent = !information.isFullDocument() && fileCache.containsKey(information.getFile()) ?
-                                      fileCache.get(information.getFile()) : "";
+        final String fileKey = information.getFile().substring(1);
+
+
+        final String currentContent = !information.isFullDocument() && fileCache.containsKey(fileKey) ?
+                                      fileCache.get(fileKey) : "";
 
         // Apply patches to content
         final String updatedContent = (String) patcher.patch_apply(new LinkedList(patches), currentContent)[0];
@@ -131,10 +134,10 @@ public final class KeyLevelEventProcessor implements EventProcessor {
             throw new IOException("Corrupted patch data.");
         }
 
-        fileCache.put(information.getFile(), updatedContent);
+        fileCache.put(fileKey, updatedContent);
 
         // Save content to specific event
-        event.getFiles().put(information.getFile(), updatedContent);
+        event.getFiles().put(fileKey, updatedContent);
     }
 
     private void processSnapshotEvent(final SnapshotEvent event) throws IOException {
