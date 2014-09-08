@@ -14,6 +14,11 @@ public final class Instance implements Comparable<Instance>  {
         return id;
     }
 
+    public String getName() {
+
+        return id;
+    }
+
     @Override
     public int compareTo(final Instance other) {
 

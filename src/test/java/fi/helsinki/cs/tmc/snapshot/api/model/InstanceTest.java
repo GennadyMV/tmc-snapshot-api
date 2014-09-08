@@ -24,6 +24,12 @@ public final class InstanceTest {
     }
 
     @Test
+    public void nameEqualsId() {
+
+        assertEquals(ID, instance.getName());
+    }
+
+    @Test
     public void comparatorUsesIdsToCompare() {
 
         final Instance i1 = new Instance("1");
