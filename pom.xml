@@ -158,6 +158,7 @@
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/CourseService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/EventProcessorService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ExerciseService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/InstanceService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ParticipantService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotEventService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/SnapshotFileService.class</exclude>
