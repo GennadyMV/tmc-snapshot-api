@@ -92,7 +92,14 @@ public final class EventTransformer {
 
                 for (SnapshotFile file : previous.getFiles()) {
                     if (current.getFileForPath(file.getPath()) == null) {
-                        current.addFile(file);
+
+                        // Create new file and ensure it has unique ID, because
+                        // files with same ID are discarded in front-end
+                        final byte[] byteId = (file.getPath() + current.getId()).getBytes();
+                        final String id = Base64.encodeBase64URLSafeString(byteId);
+
+                        final SnapshotFile newFile = new SnapshotFile(id, file.getPath(), file.getContent());
+                        current.addFile(newFile);
                     }
                 }
             }
