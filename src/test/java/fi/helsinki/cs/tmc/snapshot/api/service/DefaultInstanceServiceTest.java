@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class DefaultInstanceServiceTest {
+public final class DefaultInstanceServiceTest {
 
     @Autowired
     private InstanceService instanceService;
