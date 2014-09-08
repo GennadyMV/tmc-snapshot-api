@@ -93,8 +93,7 @@ public final class EventTransformer {
                 for (SnapshotFile file : previous.getFiles()) {
                     if (current.getFileForPath(file.getPath()) == null) {
 
-                        // Create new file and ensure it has unique ID, because
-                        // files with same ID are discarded in front-end
+                        // Create a new file and ensure it has an unique ID
                         final byte[] byteId = (file.getPath() + current.getId()).getBytes();
                         final String id = Base64.encodeBase64URLSafeString(byteId);
 
