@@ -30,13 +30,13 @@ public final class DefaultSnapshotService implements SnapshotService {
     private EventTransformer eventTransformer;
 
     @Override
-    public List<Snapshot> findAll(final String instance,
-                                  final String userId,
+    public List<Snapshot> findAll(final String instanceId,
+                                  final String participantId,
                                   final String courseId,
                                   final String exerciseId,
                                   final SnapshotLevel level) throws IOException {
 
-        final Collection<SnapshotEvent> events = exerciseService.find(instance, userId, courseId, exerciseId)
+        final Collection<SnapshotEvent> events = exerciseService.find(instanceId, participantId, courseId, exerciseId)
                                                                 .getSnapshotEvents();
 
         eventProcessorService.processEvents(events, level);
@@ -51,14 +51,14 @@ public final class DefaultSnapshotService implements SnapshotService {
     }
 
     @Override
-    public Snapshot find(final String instance,
-                         final String userId,
+    public Snapshot find(final String instanceId,
+                         final String participantId,
                          final String courseId,
                          final String exerciseId,
                          final String snapshotId,
                          final SnapshotLevel level) throws IOException {
 
-        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId, level);
+        final List<Snapshot> snapshots = findAll(instanceId, participantId, courseId, exerciseId, level);
 
         for (Snapshot snapshot : snapshots) {
             if (snapshot.getId().equals(snapshotId)) {
@@ -70,13 +70,13 @@ public final class DefaultSnapshotService implements SnapshotService {
     }
 
     @Override
-    public byte[] findAllFilesAsZip(final String instance,
-                                    final String userId,
+    public byte[] findAllFilesAsZip(final String instanceId,
+                                    final String participantId,
                                     final String courseId,
                                     final String exerciseId,
                                     final SnapshotLevel level) throws IOException {
 
-        final List<Snapshot> snapshots = findAll(instance, userId, courseId, exerciseId, level);
+        final List<Snapshot> snapshots = findAll(instanceId, participantId, courseId, exerciseId, level);
 
         final ByteArrayOutputStream files = new ByteArrayOutputStream();
         final ZipOutputStream zip = new ZipOutputStream(files);

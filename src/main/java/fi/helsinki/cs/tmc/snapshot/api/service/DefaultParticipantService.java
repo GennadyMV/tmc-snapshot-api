@@ -39,20 +39,20 @@ public final class DefaultParticipantService implements ParticipantService {
     }
 
     @Override
-    public List<Participant> findAll(final String instance) throws IOException {
+    public List<Participant> findAll(final String instanceId) throws IOException {
 
-        final List<Participant> sortedParticipants = new ArrayList<>(parseParticipants(spywareService.fetchParticipants(instance)));
+        final List<Participant> sortedParticipants = new ArrayList<>(parseParticipants(spywareService.fetchParticipants(instanceId)));
         Collections.sort(sortedParticipants);
 
         return sortedParticipants;
     }
 
     @Override
-    public Participant find(final String instance, final String id) throws IOException {
+    public Participant find(final String instanceId, final String participantId) throws IOException {
 
-        final String username = new String(Base64.decodeBase64(id));
+        final String username = new String(Base64.decodeBase64(participantId));
         final Participant participant = new Participant(username);
-        final Collection<SnapshotEvent> events = snapshotEventService.findAll(instance, username);
+        final Collection<SnapshotEvent> events = snapshotEventService.findAll(instanceId, username);
 
         snapshotOrganiser.organise(participant, events);
 

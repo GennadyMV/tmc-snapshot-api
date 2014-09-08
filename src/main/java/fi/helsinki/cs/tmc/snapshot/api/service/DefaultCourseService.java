@@ -18,16 +18,16 @@ public final class DefaultCourseService implements CourseService {
     private ParticipantService participantService;
 
     @Override
-    public Collection<Course> findAll(final String instance, final String id) throws IOException {
+    public Collection<Course> findAll(final String instanceId, final String id) throws IOException {
 
-        return participantService.find(instance, id).getCourses();
+        return participantService.find(instanceId, id).getCourses();
     }
 
     @Override
-    public Course find(final String instance, final String userId, final String courseId) throws IOException {
+    public Course find(final String instanceId, final String participantId, final String courseId) throws IOException {
 
         final String courseName = new String(Base64.decodeBase64(courseId));
-        final Course course = participantService.find(instance, userId)
+        final Course course = participantService.find(instanceId, participantId)
                                                 .getCourse(courseName);
 
         if (course == null) {

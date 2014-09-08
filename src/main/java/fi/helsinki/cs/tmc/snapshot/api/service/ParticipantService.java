@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface ParticipantService {
 
-    Collection<Participant> findAll(String instance) throws IOException;
-    Participant find(String instance, String id) throws IOException;
+    Collection<Participant> findAll(String instanceId) throws IOException;
+    Participant find(String instanceId, String id) throws IOException;
 
 }

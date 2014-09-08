@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants/{userId}/courses", produces = "application/json")
+@RequestMapping(value = "{instanceId}/participants/{participantId}/courses", produces = "application/json")
 public final class CourseController {
 
     @Autowired
     private CourseService courseService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Course> list(@PathVariable final String instance, @PathVariable final String userId) throws IOException {
+    public Collection<Course> list(@PathVariable final String instanceId, @PathVariable final String participantId) throws IOException {
 
-        return courseService.findAll(instance, userId);
+        return courseService.findAll(instanceId, participantId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{courseId}")
-    public Course read(@PathVariable final String instance,
-                       @PathVariable final String userId,
+    public Course read(@PathVariable final String instanceId,
+                       @PathVariable final String participantId,
                        @PathVariable final String courseId) throws IOException {
 
-        return courseService.find(instance, userId, courseId);
+        return courseService.find(instanceId, participantId, courseId);
     }
 }

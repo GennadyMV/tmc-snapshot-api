@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface CourseService {
 
-    Collection<Course> findAll(String instance, String id) throws IOException;
-    Course find(String instance, String userId, String courseId) throws IOException;
+    Collection<Course> findAll(String instanceId, String id) throws IOException;
+    Course find(String instanceId, String participantId, String courseId) throws IOException;
 
 }

@@ -18,14 +18,14 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
     private SnapshotService snapshotService;
 
     @Override
-    public Collection<SnapshotFile> findAll(final String instance,
-                                            final String userId,
+    public Collection<SnapshotFile> findAll(final String instanceId,
+                                            final String participantId,
                                             final String courseId,
                                             final String exerciseId,
                                             final String snapshotId,
                                             final SnapshotLevel level) throws IOException {
 
-        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level)
+        final Collection<SnapshotFile> snapshotFiles = snapshotService.find(instanceId, participantId, courseId, exerciseId, snapshotId, level)
                                                                       .getFiles();
 
         if (snapshotFiles == null) {
@@ -36,15 +36,15 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
     }
 
     @Override
-    public SnapshotFile find(final String instance,
-                             final String userId,
+    public SnapshotFile find(final String instanceId,
+                             final String participantId,
                              final String courseId,
                              final String exerciseId,
                              final String snapshotId,
                              final String fileId,
                              final SnapshotLevel level) throws IOException {
 
-        final Snapshot snapshot = snapshotService.find(instance, userId, courseId, exerciseId, snapshotId, level);
+        final Snapshot snapshot = snapshotService.find(instanceId, participantId, courseId, exerciseId, snapshotId, level);
 
         final SnapshotFile file = snapshot.getFileForId(fileId);
 
@@ -56,15 +56,15 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
     }
 
     @Override
-    public String findContent(final String instance,
-                              final String userId,
+    public String findContent(final String instanceId,
+                              final String participantId,
                               final String courseId,
                               final String exerciseId,
                               final String snapshotId,
                               final String fileId,
                               final SnapshotLevel level) throws IOException {
 
-        final SnapshotFile file = find(instance, userId, courseId, exerciseId, snapshotId, fileId, level);
+        final SnapshotFile file = find(instanceId, participantId, courseId, exerciseId, snapshotId, fileId, level);
 
         final String content = file.getContent();
 

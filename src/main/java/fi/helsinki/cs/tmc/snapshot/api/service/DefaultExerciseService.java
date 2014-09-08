@@ -18,22 +18,22 @@ public final class DefaultExerciseService implements ExerciseService {
     private CourseService courseService;
 
     @Override
-    public Collection<Exercise> findAll(final String instance,
-                                        final String userId,
+    public Collection<Exercise> findAll(final String instanceId,
+                                        final String participantId,
                                         final String courseId) throws IOException {
 
-        return courseService.find(instance, userId, courseId)
+        return courseService.find(instanceId, participantId, courseId)
                             .getExercises();
     }
 
     @Override
-    public Exercise find(final String instance,
-                         final String userId,
+    public Exercise find(final String instanceId,
+                         final String participantId,
                          final String courseId,
                          final String exerciseId) throws IOException {
 
         final String exerciseName = new String(Base64.decodeBase64(exerciseId));
-        final Exercise exercise = courseService.find(instance, userId, courseId)
+        final Exercise exercise = courseService.find(instanceId, participantId, courseId)
                                                .getExercise(exerciseName);
 
         if (exercise == null) {

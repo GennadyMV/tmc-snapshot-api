@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instance}/participants/{userId}/courses/{courseId}/exercises", produces = "application/json")
+@RequestMapping(value = "{instanceId}/participants/{participantId}/courses/{courseId}/exercises", produces = "application/json")
 public final class ExerciseController {
 
     @Autowired
     private ExerciseService exerciseService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Exercise> list(@PathVariable final String instance,
-                                     @PathVariable final String userId,
+    public Collection<Exercise> list(@PathVariable final String instanceId,
+                                     @PathVariable final String participantId,
                                      @PathVariable final String courseId) throws IOException {
 
-        return exerciseService.findAll(instance, userId, courseId);
+        return exerciseService.findAll(instanceId, participantId, courseId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{exerciseId}")
-    public Exercise read(@PathVariable final String instance,
-                         @PathVariable final String userId,
+    public Exercise read(@PathVariable final String instanceId,
+                         @PathVariable final String participantId,
                          @PathVariable final String courseId,
                          @PathVariable final String exerciseId) throws IOException {
 
-        return exerciseService.find(instance, userId, courseId, exerciseId);
+        return exerciseService.find(instanceId, participantId, courseId, exerciseId);
     }
 }
