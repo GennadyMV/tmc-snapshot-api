@@ -3,10 +3,12 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Instance;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,37 +17,31 @@ import org.springframework.stereotype.Service;
 public final class DefaultInstanceService implements InstanceService {
 
     @Value("#{'${spyware.instances}'.split(', ')}")
-    private List<String> spywareInstances;
+    private List<String> instanceIds;
 
-    private Collection<Instance> getInstances() {
+    private final Map<String, Instance> instances = new TreeMap<>();
 
-        final List<Instance> instances = new ArrayList<>();
+    @PostConstruct
+    private void initialise() {
 
-        for (String instance : spywareInstances) {
-            instances.add(new Instance(instance));
+        for (String instanceId : instanceIds) {
+            instances.put(instanceId, new Instance(instanceId));
         }
-
-        Collections.sort(instances);
-
-        return instances;
     }
 
     @Override
     public Collection<Instance> findAll() {
 
-        return getInstances();
+        return instances.values();
     }
 
     @Override
     public Instance find(final String id) {
 
-        for (Instance instance : getInstances()) {
-
-            if (instance.getId().equals(id)) {
-                return instance;
-            }
+        if (!instances.containsKey(id)) {
+            throw new NotFoundException();
         }
 
-        throw new NotFoundException();
+        return instances.get(id);
     }
 }
