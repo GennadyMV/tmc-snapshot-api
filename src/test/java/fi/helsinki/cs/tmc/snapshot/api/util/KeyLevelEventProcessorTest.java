@@ -272,7 +272,6 @@ public final class KeyLevelEventProcessorTest {
 
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
         verifyEventFileContentForExampleFile(2, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        s\n    }\n\n}");
-
     }
 
     @Test
