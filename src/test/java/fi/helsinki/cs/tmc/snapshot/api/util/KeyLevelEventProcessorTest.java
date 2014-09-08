@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 
 public final class KeyLevelEventProcessorTest {
 
+    private static final String ZIPFILENAME = "src/Nimi.java";
     private static final String FILENAME = "/src/Nimi.java";
     private static final String PATCH = "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSwyNTEgQEBcbitwdWJsaWMgY2xhc3MgTmltaSAlN0IlMEEgICAgJTBBICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZyU1QiU1RCBhcmdzKSAlN0IlMEEgICAgICAgIC8vIEtpcmpvaXRhIG9oamVsbWFzaSB0JUMzJUE0aCVDMyVBNG4gYWxsZSUwQSAgICAgICUwQSAgICAgICAgLy8gTWlrJUMzJUE0bGkgZXQgdmllbCVDMyVBNCBvbGUgdmFzdGFubnV0IHZpZWwlQzMlQTQga3lzZWx5eW4sIHRlZSBzZSBIRVRJJTBBICAgICAgICAvLyBvc29pdHRlZXNzYTogaHR0cDovL2xhYXR1LmphbW8uZmkvICUwQSAgICAgICAgJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0\\u003d";
     private static final String PATCHFILECONTENT = "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}";
@@ -77,6 +78,11 @@ public final class KeyLevelEventProcessorTest {
         verifyEventFileContent(index, FILENAME, content);
     }
 
+    private void verifyEventZIPFileContentForExampleFile(final int index, final String content) {
+
+        verifyEventFileContent(index, ZIPFILENAME, content);
+    }
+
     private void verifyEventFileContent(final int index, final String filename, final String content) {
 
         assertEquals(content, events.get(index).getFiles().get(filename));
@@ -85,6 +91,11 @@ public final class KeyLevelEventProcessorTest {
     private void verifyEventFilesCount(final int index, final int fileCount) {
 
         assertEquals(fileCount, events.get(index).getFiles().size());
+    }
+
+    private void verifyEventCount(final int count) {
+
+        assertEquals(count, events.size());
     }
 
     private void process() throws UnsupportedEncodingException {
@@ -306,8 +317,10 @@ public final class KeyLevelEventProcessorTest {
 
         process();
 
+        verifyEventCount(2);
+
         verifyEventFileContentForExampleFile(0, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        \n    }\n\n}");
-        verifyEventFileContentForExampleFile(1, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}");
+        verifyEventZIPFileContentForExampleFile(1, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        System.out.println(\"\");\n    }\n\n}");
     }
 
     @Test

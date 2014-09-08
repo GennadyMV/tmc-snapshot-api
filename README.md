@@ -281,7 +281,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710010431,
         "files": [
             {
-                "path": "/src/Main.java",
+                "path": "src/Main.java",
                 "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDEwNDMxMA",
                 "name": "Main.java"
             }
@@ -292,7 +292,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710010454,
         "files": [
             {
-                "path": "/src/Main.java",
+                "path": "src/Main.java",
                 "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDEwNDU0MA",
                 "name": "Main.java"
             }
@@ -303,12 +303,12 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
         "timestamp": 1406710056200,
         "files": [
             {
-                "path": "/src/Main.java",
+                "path": "src/Main.java",
                 "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
                 "name": "Main.java"
             },
             {
-                "path": "/src/testi/TestiLuokka.java",
+                "path": "src/testi/TestiLuokka.java",
                 "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
                 "name": "TestiLuokka.java"
             }
@@ -358,12 +358,12 @@ Returns: A single snapshot for a participant, course and exercise with the provi
     "timestamp": 1406710056200,
     "files": [
         {
-            "path": "/src/Main.java",
+            "path": "src/Main.java",
             "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
             "name": "Main.java"
         },
         {
-            "path": "/src/testi/TestiLuokka.java",
+            "path": "src/testi/TestiLuokka.java",
             "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
             "name": "TestiLuokka.java"
         }
@@ -388,12 +388,12 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 ```
 [
     {
-        "path": "/src/Main.java",
+        "path": "src/Main.java",
         "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
         "name": "Main.java"
     },
     {
-        "path": "/src/testi/TestiLuokka.java",
+        "path": "src/testi/TestiLuokka.java",
         "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
         "name": "TestiLuokka.java"
     }
@@ -416,7 +416,7 @@ Returns: A single file for a participant, course, exercise, snapshot and file wi
 
 ```
 {
-    "path": "/src/Main.java",
+    "path": "src/Main.java",
     "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
     "name": "Main.java"
 }
