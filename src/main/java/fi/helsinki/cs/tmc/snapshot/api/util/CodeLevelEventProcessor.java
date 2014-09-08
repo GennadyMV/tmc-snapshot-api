@@ -27,7 +27,7 @@ public final class CodeLevelEventProcessor implements EventProcessor {
         try {
             data = Zip.decompress(decodedData);
         } catch (IOException exception) {
-            return;
+            throw new IOException("Zip corrupted");
         }
 
         boolean hasChanges = false;
