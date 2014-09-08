@@ -121,7 +121,7 @@ Returns: A list of participants with the provided instance ID
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/
+URL: /{instanceId}/participants/{participantId}/
 Returns: A single participant with the provided IDs
 ```
 
@@ -157,7 +157,7 @@ Returns: A single participant with the provided IDs
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/
+URL: /{instanceId}/participants/{participantId}/courses/
 Returns: A list of courses for a participant with the provided IDs
 ```
 
@@ -189,7 +189,7 @@ Returns: A list of courses for a participant with the provided IDs
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/
 Returns: A single course for a participant with the provided IDs
 ```
 
@@ -219,7 +219,7 @@ Returns: A single course for a participant with the provided IDs
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/
 Returns: A list of exercises for a participant and course with the provided IDs
 ```
 
@@ -245,7 +245,7 @@ Returns: A list of exercises for a participant and course with the provided IDs
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/
 Returns: A single exercise for a participant and course with the provided IDs
 ```
 
@@ -265,7 +265,7 @@ Returns: A single exercise for a participant and course with the provided IDs
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: A list of snapshots for a participant, course and exercise with the provided IDs
 ```
@@ -322,7 +322,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ```
 Method: GET
 Content-Type: application/zip
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/files.zip
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/files.zip
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided IDs
 ```
@@ -343,7 +343,7 @@ Returns: The contents for each file in the snapshot as a ZIP for a participant, 
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: A single snapshot for a participant, course and exercise with the provided IDs
 ```
@@ -376,7 +376,7 @@ Returns: A single snapshot for a participant, course and exercise with the provi
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/files/
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: A list of files for a participant, course, exercise and snapshot with the provided IDs
 ```
@@ -405,7 +405,7 @@ Returns: A list of files for a participant, course, exercise and snapshot with t
 ```
 Method: GET
 Content-Type: application/json
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/files/{fileId}/
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: A single file for a participant, course, exercise, snapshot and file with the provided IDs
 ```
@@ -427,7 +427,7 @@ Returns: A single file for a participant, course, exercise, snapshot and file wi
 ```
 Method: GET
 Content-Type: text/plain
-URL: /{instanceId}/participants/{participantID}/courses/{courseID}/exercises/{exerciseID}/snapshots/{snapshotID}/files/{fileID}/content/
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/{snapshotId}/files/{fileId}/content/
 Parameters: level [key or code], defaults to key when no level is defined
 Returns: The content for a file for a participant, course, exercise, snapshot and file with the provided IDs
 ```
