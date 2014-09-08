@@ -48,18 +48,19 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
         for (String filename : data.keySet()) {
 
-            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
+            if (filename.endsWith("/")) {
+                continue;
+            }
+
+            final String fileKey = filename.substring(filename.indexOf("/") + 1);
             final String fileContent = new String(data.get(filename), "UTF-8");
 
-            if (!fileKey.endsWith("/")) {
-
-                if (!fileContent.equals(fileCache.get(fileKey))) {
-                    hasChanged = true;
-                    fileCache.put(fileKey, fileContent);
-                }
-
-                event.getFiles().put(fileKey, fileContent);
+            if (!fileContent.equals(fileCache.get(fileKey))) {
+                hasChanged = true;
+                fileCache.put(fileKey, fileContent);
             }
+
+            event.getFiles().put(fileKey, fileContent);
         }
 
         return hasChanged;

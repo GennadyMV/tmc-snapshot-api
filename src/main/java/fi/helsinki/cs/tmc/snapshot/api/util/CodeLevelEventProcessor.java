@@ -34,13 +34,13 @@ public final class CodeLevelEventProcessor implements EventProcessor {
 
         for (String filename : data.keySet()) {
 
-            final String fileKey = filename.replaceAll(event.getExerciseName(), "");
-
-            if (fileKey.endsWith("/")) {
+            if (filename.endsWith("/")) {
                 continue;
             }
 
+            final String fileKey = filename.substring(filename.indexOf("/") + 1);
             final String fileContent = new String(data.get(filename), "UTF-8");
+
             event.getFiles().put(fileKey, fileContent);
 
             if (hasChanges) {
