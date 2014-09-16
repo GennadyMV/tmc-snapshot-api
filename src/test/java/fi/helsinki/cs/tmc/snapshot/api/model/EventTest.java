@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -14,8 +15,8 @@ public final class EventTest {
 
     public EventTest() {
 
-        eventA = new Event("id", "eventType", 0L, new HashMap<String, Object>());
-        eventB = new Event("id2", "eventType2", 1L, null);
+        eventA = new Event("id", "eventType", new Date(0L), new HashMap<String, Object>());
+        eventB = new Event("idB", "eventTypeB", new Date(1L), null);
     }
 
     @Test
@@ -33,7 +34,7 @@ public final class EventTest {
     @Test
     public void testHappendAt() {
 
-        assertEquals(0L, eventA.getTimestamp());
+        assertEquals(new Date(0L), eventA.getTimestamp());
     }
 
     @Test
@@ -43,25 +44,25 @@ public final class EventTest {
     }
 
     @Test
-    public void testGetIdForEvent2() {
+    public void testGetIdForEventB() {
 
-        assertEquals("id2", eventB.getId());
+        assertEquals("idB", eventB.getId());
     }
 
     @Test
-    public void testEventTypeForEvent2() {
+    public void testEventTypeForEventB() {
 
-        assertEquals("eventType2", eventB.getEventType());
+        assertEquals("eventTypeB", eventB.getEventType());
     }
 
     @Test
-    public void testHappendAtForEvent2() {
+    public void testHappendAtForEventB() {
 
-        assertEquals(1L, eventB.getTimestamp());
+        assertEquals(new Date(1L), eventB.getTimestamp());
     }
 
     @Test
-    public void testMetaDataForEvent2() {
+    public void testMetaDataForEventB() {
 
         assertNull(eventB.getMetadata());
     }

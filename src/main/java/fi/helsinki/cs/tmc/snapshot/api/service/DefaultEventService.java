@@ -9,6 +9,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,32 +28,32 @@ public final class DefaultEventService implements EventService {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private Map<String, Object> readMetadata(final SnapshotEvent snapshotEvent) {
+    private Map<String, Object> readMetadata(final SnapshotEvent event) {
 
-        if (snapshotEvent.getMetadata() == null) {
+        if (event.getMetadata() == null) {
             return null;
         }
 
         try {
-            return mapper.readValue(snapshotEvent.getMetadata(), Map.class);
+            return mapper.readValue(event.getMetadata(), Map.class);
         } catch (IOException exception) {
-            LOG.warn("Invalid metadata {}.", snapshotEvent.getMetadata());
+            LOG.warn("Invalid metadata {}.", event.getMetadata());
         }
 
         return null;
     }
 
-    private String generateId(final SnapshotEvent snapshotEvent) {
+    private String generateId(final SnapshotEvent event) {
 
-        return snapshotEvent.getHappenedAt() + "" + snapshotEvent.getMetadata();
+        return event.getHappenedAt() + Long.toString(event.getSystemNanotime());
     }
 
-    private Event snapshotEventToEvent(final SnapshotEvent snapshotEvent) {
+    private Event snapshotEventToEvent(final SnapshotEvent event) {
 
-        return new Event(generateId(snapshotEvent),
-                         snapshotEvent.getEventType(),
-                         snapshotEvent.getHappenedAt(),
-                         readMetadata(snapshotEvent));
+        return new Event(generateId(event),
+                         event.getEventType(),
+                         new Date(event.getHappenedAt()),
+                         readMetadata(event));
     }
 
     @Override
@@ -69,8 +70,8 @@ public final class DefaultEventService implements EventService {
 
         final List<Event> events = new ArrayList<>();
 
-        for (SnapshotEvent snapshotEvent : snapshotEvents) {
-            events.add(snapshotEventToEvent(snapshotEvent));
+        for (SnapshotEvent event : snapshotEvents) {
+            events.add(snapshotEventToEvent(event));
         }
 
         return events;
@@ -83,16 +84,16 @@ public final class DefaultEventService implements EventService {
                       final String exerciseId,
                       final String eventId) throws IOException {
 
-        final Collection<SnapshotEvent> snapshotEvents = exerciseService.find(instanceId,
-                                                                              participantId,
-                                                                              courseId,
-                                                                              exerciseId)
-                                                                        .getSnapshotEvents();
+        final Collection<SnapshotEvent> events = exerciseService.find(instanceId,
+                                                                      participantId,
+                                                                      courseId,
+                                                                      exerciseId)
+                                                                .getSnapshotEvents();
 
-        for (SnapshotEvent snapshotEvent : snapshotEvents) {
+        for (SnapshotEvent event : events) {
 
-            if (generateId(snapshotEvent).equals(eventId)) {
-                return snapshotEventToEvent(snapshotEvent);
+            if (generateId(event).equals(eventId)) {
+                return snapshotEventToEvent(event);
             }
         }
 

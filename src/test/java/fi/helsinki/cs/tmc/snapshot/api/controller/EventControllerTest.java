@@ -6,6 +6,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.Event;
 import fi.helsinki.cs.tmc.snapshot.api.service.EventService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public final class EventControllerTest {
 
             eventData.add(new Event(Integer.toString(i),
                                     Integer.toString(i),
-                                    (long) i,
+                                    new Date(i),
                                     new HashMap<String, Object>()));
         }
 
@@ -97,7 +98,7 @@ public final class EventControllerTest {
         metadata.put("key", "value");
         metadata.put("key2", "value2");
 
-        final Event event = new Event("1", "eventType", 1L, metadata);
+        final Event event = new Event("1", "eventType", new Date(1L), metadata);
 
         when(eventService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(event);
 
@@ -106,7 +107,7 @@ public final class EventControllerTest {
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.id", is("1")))
                .andExpect(jsonPath("$.eventType", is("eventType")))
-               .andExpect(jsonPath("$.happendAt", is(1)))
+               .andExpect(jsonPath("$.timestamp", is(1)))
                .andExpect(jsonPath("$.metadata.key", is("value")))
                .andExpect(jsonPath("$.metadata.key2", is("value2")));
 

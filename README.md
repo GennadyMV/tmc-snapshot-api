@@ -41,7 +41,7 @@ The REST API provides mostly JSON-responses as `application/json`. Files are ret
 
 ### IDs
 
-All IDs in the API are specified as strings. The ID for an instance is its name. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string concatenated from a file path, snapshot timestamp and nanotime.
+All IDs in the API are specified as strings. The ID for an instance is its name. The ID for a participant is a URL-safe Base64-encoded string from a username, which matches to the username specified in TMC. The ID for a course and exercise is a URL-safe Base64-encoded string from a course and exercise name, which also match to their corresponding names in TMC. The ID for a snapshot is a string concatenated from the timestamp and nanotime for the snapshot. The ID for a file is a URL-safe Base64-encoded string concatenated from a file path, snapshot timestamp and nanotime. The ID for an event is a string concatenated from the timestamp and nanotime for the event.
 
 ### Snapshot Level
 
@@ -443,6 +443,34 @@ public class Main {
         System.out.println("Hello, World!")
     }
 }
+```
+
+### 7. Events
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/events/
+Returns: A list of events for a participant, course and exercise with the provided IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/`
+
+```
+[
+    {
+        "path": "src/Main.java",
+        "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
+        "name": "Main.java"
+    },
+    {
+        "path": "src/testi/TestiLuokka.java",
+        "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
+        "name": "TestiLuokka.java"
+    }
+]
 ```
 
 ## Credits
