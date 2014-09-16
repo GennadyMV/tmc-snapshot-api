@@ -63,7 +63,7 @@ public final class DefaultSnapshotEventService implements SnapshotEventService {
         }
 
         LOG.info("Spyware-data fetched.");
-        LOG.info("Splitting events from chunks...");
+        LOG.info("Building chunks...");
 
         final List<byte[]> chunks = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public final class DefaultSnapshotEventService implements SnapshotEventService {
             chunks.add(Arrays.copyOfRange(byteData, range[0], range[0] + range[1]));
         }
 
-        LOG.info("Split {} events.", indexLines.length);
+        LOG.info("Split data to {} chunks.", chunks.size());
 
         return chunks;
     }
