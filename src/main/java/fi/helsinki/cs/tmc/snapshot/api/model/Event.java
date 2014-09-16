@@ -6,14 +6,14 @@ public final class Event {
 
     private final String id;
     private final String eventType;
-    private final long happendAt;
+    private final long timestamp;
     private final Map<String, Object> metadata;
 
-    public Event(final String id, final String eventType, final long happendAt, final Map<String, Object> metadata) {
+    public Event(final String id, final String eventType, final long timestamp, final Map<String, Object> metadata) {
 
         this.id = id;
         this.eventType = eventType;
-        this.happendAt = happendAt;
+        this.timestamp = timestamp;
         this.metadata = metadata;
     }
 
@@ -27,9 +27,9 @@ public final class Event {
         return eventType;
     }
 
-    public long getHappendAt() {
+    public long getTimestamp() {
 
-        return happendAt;
+        return timestamp;
     }
 
     public Map<String, Object> getMetadata() {
