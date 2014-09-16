@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
+import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Event;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 
@@ -29,9 +30,24 @@ public final class DefaultEventService implements EventService {
 
         for (SnapshotEvent snapshotEvent : snapshotEvents) {
             events.add(new Event(snapshotEvent.getHappenedAt() + "" + snapshotEvent.getSystemNanotime(),
-                                 snapshotEvent.getEventType(), snapshotEvent.getMetadata()));
+                    snapshotEvent.getEventType(), snapshotEvent.getMetadata()));
         }
 
         return events;
+    }
+
+    @Override
+    public Event find(final String instanceId, final String participantId, final String courseId,
+            final String exerciseId, final String eventId) throws IOException {
+
+        final List<Event> events = findAll(instanceId, participantId, courseId, exerciseId);
+
+        for (Event event : events) {
+            if (event.getId().equals(eventId)) {
+                return event;
+            }
+        }
+
+        throw new NotFoundException();
     }
 }

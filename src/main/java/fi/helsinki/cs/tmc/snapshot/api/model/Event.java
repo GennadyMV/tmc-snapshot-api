@@ -2,7 +2,6 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 public final class Event {
 
-
     private final String id;
     private final String eventType;
     private final String metadata;
