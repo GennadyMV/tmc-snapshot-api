@@ -456,21 +456,54 @@ Returns: A list of events for a participant, course and exercise with the provid
 
 #### Example Request
 
-`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/14067100562006708388460953/files/`
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/events/`
 
 ```
 [
     {
-        "path": "src/Main.java",
-        "id": "L3NyYy9NYWluLmphdmExNDA2NzEwMDU2MjAwMA",
-        "name": "Main.java"
+        "id": "139526261085413507305253514",
+        "eventType": "text_insert",
+        "timestamp": 1395262610854,
+        "metadata": {}
     },
     {
-        "path": "src/testi/TestiLuokka.java",
-        "id": "L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA",
-        "name": "TestiLuokka.java"
+        "id": "139526257830313474754345700",
+        "eventType": "text_remove",
+        "timestamp": 1395262578303,
+        "metadata": {}
+    },
+    {
+        "id": "139526261650613512957311747",
+        "eventType": "code_snapshot",
+        "timestamp": 1395262616506,
+        "metadata": {
+            "cause": "file_change",
+            "file": "/src/Main.java"
+        }
     }
 ]
+```
+
+### 7. Event
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/events/{eventId}/
+Returns: A single event for a participant, course and exercise with the provided IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/events/139526261085413507305253514/`
+
+```
+{
+    "id": "139526261085413507305253514",
+    "eventType": "text_insert",
+    "timestamp": 1395262610854,
+    "metadata": {}
+}
 ```
 
 ## Credits
