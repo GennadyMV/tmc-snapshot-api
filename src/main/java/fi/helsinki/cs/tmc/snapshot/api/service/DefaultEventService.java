@@ -28,36 +28,45 @@ public final class DefaultEventService implements EventService {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private Event snapshotEventToEvent(final SnapshotEvent snapshotEvent) {
-
-        final String id = snapshotEvent.getHappenedAt() + "" + snapshotEvent.getSystemNanotime();
+    private Map<String, Object> readMetadata(final SnapshotEvent snapshotEvent) {
 
         if (snapshotEvent.getMetadata() == null) {
-            return new Event(id, snapshotEvent.getEventType(), null);
+            return null;
         }
-
-        Map<String, Object> metadata = null;
 
         try {
-            metadata = mapper.readValue(snapshotEvent.getMetadata(), Map.class);
+            return mapper.readValue(snapshotEvent.getMetadata(), Map.class);
         } catch (IOException ex) {
-            LOG.warn("Invalid metadata for event {}. Metadata: {}", id, snapshotEvent.getMetadata());
+            LOG.warn("Invalid metadata {}", snapshotEvent.getMetadata());
         }
 
-        return new Event(id, snapshotEvent.getEventType(), metadata);
+        return null;
+    }
+
+    private String generateId(final SnapshotEvent snapshotEvent) {
+
+        return snapshotEvent.getHappenedAt() + "" + snapshotEvent.getMetadata();
+    }
+
+    private Event snapshotEventToEvent(final SnapshotEvent snapshotEvent) {
+
+        return new Event(generateId(snapshotEvent),
+                snapshotEvent.getEventType(),
+                snapshotEvent.getHappenedAt(),
+                readMetadata(snapshotEvent));
     }
 
     @Override
     public List<Event> findAll(final String instanceId,
-                               final String participantId,
-                               final String courseId,
-                               final String exerciseId) throws IOException {
+            final String participantId,
+            final String courseId,
+            final String exerciseId) throws IOException {
 
         final Collection<SnapshotEvent> snapshotEvents = exerciseService.find(instanceId,
-                                                                              participantId,
-                                                                              courseId,
-                                                                              exerciseId)
-                                                                        .getSnapshotEvents();
+                participantId,
+                courseId,
+                exerciseId)
+                .getSnapshotEvents();
 
         final List<Event> events = new ArrayList<>();
 
@@ -75,12 +84,15 @@ public final class DefaultEventService implements EventService {
                       final String exerciseId,
                       final String eventId) throws IOException {
 
-        final List<Event> events = findAll(instanceId, participantId, courseId, exerciseId);
+        final Collection<SnapshotEvent> snapshotEvents = exerciseService.find(instanceId,
+                participantId,
+                courseId,
+                exerciseId)
+                .getSnapshotEvents();
 
-        for (Event event : events) {
-
-            if (event.getId().equals(eventId)) {
-                return event;
+        for (SnapshotEvent snapshotEvent : snapshotEvents) {
+            if (generateId(snapshotEvent).equals(eventId)) {
+                return snapshotEventToEvent(snapshotEvent);
             }
         }
 
