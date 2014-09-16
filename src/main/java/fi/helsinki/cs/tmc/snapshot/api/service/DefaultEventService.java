@@ -19,30 +19,40 @@ public final class DefaultEventService implements EventService {
     private ExerciseService exerciseService;
 
     @Override
-    public List<Event> findAll(final String instanceId, final String participantId, final String courseId,
-            final String exerciseId) throws IOException {
+    public List<Event> findAll(final String instanceId,
+                               final String participantId,
+                               final String courseId,
+                               final String exerciseId) throws IOException {
 
-        final Collection<SnapshotEvent> snapshotEvents = exerciseService.find(instanceId, participantId, courseId,
-                exerciseId)
-                .getSnapshotEvents();
+        final Collection<SnapshotEvent> snapshotEvents = exerciseService.find(instanceId,
+                                                                              participantId,
+                                                                              courseId,
+                                                                              exerciseId)
+                                                                        .getSnapshotEvents();
 
         final List<Event> events = new ArrayList<>();
 
         for (SnapshotEvent snapshotEvent : snapshotEvents) {
+
             events.add(new Event(snapshotEvent.getHappenedAt() + "" + snapshotEvent.getSystemNanotime(),
-                    snapshotEvent.getEventType(), snapshotEvent.getMetadata()));
+                                 snapshotEvent.getEventType(),
+                                 snapshotEvent.getMetadata()));
         }
 
         return events;
     }
 
     @Override
-    public Event find(final String instanceId, final String participantId, final String courseId,
-            final String exerciseId, final String eventId) throws IOException {
+    public Event find(final String instanceId,
+                      final String participantId,
+                      final String courseId,
+                      final String exerciseId,
+                      final String eventId) throws IOException {
 
         final List<Event> events = findAll(instanceId, participantId, courseId, exerciseId);
 
         for (Event event : events) {
+
             if (event.getId().equals(eventId)) {
                 return event;
             }
