@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/events",
                 produces = "application/json")
-public final class EventsController {
+public final class EventController {
 
     @Autowired
     private EventService eventService;
