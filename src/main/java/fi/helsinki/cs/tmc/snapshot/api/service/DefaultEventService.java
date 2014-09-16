@@ -9,6 +9,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,17 +31,14 @@ public final class DefaultEventService implements EventService {
 
     private Map<String, Object> readMetadata(final SnapshotEvent event) {
 
-        if (event.getMetadata() == null) {
-            return null;
+        if (event.getMetadata() != null) {
+            try {
+                return mapper.readValue(event.getMetadata(), Map.class);
+            } catch (IOException exception) {
+                LOG.warn("Invalid metadata {}.", event.getMetadata());
+            }
         }
-
-        try {
-            return mapper.readValue(event.getMetadata(), Map.class);
-        } catch (IOException exception) {
-            LOG.warn("Invalid metadata {}.", event.getMetadata());
-        }
-
-        return null;
+        return Collections.EMPTY_MAP;
     }
 
     private String generateId(final SnapshotEvent event) {
