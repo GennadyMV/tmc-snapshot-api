@@ -72,6 +72,7 @@ public final class EventControllerTest {
         final List<Event> eventData = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
+
             eventData.add(new Event(Integer.toString(i),
                                     Integer.toString(i),
                                     (long) i,
@@ -81,9 +82,9 @@ public final class EventControllerTest {
         when(eventService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(eventData);
 
         mockMvc.perform(get(EVENT_BASE_URL))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(5)));
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", hasSize(5)));
 
         verify(eventService).findAll(INSTANCE, USER, COURSE, EXERCISE);
         verifyNoMoreInteractions(eventService);
@@ -95,18 +96,19 @@ public final class EventControllerTest {
         final Map<String, Object> metadata = new HashMap<>();
         metadata.put("key", "value");
         metadata.put("key2", "value2");
+
         final Event event = new Event("1", "eventType", 1L, metadata);
 
         when(eventService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenReturn(event);
 
         mockMvc.perform(get(EVENT_BASE_URL + "/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is("1")))
-                .andExpect(jsonPath("$.eventType", is("eventType")))
-                .andExpect(jsonPath("$.happendAt", is(1)))
-                .andExpect(jsonPath("$.metadata.key", is("value")))
-                .andExpect(jsonPath("$.metadata.key2", is("value2")));
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id", is("1")))
+               .andExpect(jsonPath("$.eventType", is("eventType")))
+               .andExpect(jsonPath("$.happendAt", is(1)))
+               .andExpect(jsonPath("$.metadata.key", is("value")))
+               .andExpect(jsonPath("$.metadata.key2", is("value2")));
 
         verify(eventService).find(INSTANCE, USER, COURSE, EXERCISE, "1");
         verifyNoMoreInteractions(eventService);
@@ -115,20 +117,20 @@ public final class EventControllerTest {
     @Test
     public void listHandlesNotFoundException() throws Exception {
 
-        when(eventService.findAll(INSTANCE, USER, COURSE, EXERCISE)).thenThrow(
-                new NotFoundException());
+        when(eventService.findAll(INSTANCE, USER, COURSE, EXERCISE))
+            .thenThrow(new NotFoundException());
 
         mockMvc.perform(get(EVENT_BASE_URL))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 
     @Test
     public void readHandlesNotFoundException() throws Exception {
 
-        when(eventService.find(INSTANCE, USER, COURSE, EXERCISE, "1")).thenThrow(
-                new NotFoundException());
+        when(eventService.find(INSTANCE, USER, COURSE, EXERCISE, "1"))
+            .thenThrow(new NotFoundException());
 
         mockMvc.perform(get(EVENT_BASE_URL + "/1"))
-                .andExpect(status().is(404));
+               .andExpect(status().is(404));
     }
 }
