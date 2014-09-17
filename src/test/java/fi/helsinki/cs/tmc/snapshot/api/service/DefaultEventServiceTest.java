@@ -127,7 +127,7 @@ public class DefaultEventServiceTest {
 
         final List<SnapshotEvent> snapshotEvents = new ArrayList<>();
 
-        snapshotEvents.add(createEvent("event", "metadata", 50L, 55L, "invalid", null));
+        snapshotEvents.add(createEvent("event", "metadata", 50L, 55L, "invalid", "falseData"));
 
         when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
         when(exercise.getSnapshotEvents()).thenReturn(snapshotEvents);
