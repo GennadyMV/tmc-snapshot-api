@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 public final class DefaultEventService implements EventService {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DefaultEventService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultEventService.class);
 
     @Autowired
     private ExerciseService exerciseService;
