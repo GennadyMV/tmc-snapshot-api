@@ -21,7 +21,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Mockito.when;
 
@@ -53,7 +55,8 @@ public class DefaultEventServiceTest {
                                       final String exerciseName,
                                       final Long happenedAt,
                                       final Long systemNanotime,
-                                      final String eventType) {
+                                      final String eventType,
+                                      final String metadata) {
 
         final SnapshotEvent event = new SnapshotEvent();
 
@@ -62,44 +65,46 @@ public class DefaultEventServiceTest {
         event.setHappenedAt(happenedAt);
         event.setSystemNanotime(systemNanotime);
         event.setEventType(eventType);
+        event.setMetadata(metadata);
 
         return event;
+    }
+
+    private void configure(final String courseName,
+                           final String exerciseName,
+                           final Long happenedAt,
+                           final Long systemNanotime,
+                           final String eventType,
+                           final String metadata) throws IOException {
+
+        final List<SnapshotEvent> events = new ArrayList<>();
+
+        final SnapshotEvent event = createEvent(courseName, exerciseName, happenedAt, systemNanotime, eventType, metadata);
+
+        events.add(event);
+
+        when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
+        when(exercise.getSnapshotEvents()).thenReturn(events);
+
     }
 
     @Test
     public void shouldFindEvent() throws IOException {
 
-        final List<SnapshotEvent> events = new ArrayList<>();
+        configure("mooc", "ex1", 100L, 102L, "text_insert", "{\"metadata\":\"data\"}");
 
-        final SnapshotEvent event1 = createEvent("mooc", "ex1", 100L, 102L, "text_insert");
-        final SnapshotEvent event2 = createEvent("mooc", "ex2", 104L, 106L, "file_create");
-
-        events.add(event1);
-        events.add(event2);
-
-        when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
-        when(exercise.getSnapshotEvents()).thenReturn(events);
-
-        final Event result = eventService.find(INSTANCE, USER, COURSE, EXERCISE, "104106");
+        final Event result = eventService.find(INSTANCE, USER, COURSE, EXERCISE, "100102");
 
         assertNotNull(result);
-        assertEquals("104106", result.getId());
-        assertEquals("file_create", result.getEventType());
+        assertEquals("100102", result.getId());
+        assertEquals("text_insert", result.getEventType());
+        assertFalse(result.getMetadata().isEmpty());
     }
 
     @Test(expected = NotFoundException.class)
     public void shouldThrowExceptionOnIncorrectId() throws IOException {
 
-        final List<SnapshotEvent> events = new ArrayList<>();
-
-        final SnapshotEvent event1 = createEvent("mooc", "ex1", 100L, 102L, "text_insert");
-        final SnapshotEvent event2 = createEvent("mooc", "ex2", 104L, 106L, "file_create");
-
-        events.add(event1);
-        events.add(event2);
-
-        when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
-        when(exercise.getSnapshotEvents()).thenReturn(events);
+        configure("mooc", "ex1", 100L, 102L, "text_insert", null);
 
         eventService.find(INSTANCE, USER, COURSE, EXERCISE, "404");
     }
@@ -107,25 +112,28 @@ public class DefaultEventServiceTest {
     @Test
     public void shouldFindAllEvents() throws IOException {
 
+        configure("hy", "ex10", 100L, 102L, "text_remove", null);
+
+        final List<Event> events = eventService.findAll(INSTANCE, USER, COURSE, EXERCISE);
+
+        assertEquals(1, events.size());
+
+        assertEquals("100102", events.get(0).getId());
+        assertEquals("text_remove", events.get(0).getEventType());
+    }
+
+    @Test
+    public void shouldReturnEmptyMapOnInvalidMetadata() throws IOException {
+
         final List<SnapshotEvent> snapshotEvents = new ArrayList<>();
 
-        final SnapshotEvent event1 = createEvent("hy", "ex10", 100L, 102L, "text_remove");
-        final SnapshotEvent event2 = createEvent("hy", "ex20", 104L, 106L, "file_delete");
-
-        snapshotEvents.add(event1);
-        snapshotEvents.add(event2);
+        snapshotEvents.add(createEvent("event", "metadata", 50L, 55L, "invalid", null));
 
         when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
         when(exercise.getSnapshotEvents()).thenReturn(snapshotEvents);
 
-        final List<Event> events = eventService.findAll(INSTANCE, USER, COURSE, EXERCISE);
+        final Event event = eventService.find(INSTANCE, USER, COURSE, EXERCISE, "5055");
 
-        assertEquals(2, events.size());
-
-        assertEquals("100102", events.get(0).getId());
-        assertEquals("text_remove", events.get(0).getEventType());
-
-        assertEquals("104106", events.get(1).getId());
-        assertEquals("file_delete", events.get(1).getEventType());
+        assertTrue(event.getMetadata().isEmpty());
     }
 }
