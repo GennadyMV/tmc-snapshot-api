@@ -170,6 +170,7 @@
                             <exclude>com/google/*</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/app/App.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/CourseService.class</exclude>
+                            <exclude>fi/helsinki/cs/tmc/snapshot/api/service/EventService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/EventProcessorService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/ExerciseService.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/InstanceService.class</exclude>
