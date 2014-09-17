@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.app;
 
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -31,21 +32,24 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+    protected void configure(final HttpSecurity security) throws Exception {
+
+        security.authorizeRequests()
                 .antMatchers(basicPath)
-                    .hasRole("USER")
-                    .and()
+                .hasRole("USER")
+                .and()
                 .httpBasic()
                 .realmName(basicRealm);
     }
 
     @Override
-    public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .withDefaultSchema()
-                .withUser(username).password(password).roles("USER", "ADMIN");
-    }
+    public void configure(final AuthenticationManagerBuilder managerBuilder) throws Exception {
 
+        managerBuilder.jdbcAuthentication()
+                      .dataSource(dataSource)
+                      .withDefaultSchema()
+                      .withUser(username)
+                      .password(password)
+                      .roles("USER");
+    }
 }

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Exercise.class)
-public class DefaultEventServiceTest {
+public final class DefaultEventServiceTest {
 
     private static final String INSTANCE = "hy";
     private static final String USER = "testUsername";
