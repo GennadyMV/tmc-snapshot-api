@@ -9,24 +9,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.codec.binary.Base64;
+public final class Exercise extends AbstractBase64Identifier {
 
-public final class Exercise implements Comparable<Exercise> {
-
-    private final String id;
     private final String name;
     private final List<SnapshotEvent> snapshotEvents;
 
     public Exercise(final String name) {
 
-        this.id = Base64.encodeBase64URLSafeString(name.getBytes());
+        super(name);
         this.name = name;
         this.snapshotEvents = new ArrayList<>();
-    }
-
-    public String getId() {
-
-        return id;
     }
 
     public String getName() {
@@ -64,12 +56,6 @@ public final class Exercise implements Comparable<Exercise> {
 
         final Exercise other = (Exercise) object;
 
-        return id.equals(other.getId());
-    }
-
-    @Override
-    public int compareTo(final Exercise other) {
-
-        return id.compareTo(other.getId());
+        return this.getId().equals(other.getId());
     }
 }

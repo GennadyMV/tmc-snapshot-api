@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.commons.codec.binary.Base64;
+public final class Course extends AbstractBase64Identifier {
 
-public final class Course implements Comparable<Course> {
-
-    private final String id;
     private final String name;
 
     @JsonIgnore
@@ -22,14 +19,9 @@ public final class Course implements Comparable<Course> {
 
     public Course(final String name) {
 
-        id = Base64.encodeBase64URLSafeString(name.getBytes());
+        super(name);
         this.name = name;
         exercises = new HashMap<>();
-    }
-
-    public String getId() {
-
-        return id;
     }
 
     public String getName() {
@@ -75,12 +67,6 @@ public final class Course implements Comparable<Course> {
 
         final Course other = (Course) object;
 
-        return id.equals(other.getId());
-    }
-
-    @Override
-    public int compareTo(final Course other) {
-
-        return id.compareTo(other.getId());
+        return this.getId().equals(other.getId());
     }
 }

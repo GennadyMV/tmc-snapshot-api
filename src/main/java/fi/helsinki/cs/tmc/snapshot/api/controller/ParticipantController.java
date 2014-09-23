@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
+import fi.helsinki.cs.tmc.snapshot.api.model.PlainParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public final class ParticipantController {
     private ParticipantService participantService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Participant> list(@PathVariable final String instanceId) throws IOException {
+    public Collection<PlainParticipant> list(@PathVariable final String instanceId) throws IOException {
 
         return participantService.findAll(instanceId);
     }

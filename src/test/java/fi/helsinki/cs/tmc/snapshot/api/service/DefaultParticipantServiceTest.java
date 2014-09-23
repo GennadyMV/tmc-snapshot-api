@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
+import fi.helsinki.cs.tmc.snapshot.api.model.PlainParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 
 import java.io.IOException;
@@ -53,7 +54,7 @@ public final class DefaultParticipantServiceTest {
 
         when(spywareService.fetchParticipants(INSTANCE)).thenReturn(participantData);
 
-        final List<Participant> participants = (List<Participant>) participantService.findAll(INSTANCE);
+        final List<PlainParticipant> participants = (List<PlainParticipant>) participantService.findAll(INSTANCE);
 
         assertEquals(3, participants.size());
 

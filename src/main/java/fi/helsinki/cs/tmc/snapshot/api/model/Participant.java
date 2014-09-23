@@ -6,29 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
+public final class Participant extends PlainParticipant {
 
-public final class Participant implements Comparable<Participant> {
-
-    private final String id;
-    private final String username;
     private final Map<String, Course> courses;
 
     public Participant(final String username) {
 
-        this.id = Base64.encodeBase64URLSafeString(username.getBytes());
-        this.username = username;
+        super(username);
         this.courses = new HashMap<>();
-    }
-
-    public String getId() {
-
-        return id;
-    }
-
-    public String getUsername() {
-
-        return username;
     }
 
     public List<Course> getCourses() {
@@ -47,11 +32,5 @@ public final class Participant implements Comparable<Participant> {
     public Course getCourse(final String name) {
 
         return courses.get(name);
-    }
-
-    @Override
-    public int compareTo(final Participant other) {
-
-        return id.compareTo(other.getId());
     }
 }

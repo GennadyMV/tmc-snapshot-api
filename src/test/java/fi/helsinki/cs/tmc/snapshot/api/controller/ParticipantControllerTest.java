@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
+import fi.helsinki.cs.tmc.snapshot.api.model.PlainParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 
 import java.util.ArrayList;
@@ -63,10 +64,10 @@ public final class ParticipantControllerTest {
     @Test
     public void shouldFetchAllParticipantsFromService() throws Exception {
 
-        final List<Participant> participants = new ArrayList<>();
+        final List<PlainParticipant> participants = new ArrayList<>();
 
-        participants.add(new Participant("teacher"));
-        participants.add(new Participant("apprentice"));
+        participants.add(new PlainParticipant("teacher"));
+        participants.add(new PlainParticipant("apprentice"));
 
         when(participantService.findAll(HY_INSTANCE)).thenReturn(participants);
 
