@@ -317,7 +317,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ]
 ```
 
-### 5.1. Snapshots RAW
+### 5.2. Snapshots RAW
 
 ```
 Method: GET
@@ -384,7 +384,7 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
 ]
 ```
 
-### 5.2. Snapshot File Contents
+### 5.3. Snapshot File Contents
 
 ```
 Method: GET
@@ -405,7 +405,7 @@ Returns: The contents for each file in the snapshot as a ZIP for a participant, 
     └── L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA
 ```
 
-### 5.3. Snapshot
+### 5.4. Snapshot
 
 ```
 Method: GET
