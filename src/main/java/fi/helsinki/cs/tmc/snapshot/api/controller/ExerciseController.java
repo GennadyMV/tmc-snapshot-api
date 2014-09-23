@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "{instanceId}/participants/{participantId}/courses/{courseId}/exercises", produces = "application/json")
+@RequestMapping(value = "{instanceId}/participants/{participantId}/courses/{courseId}/exercises",
+                produces = "application/json")
 public final class ExerciseController {
 
     @Autowired
