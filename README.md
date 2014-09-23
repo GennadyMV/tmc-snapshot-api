@@ -266,7 +266,7 @@ Returns: A single exercise for a participant and course with the provided IDs
 Method: GET
 Content-Type: application/json
 URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/
-Parameters: level [key, code or raw], defaults to key when no level is defined
+Parameters: level [key or code], defaults to key when no level is defined
 Returns: A list of snapshots for a participant, course and exercise with the provided IDs
 ```
 
@@ -316,6 +316,18 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
     }
 ]
 ```
+
+### 5.1. Snapshots RAW
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/
+Parameters: level [raw], defaults to key when no level is defined
+Returns: A list of raw snapshots for a participant, course and exercise with the provided IDs
+```
+
+#### Example Request
 
 `GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/?level=raw`
 
