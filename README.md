@@ -339,23 +339,10 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
         eventType: "code_snapshot",
         happenedAt: 1411297524487,
         systemNanotime: 4569956362905,
-        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}",
-        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==",
-        files: { },
-        projectActionEvent: false,
-        codeSnapshot: true
-    },
-    {
-        courseName: "2014-mooc-no-deadline",
-        exerciseName: "viikko1-Viikko1_001.Nimi",
-        eventType: "text_remove",
-        happenedAt: 1411297721309,
-        systemNanotime: 4766776038639,
-        metadata: null,
-        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSw4OCBAQFxuK3B1YmxpYyBjbGFzcyBOaW1pICU3QiUwQSAgICAlMEEgICAgcHVibGljIHN0YXRpYyB2b2lkIG1haW4oU3RyaW5nJTVCJTVEIGFyZ3MpICU3QiUwQSAgICAgICAgJTBBJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0=",
-        files: { },
-        projectActionEvent: false,
-        codeSnapshot: false
+        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}", // String, should contain valid json
+        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==", // BASE64 Encoded ZIP when eventType equals "code_snapshot"
+        projectActionEvent: false, // eventType contains "project_action"
+        codeSnapshot: true // eventType equals "code_snapshot"
     },
     {
         courseName: "2014-mooc-no-deadline",
@@ -363,23 +350,10 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
         eventType: "text_insert",
         happenedAt: 1411297721339,
         systemNanotime: 4766808950124,
-        metadata: null,
-        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
-        files: { },
-        projectActionEvent: false,
-        codeSnapshot: false
-    },
-    {
-        courseName: "2014-mooc-no-deadline",
-        exerciseName: "viikko1-Viikko1_001.Nimi",
-        eventType: "text_insert",
-        happenedAt: 1411297721749,
-        systemNanotime: 4767212587047,
-        metadata: null,
-        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcyLDE2ICs3MiwxNyBAQFxuICAgICAgICBTXG4reVxuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
-        files: { },
-        projectActionEvent: false,
-        codeSnapshot: false
+        metadata: null, // should be null if eventType not equals "code_snapshot"
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==", // BASE64 Encoded json which contains Google diff-match-patch patch and some other information
+        projectActionEvent: false, // eventType contains "project_action
+        codeSnapshot: false // eventType equals "code_snapshot"
     }
 ]
 ```
