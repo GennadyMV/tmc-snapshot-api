@@ -266,7 +266,7 @@ Returns: A single exercise for a participant and course with the provided IDs
 Method: GET
 Content-Type: application/json
 URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/
-Parameters: level [key or code], defaults to key when no level is defined
+Parameters: level [key, code or raw], defaults to key when no level is defined
 Returns: A list of snapshots for a participant, course and exercise with the provided IDs
 ```
 
@@ -313,6 +313,61 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
                 "name": "TestiLuokka.java"
             }
         ]
+    }
+]
+```
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/?level=raw`
+
+```
+[
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "code_snapshot",
+        happenedAt: 1411297524487,
+        systemNanotime: 4569956362905,
+        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}",
+        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==",
+        files: { },
+        projectActionEvent: false,
+        codeSnapshot: true
+    },
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "text_remove",
+        happenedAt: 1411297721309,
+        systemNanotime: 4766776038639,
+        metadata: null,
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTAsMCArMSw4OCBAQFxuK3B1YmxpYyBjbGFzcyBOaW1pICU3QiUwQSAgICAlMEEgICAgcHVibGljIHN0YXRpYyB2b2lkIG1haW4oU3RyaW5nJTVCJTVEIGFyZ3MpICU3QiUwQSAgICAgICAgJTBBJTBBICAgICU3RCUwQSUwQSU3RFxuIiwiZnVsbF9kb2N1bWVudCI6dHJ1ZX0=",
+        files: { },
+        projectActionEvent: false,
+        codeSnapshot: false
+    },
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "text_insert",
+        happenedAt: 1411297721339,
+        systemNanotime: 4766808950124,
+        metadata: null,
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
+        files: { },
+        projectActionEvent: false,
+        codeSnapshot: false
+    },
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "text_insert",
+        happenedAt: 1411297721749,
+        systemNanotime: 4767212587047,
+        metadata: null,
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcyLDE2ICs3MiwxNyBAQFxuICAgICAgICBTXG4reVxuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
+        files: { },
+        projectActionEvent: false,
+        codeSnapshot: false
     }
 ]
 ```
