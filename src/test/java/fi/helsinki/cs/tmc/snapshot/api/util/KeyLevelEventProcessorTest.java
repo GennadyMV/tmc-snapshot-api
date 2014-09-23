@@ -243,9 +243,9 @@ public final class KeyLevelEventProcessorTest {
 
         process();
 
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT);
     }
 
     @Test
@@ -256,9 +256,9 @@ public final class KeyLevelEventProcessorTest {
         generatePatchForExampleExercise(PATCH);
 
         process();
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT);
     }
 
     @Test
@@ -271,7 +271,7 @@ public final class KeyLevelEventProcessorTest {
         process();
 
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(2, "public class Nimi {\n    \n    public static void main(String[] args) {\n        // Kirjoita ohjelmasi tähän alle\n      \n        // Mikäli et vielä ole vastannut vielä kyselyyn, tee se HETI\n        // osoitteessa: http://laatu.jamo.fi/ \n        s\n    }\n\n}");
+        verifyEventCount(2);
     }
 
     @Test
@@ -283,9 +283,9 @@ public final class KeyLevelEventProcessorTest {
 
         process();
 
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT);
     }
 
     @Test
@@ -297,9 +297,9 @@ public final class KeyLevelEventProcessorTest {
 
         process();
 
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
         verifyEventFileContentForExampleFile(0, PATCHFILECONTENT);
-        verifyEventFileContentForExampleFile(1, PATCHFILECONTENT);
+        verifyEventFileContentForExampleFile(2, PATCHFILECONTENT);
     }
 
     @Test

@@ -38,6 +38,8 @@ public final class KeyLevelEventProcessor implements EventProcessor {
         final byte[] decodedData = Base64.decodeBase64(event.getData());
         final Map<String, byte[]> data;
 
+        final Map<String, String> zipFileCache = new HashMap<>();
+
         try {
             data = Zip.decompress(decodedData);
         } catch (IOException exception) {
@@ -57,11 +59,17 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
             if (!fileContent.equals(fileCache.get(fileKey))) {
                 hasChanged = true;
-                fileCache.put(fileKey, fileContent);
             }
-
+            zipFileCache.put(fileKey, fileContent);
             event.getFiles().put(fileKey, fileContent);
         }
+
+        if (zipFileCache.size() != fileCache.size()) {
+            hasChanged = true;
+        }
+
+        // Replace old cache
+        fileCache = zipFileCache;
 
         return hasChanged;
     }

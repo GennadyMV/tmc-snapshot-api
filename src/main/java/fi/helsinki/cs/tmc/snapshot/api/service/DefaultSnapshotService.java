@@ -82,7 +82,7 @@ public final class DefaultSnapshotService implements SnapshotService {
         final ZipOutputStream zip = new ZipOutputStream(files);
 
         for (Snapshot snapshot : snapshots) {
-
+            zip.putNextEntry(new ZipEntry(snapshot.getId() + "/"));
             for (SnapshotFile file : snapshot.getFiles()) {
 
                 final ZipEntry entry = new ZipEntry(String.format("%s/%s", snapshot.getId(), file.getId()));

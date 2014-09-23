@@ -160,6 +160,6 @@ public final class DefaultSnapshotServiceTest {
 
         final byte[] bytes = snapshotService.findAllFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
 
-        assertEquals(402, bytes.length);
+        assertEquals(598, bytes.length);
     }
 }
