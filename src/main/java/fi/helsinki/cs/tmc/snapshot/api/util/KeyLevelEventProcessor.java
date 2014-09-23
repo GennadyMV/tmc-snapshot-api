@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.DiffMatchPatch;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventInformation;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEventMetadata;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEventInformation;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEventMetadata;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

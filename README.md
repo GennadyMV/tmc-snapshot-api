@@ -463,12 +463,14 @@ Returns: A list of events for a participant, course and exercise with the provid
     {
         "id": "139526261085413507305253514",
         "eventType": "text_insert",
-        "timestamp": 1395262610854
+        "timestamp": 1395262610854,
+        "metadata": {}
     },
     {
         "id": "139526257830313474754345700",
         "eventType": "text_remove",
-        "timestamp": 1395262578303
+        "timestamp": 1395262578303,
+        "metadata": {}
     },
     {
         "id": "139526261650613512957311747",
@@ -499,7 +501,8 @@ Returns: A single event for a participant, course and exercise with the provided
 {
     "id": "139526261085413507305253514",
     "eventType": "text_insert",
-    "timestamp": 1395262610854
+    "timestamp": 1395262610854,
+    "metadata": {}
 }
 ```
 

@@ -1,10 +1,10 @@
-package fi.helsinki.cs.tmc.snapshot.api.model;
+package fi.helsinki.cs.tmc.snapshot.api.spyware.model;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public final class MetadataTest {
+public final class SnapshotEventMetadataTest {
 
     @Test
     public void constructorSetsValuesCorrectly() {

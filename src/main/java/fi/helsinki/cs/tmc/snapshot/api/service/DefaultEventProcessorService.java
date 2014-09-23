@@ -1,7 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.util.CodeLevelEventProcessor;
 import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 
