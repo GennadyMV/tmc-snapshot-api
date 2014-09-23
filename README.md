@@ -365,7 +365,7 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
 - systemNanotime: `Long`, a nanotime when the event happened to determine the order of the events
 - metadata: `String`, should contain a string with valid JSON
 - data: `String`, Base64-encoded data in different formats, `code_snapshot` contains a ZIP, others most likely JSON
-- projectActionEvent: `Boolean`, true if the `eventType` contains `project_action`
+- projectActionEvent: `Boolean`, true if the `eventType` string contains `project_action`
 - codeSnapshot: `Boolean`, true if the `eventType` equals `code_snapshot`
 
 ### 5.3. Snapshot File Contents
