@@ -45,7 +45,7 @@ All IDs in the API are specified as strings. The ID for an instance is its name.
 
 ### Snapshot Level
 
-There are three levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution. Raw-level snapshots provide all snapshot types unprocessed.
+There are three levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution. Raw-level snapshots provide all snapshot data unprocessed.
 
 ### 1. Instances
 
@@ -317,7 +317,7 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ]
 ```
 
-### 5.2. Snapshots RAW
+### 5.2. Raw Snapshots
 
 ```
 Method: GET
@@ -339,10 +339,10 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
         eventType: "code_snapshot",
         happenedAt: 1411297524487,
         systemNanotime: 4569956362905,
-        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}", // String, should contain valid json
-        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==", // BASE64 Encoded ZIP when eventType equals "code_snapshot"
-        projectActionEvent: false, // eventType contains "project_action"
-        codeSnapshot: true // eventType equals "code_snapshot"
+        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}",
+        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==",
+        projectActionEvent: false,
+        codeSnapshot: true
     },
     {
         courseName: "2014-mooc-no-deadline",
@@ -358,15 +358,15 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
 ]
 ```
 
-- courseName: String, name of the course
-- exerciseName: String, name of the exercise
-- eventType: String, "code_snapshot", "project_action", "text_insert", "text_remove", etc.
-- happendAt: Long, timestamp when the event happend
-- systemNanotime: Long, nanotime when the event happend to determine order of the events
-- metadata: String, should contain string which contains valid json
-- data: String, BASE64 encoded data in different formats, code_snapshot contains ZIP other probably json
-- projectActionEvent: Boolean, true if eventType contains "project_action"
-- codeSanpshot: Boolean, true if eventType equals "code_snapshot"
+- courseName: `String`, the name of the course
+- exerciseName: `String`, the name of the exercise
+- eventType: `String`, for example `text_insert`, `text_remove`, `project_action`, `code_snapshot` etc.
+- happenedAt: `Long`, a timestamp when the event happened
+- systemNanotime: `Long`, a nanotime when the event happened to determine the order of the events
+- metadata: `String`, should contain a string with valid JSON
+- data: `String`, Base64-encoded data in different formats, `code_snapshot` contains a ZIP, others most likely JSON
+- projectActionEvent: `Boolean`, true if the `eventType` contains `project_action`
+- codeSnapshot: `Boolean`, true if the `eventType` equals `code_snapshot`
 
 ### 5.3. Snapshot File Contents
 
