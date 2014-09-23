@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 public enum SnapshotLevel {
 
-    KEY, CODE, RAW;
+    RAW, KEY, CODE;
 
     public static SnapshotLevel fromString(final String level) {
 

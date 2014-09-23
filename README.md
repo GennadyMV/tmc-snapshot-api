@@ -45,7 +45,7 @@ All IDs in the API are specified as strings. The ID for an instance is its name.
 
 ### Snapshot Level
 
-There are two levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution.
+There are three levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution. Raw-level snapshots provide all snapshot types unprocessed.
 
 ### 1. Instances
 
@@ -317,7 +317,58 @@ Returns: A list of snapshots for a participant, course and exercise with the pro
 ]
 ```
 
-### 5.2. Snapshot File Contents
+### 5.2. Snapshots RAW
+
+```
+Method: GET
+Content-Type: application/json
+URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/
+Parameters: level [raw], defaults to key when no level is defined
+Returns: A list of raw snapshots for a participant, course and exercise with the provided IDs
+```
+
+#### Example Request
+
+`GET /hy/participants/MDEyMzQ1Njc4/courses/WFhYLW9oamEta2VydGF1cw/exercises/c2V0dGkxLTAxLlRhdmFyYU1hdGthbGF1a2t1SmFMYXN0aXJ1dW1h/snapshots/?level=raw`
+
+```
+[
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "code_snapshot",
+        happenedAt: 1411297524487,
+        systemNanotime: 4569956362905,
+        metadata: "{"cause":"file_create","file":"/nbproject/private/private.properties"}", // String, should contain valid json
+        data: "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==", // BASE64 Encoded ZIP when eventType equals "code_snapshot"
+        projectActionEvent: false, // eventType contains "project_action"
+        codeSnapshot: true // eventType equals "code_snapshot"
+    },
+    {
+        courseName: "2014-mooc-no-deadline",
+        exerciseName: "viikko1-Viikko1_001.Nimi",
+        eventType: "text_insert",
+        happenedAt: 1411297721339,
+        systemNanotime: 4766808950124,
+        metadata: null,
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
+        projectActionEvent: false,
+        codeSnapshot: false
+    }
+]
+```
+
+- courseName: String, name of the course
+- exerciseName: String, name of the exercise
+- eventType: String, "code_snapshot", "project_action", "text_insert", "text_remove", etc.
+- happendAt: Long, timestamp when the event happend
+- systemNanotime: Long, nanotime when the event happend to determine order of the events
+- metadata: String, should contain string which contains valid json
+- data: String, BASE64 encoded data in different formats, code_snapshot contains ZIP other probably json
+- projectActionEvent: Boolean, true if eventType contains "project_action"
+- codeSanpshot: Boolean, true if eventType equals "code_snapshot"
+
+### 5.3. Snapshot File Contents
 
 ```
 Method: GET
@@ -338,7 +389,7 @@ Returns: The contents for each file in the snapshot as a ZIP for a participant, 
     └── L3NyYy90ZXN0aS9UZXN0aUx1b2trYS5qYXZhMTQwNjcxMDA1NjIwMDA
 ```
 
-### 5.3. Snapshot
+### 5.4. Snapshot
 
 ```
 Method: GET

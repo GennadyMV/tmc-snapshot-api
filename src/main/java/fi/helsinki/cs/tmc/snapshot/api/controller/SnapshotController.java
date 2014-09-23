@@ -28,15 +28,14 @@ public final class SnapshotController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Object list(@PathVariable final String instanceId,
-                               @PathVariable final String participantId,
-                               @PathVariable final String courseId,
-                               @PathVariable final String exerciseId,
-                               @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
+                       @PathVariable final String participantId,
+                       @PathVariable final String courseId,
+                       @PathVariable final String exerciseId,
+                       @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
 
         final SnapshotLevel snapshotLevel = SnapshotLevel.fromString(level);
 
         if (snapshotLevel == SnapshotLevel.RAW) {
-
             return exerciseService.find(instanceId, participantId, courseId, exerciseId).getSnapshotEvents();
         }
 
