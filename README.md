@@ -358,13 +358,13 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
 ]
 ```
 
-- courseName: Name of the course
-- exerciseName: Name of the exercise
-- eventType: String containing "code_snapshot", "project_action", "text_insert", "text_remove", etc.
-- happendAt: timestamp when the event happend
-- systemNanotime: Nanotime when the event happend to determine order of the events
-- metadata: Should contain string which contains valid json
-- data: BASE64 encoded data in different formats, code_snapshot contains ZIP other probably json
+- courseName: String, name of the course
+- exerciseName: String, name of the exercise
+- eventType: String, "code_snapshot", "project_action", "text_insert", "text_remove", etc.
+- happendAt: Long, timestamp when the event happend
+- systemNanotime: Long, nanotime when the event happend to determine order of the events
+- metadata: String, should contain string which contains valid json
+- data: String, BASE64 encoded data in different formats, code_snapshot contains ZIP other probably json
 - projectActionEvent: Boolean, true if eventType contains "project_action"
 - codeSanpshot: Boolean, true if eventType equals "code_snapshot"
 
