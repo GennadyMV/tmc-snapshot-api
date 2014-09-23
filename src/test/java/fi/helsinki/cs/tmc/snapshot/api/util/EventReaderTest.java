@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.snapshot.api.util;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 
 import java.io.File;
 import java.io.IOException;

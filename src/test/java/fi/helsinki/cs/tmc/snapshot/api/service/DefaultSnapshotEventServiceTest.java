@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventReader;
 
 import java.io.File;

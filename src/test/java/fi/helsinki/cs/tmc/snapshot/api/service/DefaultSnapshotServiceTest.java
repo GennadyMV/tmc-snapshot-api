@@ -3,9 +3,9 @@ package fi.helsinki.cs.tmc.snapshot.api.service;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 import fi.helsinki.cs.tmc.snapshot.api.util.KeyLevelEventProcessor;
 

@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.snapshot.api.model;
+package fi.helsinki.cs.tmc.snapshot.api.spyware.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

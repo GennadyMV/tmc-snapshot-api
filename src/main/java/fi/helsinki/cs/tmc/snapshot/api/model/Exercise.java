@@ -2,6 +2,8 @@ package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

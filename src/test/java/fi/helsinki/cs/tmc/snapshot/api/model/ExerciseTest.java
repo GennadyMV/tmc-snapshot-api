@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
+
 import java.util.Objects;
 
 import org.junit.Before;

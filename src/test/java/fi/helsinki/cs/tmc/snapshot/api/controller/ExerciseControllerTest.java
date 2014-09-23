@@ -3,8 +3,8 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
 import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
-import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotEvent;
 import fi.helsinki.cs.tmc.snapshot.api.service.ExerciseService;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 
 import java.util.ArrayList;
 import java.util.List;
