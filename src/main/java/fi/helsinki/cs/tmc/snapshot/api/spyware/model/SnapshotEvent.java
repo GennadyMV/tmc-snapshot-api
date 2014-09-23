@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.spyware.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,8 @@ public final class SnapshotEvent implements Comparable<SnapshotEvent> {
     private Long systemNanotime;
     private String metadata;
     private String data;
+
+    @JsonIgnore
     private final Map<String, String> files = new HashMap<>();
 
     public boolean isProjectActionEvent() {
