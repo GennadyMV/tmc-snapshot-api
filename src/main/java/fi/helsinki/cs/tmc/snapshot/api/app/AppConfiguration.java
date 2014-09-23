@@ -67,13 +67,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(final List<HttpMessageConverter<?>> messageConverters) {
 
-        // Jackson
-        final MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-
-        // Configure ObjectMapper
-        //jacksonConverter.getObjectMapper().configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
-
-        messageConverters.add(jacksonConverter);
+        messageConverters.add(new MappingJackson2HttpMessageConverter());
         messageConverters.add(new ByteArrayHttpMessageConverter());
         messageConverters.add(new StringHttpMessageConverter());
         messageConverters.add(new PlainErrorMessageConverter());

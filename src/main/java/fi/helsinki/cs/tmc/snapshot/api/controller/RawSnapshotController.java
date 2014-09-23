@@ -21,9 +21,9 @@ public final class RawSnapshotController {
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<SnapshotEvent> list(@PathVariable final String instanceId,
-                               @PathVariable final String participantId,
-                               @PathVariable final String courseId,
-                               @PathVariable final String exerciseId) throws IOException {
+                                          @PathVariable final String participantId,
+                                          @PathVariable final String courseId,
+                                          @PathVariable final String exerciseId) throws IOException {
 
         return exerciseService.find(instanceId, participantId, courseId, exerciseId).getSnapshotEvents();
     }
