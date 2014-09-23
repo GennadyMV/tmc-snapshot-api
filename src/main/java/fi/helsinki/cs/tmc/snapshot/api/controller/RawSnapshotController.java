@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,8 +23,7 @@ public final class RawSnapshotController {
     public Collection<SnapshotEvent> list(@PathVariable final String instanceId,
                                @PathVariable final String participantId,
                                @PathVariable final String courseId,
-                               @PathVariable final String exerciseId,
-                               @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level) throws IOException {
+                               @PathVariable final String exerciseId) throws IOException {
 
         return exerciseService.find(instanceId, participantId, courseId, exerciseId).getSnapshotEvents();
     }
