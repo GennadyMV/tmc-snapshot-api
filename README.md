@@ -45,7 +45,7 @@ All IDs in the API are specified as strings. The ID for an instance is its name.
 
 ### Snapshot Level
 
-There are two levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution.
+There are three levels for snapshots. Key-level snapshots — which is the default — provide snapshots that progress one keystroke (or event) at a time. This provides a way to “playback” the snapshots, the same way as a participant has implemented the solution. Code-level snapshots provide snapshots that have a larger scope. These snapshots are “full snapshots” that are collected for example when the participant saves the solution. Raw-level snapshots provide all snapshot types unprocessed.
 
 ### 1. Instances
 
