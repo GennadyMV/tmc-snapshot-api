@@ -350,13 +350,23 @@ Returns: A list of raw snapshots for a participant, course and exercise with the
         eventType: "text_insert",
         happenedAt: 1411297721339,
         systemNanotime: 4766808950124,
-        metadata: null, // should be null if eventType not equals "code_snapshot"
-        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==", // BASE64 Encoded json which contains Google diff-match-patch patch and some other information
-        projectActionEvent: false, // eventType contains "project_action
-        codeSnapshot: false // eventType equals "code_snapshot"
+        metadata: null,
+        data: "eyJmaWxlIjoiL3NyYy9OaW1pLmphdmEiLCJwYXRjaGVzIjoiQEAgLTcxLDE2ICs3MSwxNyBAQFxuICAgICAgICAgXG4rU1xuICUwQSUwQSAgICAlN0QlMEFcbiIsImZ1bGxfZG9jdW1lbnQiOmZhbHNlfQ==",
+        projectActionEvent: false,
+        codeSnapshot: false
     }
 ]
 ```
+
+- courseName: Name of the course
+- exerciseName: Name of the exercise
+- eventType: String containing "code_snapshot", "project_action", "text_insert", "text_remove", etc.
+- happendAt: timestamp when the event happend
+- systemNanotime: Nanotime when the event happend to determine order of the events
+- metadata: Should contain string which contains valid json
+- data: BASE64 encoded data in different formats, code_snapshot contains ZIP other probably json
+- projectActionEvent: Boolean, true if eventType contains "project_action"
+- codeSanpshot: Boolean, true if eventType equals "code_snapshot"
 
 ### 5.3. Snapshot File Contents
 
