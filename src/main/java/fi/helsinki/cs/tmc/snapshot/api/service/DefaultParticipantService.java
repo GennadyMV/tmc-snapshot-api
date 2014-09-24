@@ -1,7 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.service;
 
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
-import fi.helsinki.cs.tmc.snapshot.api.model.PlainParticipant;
+import fi.helsinki.cs.tmc.snapshot.api.model.SimpleParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 
 import java.io.IOException;
@@ -27,22 +27,22 @@ public final class DefaultParticipantService implements ParticipantService {
     @Autowired
     private SpywareService spywareService;
 
-    private Collection<PlainParticipant> parseParticipants(final String data) {
+    private Collection<SimpleParticipant> parseParticipants(final String data) {
 
         final String[] content = data.split("\n");
         final List participants = new ArrayList();
 
         for (String username : content) {
-            participants.add(new PlainParticipant(username));
+            participants.add(new SimpleParticipant(username));
         }
 
         return participants;
     }
 
     @Override
-    public List<PlainParticipant> findAll(final String instanceId) throws IOException {
+    public List<SimpleParticipant> findAll(final String instanceId) throws IOException {
 
-        final List<PlainParticipant> sortedParticipants = new ArrayList<>(parseParticipants(spywareService.fetchParticipants(instanceId)));
+        final List<SimpleParticipant> sortedParticipants = new ArrayList<>(parseParticipants(spywareService.fetchParticipants(instanceId)));
         Collections.sort(sortedParticipants);
 
         return sortedParticipants;

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class Participant extends PlainParticipant {
+public final class Participant extends SimpleParticipant {
 
     private final Map<String, Course> courses;
 

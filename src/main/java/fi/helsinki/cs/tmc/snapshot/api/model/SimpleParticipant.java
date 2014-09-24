@@ -1,10 +1,10 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-public class PlainParticipant extends AbstractBase64Identifier {
+public class SimpleParticipant extends AbstractBase64Identifier {
 
     private final String username;
 
-    public PlainParticipant(final String username) {
+    public SimpleParticipant(final String username) {
 
         super(username);
         this.username = username;
