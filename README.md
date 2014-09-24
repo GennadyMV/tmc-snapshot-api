@@ -1,8 +1,8 @@
 tmc-snapshot-api
 ================
 
-[![Build Status](https://travis-ci.org/kesapojat/tmc-snapshot-api.svg?branch=master)](https://travis-ci.org/kesapojat/tmc-snapshot-api/)
-[![Coverage Status](https://img.shields.io/coveralls/kesapojat/tmc-snapshot-api.svg)](https://coveralls.io/r/kesapojat/tmc-snapshot-api/)
+[![Build Status](https://travis-ci.org/rage-research/tmc-snapshot-api.svg?branch=master)](https://travis-ci.org/rage-research/tmc-snapshot-api/)
+[![Coverage Status](https://img.shields.io/coveralls/rage-research/tmc-snapshot-api.svg)](https://coveralls.io/r/rage-research/tmc-snapshot-api/)
 
 A Spring Boot Web API for accessing TMC exercise snapshots (Java 7 + Java EE 7 + Spring Boot 1.1.4.RELEASE) from the [tmc-spyware-server](https://github.com/testmycode/tmc-spyware-server/).
 
