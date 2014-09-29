@@ -33,7 +33,7 @@ public final class DefaultSnapshotService implements SnapshotService {
 
     private List<Snapshot> limitSnapshots(final List<Snapshot> snapshots, final String from, final int count) {
 
-        if (from == null && count == 0) {
+        if (from.isEmpty() && count == 0) {
             return snapshots;
         }
 
