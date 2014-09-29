@@ -105,7 +105,6 @@ public final class DefaultSnapshotService implements SnapshotService {
                                  final int count) throws IOException {
 
         final List<Snapshot> snapshots = findAll(instanceId, participantId, courseId, exerciseId, level);
-
         final List<Snapshot> limitedList = limitSnapshots(snapshots, from, count);
 
         final ByteArrayOutputStream files = new ByteArrayOutputStream();
