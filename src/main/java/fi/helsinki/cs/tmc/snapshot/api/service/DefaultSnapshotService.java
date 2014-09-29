@@ -10,6 +10,7 @@ import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -44,7 +45,7 @@ public final class DefaultSnapshotService implements SnapshotService {
         final List<Snapshot> snapshots = eventTransformer.toSnapshotList(events);
 
         if (snapshots == null) {
-            throw new NotFoundException();
+            return Collections.EMPTY_LIST;
         }
 
         return snapshots;

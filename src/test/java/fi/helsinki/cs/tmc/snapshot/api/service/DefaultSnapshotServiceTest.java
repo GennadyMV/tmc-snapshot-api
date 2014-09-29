@@ -87,15 +87,17 @@ public final class DefaultSnapshotServiceTest {
         assertEquals(returnedSnapshots, snapshots);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void findAllThrowsNotFoundExceptionWhenNullBuiltSnapshots() throws IOException {
+    @Test
+    public void findAllReturnsEmptyListWhenNullBuiltSnapshots() throws IOException {
 
         final Exercise exercise = new Exercise(EXERCISE);
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(exercise.getSnapshotEvents())).thenReturn(null);
 
-        snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
+        final List<Snapshot> result = snapshotService.findAll(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
+
+        assertEquals(0, result.size());
     }
 
     @Test

@@ -7,6 +7,7 @@ import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public final class DefaultSnapshotFileService implements SnapshotFileService {
                                                                       .getFiles();
 
         if (snapshotFiles == null) {
-            throw new NotFoundException();
+            return Collections.EMPTY_LIST;
         }
 
         return snapshotFiles;

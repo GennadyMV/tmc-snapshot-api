@@ -153,8 +153,8 @@ public final class DefaultSnapshotFileServiceTest {
         assertEquals("public class Example { }", snapshotFiles.get(0).getContent());
     }
 
-    @Test(expected = NotFoundException.class)
-    public void shouldThrowExceptionOnNonExistentSnapshotFiles() throws IOException {
+    @Test
+    public void shouldReturnEmptyListNonExistentSnapshotFiles() throws IOException {
 
         final Snapshot snapshot = new Snapshot("55", 2L, new HashMap<String, SnapshotFile>(), false);
         final Snapshot spy = spy(snapshot);
@@ -169,7 +169,9 @@ public final class DefaultSnapshotFileServiceTest {
 
         doReturn(null).when(spy).getFiles();
 
-        fileService.findAll("mooc", "admin", "java-course", "ex", "2", SnapshotLevel.KEY);
+        final Collection<SnapshotFile> snapshotFiles = fileService.findAll("mooc", "admin", "java-course", "ex", "2", SnapshotLevel.KEY);
+
+        assertEquals(0, snapshotFiles.size());
     }
 
     @Test(expected = NotFoundException.class)
