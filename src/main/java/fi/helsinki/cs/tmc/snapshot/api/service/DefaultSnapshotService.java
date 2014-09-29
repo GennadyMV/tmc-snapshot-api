@@ -9,6 +9,7 @@ import fi.helsinki.cs.tmc.snapshot.api.util.EventTransformer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,28 @@ public final class DefaultSnapshotService implements SnapshotService {
 
     @Autowired
     private EventTransformer eventTransformer;
+
+    private List<Snapshot> limitSnapshots(final List<Snapshot> snapshots, final String from, final int count) {
+
+        if (from == null && count == 0) {
+
+            return snapshots;
+        }
+
+        final List<Snapshot> limited = new ArrayList<>();
+
+        for (int i = 0; i < snapshots.size(); i++) {
+            if (from != null && !snapshots.get(i).getId().equals(from)) {
+                continue;
+            }
+            for (int j = i; j < Math.min(i + count, snapshots.size()); j++) {
+                limited.add(snapshots.get(j));
+            }
+            break;
+        }
+
+        return limited;
+    }
 
     @Override
     public List<Snapshot> findAll(final String instanceId,
@@ -71,18 +94,22 @@ public final class DefaultSnapshotService implements SnapshotService {
     }
 
     @Override
-    public byte[] findAllFilesAsZip(final String instanceId,
-                                    final String participantId,
-                                    final String courseId,
-                                    final String exerciseId,
-                                    final SnapshotLevel level) throws IOException {
+    public byte[] findFilesAsZip(final String instanceId,
+                                 final String participantId,
+                                 final String courseId,
+                                 final String exerciseId,
+                                 final SnapshotLevel level,
+                                 final String from,
+                                 final int count) throws IOException {
 
         final List<Snapshot> snapshots = findAll(instanceId, participantId, courseId, exerciseId, level);
+
+        final List<Snapshot> limitedList = limitSnapshots(snapshots, from, count);
 
         final ByteArrayOutputStream files = new ByteArrayOutputStream();
         final ZipOutputStream zip = new ZipOutputStream(files);
 
-        for (Snapshot snapshot : snapshots) {
+        for (Snapshot snapshot : limitedList) {
 
             zip.putNextEntry(new ZipEntry(snapshot.getId() + "/"));
 
