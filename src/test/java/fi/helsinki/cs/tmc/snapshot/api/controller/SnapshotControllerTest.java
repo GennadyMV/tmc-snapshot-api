@@ -155,6 +155,38 @@ public final class SnapshotControllerTest {
     }
 
     @Test
+    public void readFilesPassesFromToService() throws Exception {
+
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/files.zip?from=2"));
+
+        verify(snapshotService).findFilesAsZip(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY, "2", 0);
+    }
+
+    @Test
+    public void readFilesPassesCountToService() throws Exception {
+
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/files.zip?count=1"));
+
+        verify(snapshotService).findFilesAsZip(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY, "", 1);
+    }
+
+    @Test
+    public void readFilesPassesFromAndCountToService() throws Exception {
+
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/files.zip?from=2&count=1"));
+
+        verify(snapshotService).findFilesAsZip(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY, "2", 1);
+    }
+
+    @Test
+    public void readFilesPassesLevelAndFromAndCountToService() throws Exception {
+
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "/files.zip?level=code&from=2&count=1"));
+
+        verify(snapshotService).findFilesAsZip(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.CODE, "2", 1);
+    }
+
+    @Test
     public void readFilesHandlesNotFoundException() throws Exception {
 
         when(snapshotService.findFilesAsZip(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY, "", 0)).thenThrow(new NotFoundException());
