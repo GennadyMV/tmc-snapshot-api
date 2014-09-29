@@ -160,7 +160,7 @@ public final class DefaultSnapshotServiceTest {
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
 
-        final byte[] bytes = snapshotService.findFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY, null, 0);
+        final byte[] bytes = snapshotService.findFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY, "", 0);
 
         assertEquals(598, bytes.length);
     }
