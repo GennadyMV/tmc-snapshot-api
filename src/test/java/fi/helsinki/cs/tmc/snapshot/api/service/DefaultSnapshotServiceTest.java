@@ -62,12 +62,14 @@ public final class DefaultSnapshotServiceTest {
     private List<Snapshot> generateSnapshots(final boolean codeLevel, final String fileContent, final int[] ids) {
 
         final List<Snapshot> snapshots = new ArrayList<>();
+
         for (int id : ids) {
             final String idString = Integer.toString(id);
             final Snapshot snapshot = new Snapshot(idString, 0L, new HashMap<String, SnapshotFile>(), codeLevel);
             snapshot.addFile(new SnapshotFile(idString, idString, fileContent));
             snapshots.add(snapshot);
         }
+
         return snapshots;
     }
 
@@ -80,7 +82,6 @@ public final class DefaultSnapshotServiceTest {
 
         return generateSnapshots(true, "code", ids);
     }
-
 
     @Test
     public void findAllReturnsProcessedSnapshots() throws IOException {
