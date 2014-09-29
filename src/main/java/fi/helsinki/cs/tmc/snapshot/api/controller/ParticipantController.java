@@ -1,7 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import fi.helsinki.cs.tmc.snapshot.api.model.Participant;
-import fi.helsinki.cs.tmc.snapshot.api.model.SimpleParticipant;
 import fi.helsinki.cs.tmc.snapshot.api.service.ParticipantService;
 
 import java.io.IOException;
@@ -21,12 +21,14 @@ public final class ParticipantController {
     private ParticipantService participantService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<SimpleParticipant> list(@PathVariable final String instanceId) throws IOException {
+    @JsonView(Participant.NoCourses.class)
+    public Collection<Participant> list(@PathVariable final String instanceId) throws IOException {
 
         return participantService.findAll(instanceId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{participantId}")
+    @JsonView(Participant.Default.class)
     public Participant read(@PathVariable final String instanceId, @PathVariable final String participantId) throws IOException {
 
         return participantService.find(instanceId, participantId);
