@@ -34,19 +34,21 @@ public final class DefaultSnapshotService implements SnapshotService {
     private List<Snapshot> limitSnapshots(final List<Snapshot> snapshots, final String from, final int count) {
 
         if (from == null && count == 0) {
-
             return snapshots;
         }
 
         final List<Snapshot> limited = new ArrayList<>();
 
         for (int i = 0; i < snapshots.size(); i++) {
+
             if (from != null && !snapshots.get(i).getId().equals(from)) {
                 continue;
             }
+
             for (int j = i; j < Math.min(i + count, snapshots.size()); j++) {
                 limited.add(snapshots.get(j));
             }
+
             break;
         }
 
