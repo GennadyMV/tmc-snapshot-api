@@ -61,7 +61,7 @@ public final class SnapshotController {
                                         @PathVariable final String courseId,
                                         @PathVariable final String exerciseId,
                                         @RequestParam(value = "level", defaultValue = "KEY", required = false) final String level,
-                                        @RequestParam(value = "from", required = false) final String from,
+                                        @RequestParam(value = "from", defaultValue = "", required = false) final String from,
                                         @RequestParam(value = "count", defaultValue = "0", required = false) final int count) throws IOException {
         return new HttpEntity<>(snapshotService.findFilesAsZip(instanceId, participantId, courseId, exerciseId, SnapshotLevel.fromString(level), from, count));
     }

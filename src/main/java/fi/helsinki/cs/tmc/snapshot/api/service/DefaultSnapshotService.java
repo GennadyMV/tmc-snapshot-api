@@ -41,7 +41,7 @@ public final class DefaultSnapshotService implements SnapshotService {
 
         for (int i = 0; i < snapshots.size(); i++) {
 
-            if (from != null && !snapshots.get(i).getId().equals(from)) {
+            if (!from.isEmpty() && !snapshots.get(i).getId().equals(from)) {
                 continue;
             }
 
