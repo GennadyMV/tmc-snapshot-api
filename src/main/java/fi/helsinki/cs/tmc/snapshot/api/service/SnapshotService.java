@@ -10,6 +10,6 @@ public interface SnapshotService {
 
     List<Snapshot> findAll(String instanceId, String participantId, String courseId, String exerciseId, SnapshotLevel level) throws IOException;
     Snapshot find(String instanceId, String participantId, String courseId, String exerciseId, String snapshotId, SnapshotLevel level) throws IOException;
-    byte[] findAllFilesAsZip(String instanceId, String participantId, String courseId, String exerciseId, SnapshotLevel level) throws IOException;
+    byte[] findFilesAsZip(String instanceId, String participantId, String courseId, String exerciseId, SnapshotLevel level, String from, int count) throws IOException;
 
 }

@@ -59,6 +59,30 @@ public final class DefaultSnapshotServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
+    private List<Snapshot> generateSnapshots(final boolean codeLevel, final String fileContent, final int[] ids) {
+
+        final List<Snapshot> snapshots = new ArrayList<>();
+
+        for (int id : ids) {
+            final String idString = Integer.toString(id);
+            final Snapshot snapshot = new Snapshot(idString, 0L, new HashMap<String, SnapshotFile>(), codeLevel);
+            snapshot.addFile(new SnapshotFile(idString, idString, fileContent));
+            snapshots.add(snapshot);
+        }
+
+        return snapshots;
+    }
+
+    private List<Snapshot> generateSnapshots(final int... ids) {
+
+        return generateSnapshots(false, "key", ids);
+    }
+
+    private List<Snapshot> generateCodeSnapshots(final int... ids) {
+
+        return generateSnapshots(true, "code", ids);
+    }
+
     @Test
     public void findAllReturnsProcessedSnapshots() throws IOException {
 
@@ -135,7 +159,7 @@ public final class DefaultSnapshotServiceTest {
     }
 
     @Test
-    public void findAllFilesAsZipReturnsCorrectBytes() throws IOException {
+    public void findFilesAsZipReturnsCorrectBytes() throws IOException {
 
         final Exercise exercise = new Exercise(EXERCISE);
 
@@ -144,24 +168,53 @@ public final class DefaultSnapshotServiceTest {
 
         final Collection<SnapshotEvent> events = exercise.getSnapshotEvents();
 
-        final SnapshotFile file = new SnapshotFile("L3NyYy9IZWlNYWFpbG1hLmphdmE", "/src/HeiMaailma.java", "public class HeiMaailma { }");
-        final SnapshotFile file2 = new SnapshotFile("L3NyYy9IZWlNYWFpbG1hLmphdmE2", "/src/HeiMaailma.java", "public class HeiMaailma { private String hei; }");
-
-        final Snapshot snapshot = new Snapshot("2", 10L, new HashMap<String, SnapshotFile>(), false);
-        snapshot.addFile(file);
-
-        final Snapshot snapshot2 = new Snapshot("3", 11L, new HashMap<String, SnapshotFile>(), false);
-        snapshot2.addFile(file2);
-
-        final List<Snapshot> snapshots = new ArrayList<>();
-        snapshots.add(snapshot);
-        snapshots.add(snapshot2);
+        final List<Snapshot> snapshots = generateSnapshots(1, 2, 3);
 
         when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
         when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
 
-        final byte[] bytes = snapshotService.findAllFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY);
+        final byte[] bytes = snapshotService.findFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY, "", 0);
 
-        assertEquals(598, bytes.length);
+        assertEquals(625, bytes.length);
+    }
+
+    @Test
+    public void findFilesAsZipReturnsCorrectBytesWhenCountSet() throws IOException {
+
+        final Exercise exercise = new Exercise(EXERCISE);
+
+        exercise.addSnapshotEvent(new SnapshotEvent());
+        exercise.addSnapshotEvent(new SnapshotEvent());
+
+        final Collection<SnapshotEvent> events = exercise.getSnapshotEvents();
+
+        final List<Snapshot> snapshots = generateSnapshots(2, 3, 4, 5, 6, 7);
+
+        when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
+        when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
+
+        final byte[] bytes = snapshotService.findFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY, "", 2);
+
+        assertEquals(424, bytes.length);
+    }
+
+    @Test
+    public void findFilesAsZipReturnsCorrectBytesWhenFromIdSetAndCount() throws IOException {
+
+        final Exercise exercise = new Exercise(EXERCISE);
+
+        exercise.addSnapshotEvent(new SnapshotEvent());
+        exercise.addSnapshotEvent(new SnapshotEvent());
+
+        final Collection<SnapshotEvent> events = exercise.getSnapshotEvents();
+
+        final List<Snapshot> snapshots = generateSnapshots(2, 3, 4, 5, 6, 7);
+
+        when(exerciseService.find(INSTANCE, USERNAME, COURSE, EXERCISE)).thenReturn(exercise);
+        when(eventTransformer.toSnapshotList(events)).thenReturn(snapshots);
+
+        final byte[] bytes = snapshotService.findFilesAsZip(INSTANCE, USERNAME, COURSE, EXERCISE, SnapshotLevel.KEY, "3", 3);
+
+        assertEquals(625, bytes.length);
     }
 }
