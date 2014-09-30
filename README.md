@@ -375,6 +375,8 @@ Method: GET
 Content-Type: application/zip
 URL: /{instanceId}/participants/{participantId}/courses/{courseId}/exercises/{exerciseId}/snapshots/files.zip
 Parameters: level [key or code], defaults to key when no level is defined
+            from [snapshotId], optional, files are returned from this snapshot onwards
+            count [Integer], optional, amount of snapshots to return
 Returns: The contents for each file in the snapshot as a ZIP for a participant, course and exercise with the provided IDs
 ```
 
