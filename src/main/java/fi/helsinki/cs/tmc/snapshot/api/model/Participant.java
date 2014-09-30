@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.Map;
 
 public final class Participant extends AbstractBase64Identifier {
 
-    public interface NoCourses { }
-    public interface Default extends NoCourses { }
+    public interface Default { }
+    public interface WithCourses extends Default { }
 
     private String username;
 
@@ -24,7 +25,7 @@ public final class Participant extends AbstractBase64Identifier {
         this.courses = new HashMap<>();
     }
 
-    @JsonView(NoCourses.class)
+    @JsonView(Default.class)
     public String getUsername() {
 
         return this.username;
@@ -35,7 +36,7 @@ public final class Participant extends AbstractBase64Identifier {
         this.username = username;
     }
 
-    @JsonView(Default.class)
+    @JsonView(WithCourses.class)
     public List<Course> getCourses() {
 
         final List sortedCourses = new ArrayList<>(courses.values());

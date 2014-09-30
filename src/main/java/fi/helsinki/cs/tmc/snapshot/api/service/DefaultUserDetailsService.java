@@ -13,30 +13,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DefaultUserDetailsService implements UserDetailsService {
+public final class DefaultUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(final String username) {
-
-        final User user = userRepository.findByUsername(username);
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                true,
-                true,
-                true,
-                true,
-                getRolesAsGrantedAuthorities(user.getRoles()));
-
-    }
 
     private List<GrantedAuthority> getRolesAsGrantedAuthorities(final List<Role> roles) {
 
@@ -47,5 +29,20 @@ public class DefaultUserDetailsService implements UserDetailsService {
         }
 
         return authorities;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(final String username) {
+
+        final User user = userRepository.findByUsername(username);
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                                                                      user.getPassword(),
+                                                                      true,
+                                                                      true,
+                                                                      true,
+                                                                      true,
+                                                                      getRolesAsGrantedAuthorities(user.getRoles()));
+
     }
 }

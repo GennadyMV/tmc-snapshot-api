@@ -1,30 +1,25 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.*;
 
-@Entity(name = "ROLES")
-public class Role implements Serializable {
+import org.hibernate.validator.constraints.NotBlank;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
+@Entity
+public class Role extends AbstractPersistable<Long> {
+
+    @NotBlank
     private String rolename;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
-    public Long getId() {
+    public void setUsers(final List<User> users) {
 
-        return id;
-    }
-
-    public void setId(final Long id) {
-
-        this.id = id;
+        this.users = users;
     }
 
     public List<User> getUsers() {
@@ -32,18 +27,13 @@ public class Role implements Serializable {
         return users;
     }
 
-    public void setUsers(final List<User> users) {
+    public void setRolename(final String rolename) {
 
-        this.users = users;
+        this.rolename = rolename;
     }
 
     public String getRolename() {
 
         return rolename;
-    }
-
-    public void setRolename(final String rolename) {
-
-        this.rolename = rolename;
     }
 }

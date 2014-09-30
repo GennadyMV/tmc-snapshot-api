@@ -1,33 +1,31 @@
 package fi.helsinki.cs.tmc.snapshot.api.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
-@Entity(name = "USERS")
-public class User implements Serializable {
+import org.hibernate.validator.constraints.NotBlank;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
+@Entity
+public class User extends AbstractPersistable<Long> {
 
     @Column(unique = true)
+    @NotBlank
     private String username;
 
+    @NotBlank
+    @Size(min = 14)
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles;
 
-    public Long getId() {
+    public void setPassword(final String password) {
 
-        return id;
-    }
-
-    public void setId(final Long id) {
-
-        this.id = id;
+        this.password = password;
     }
 
     public String getPassword() {
@@ -35,9 +33,9 @@ public class User implements Serializable {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setRoles(final List<Role> roles) {
 
-        this.password = password;
+        this.roles = roles;
     }
 
     public List<Role> getRoles() {
@@ -45,18 +43,13 @@ public class User implements Serializable {
         return roles;
     }
 
-    public void setRoles(final List<Role> roles) {
+    public void setUsername(final String username) {
 
-        this.roles = roles;
+        this.username = username;
     }
 
     public String getUsername() {
 
         return username;
-    }
-
-    public void setUsername(final String username) {
-
-        this.username = username;
     }
 }
