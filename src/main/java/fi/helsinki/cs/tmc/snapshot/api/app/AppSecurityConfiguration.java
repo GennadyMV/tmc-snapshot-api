@@ -35,9 +35,8 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         security.antMatcher(basicPath)
                 .authorizeRequests()
-                    .anyRequest()
-                        .authenticated()
-                .and()
+                    .anyRequest().authenticated()
+                    .and()
                 .httpBasic()
                     .realmName(basicRealm);
     }
