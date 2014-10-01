@@ -35,22 +35,22 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         security.antMatcher(basicPath)
                 .authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                    .anyRequest()
+                        .authenticated()
                 .and()
                 .httpBasic()
-                .realmName(basicRealm);
+                    .realmName(basicRealm);
     }
 
     @Override
     public void configure(final AuthenticationManagerBuilder managerBuilder) throws Exception {
 
         managerBuilder.inMemoryAuthentication()
-                      .withUser(username)
-                      .password(password)
-                      .roles("USER")
+                        .withUser(username)
+                        .password(password)
+                        .roles("USER")
+                        .and()
                       .and()
-                      .and()
-                      .userDetailsService(userDetailsService);
+                        .userDetailsService(userDetailsService);
     }
 }
