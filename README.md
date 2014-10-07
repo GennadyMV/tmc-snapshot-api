@@ -564,7 +564,7 @@ Returns: A single event for a participant, course and exercise with the provided
 This project has been developed at the University of Helsinki’s [Department of Computer Science](http://cs.helsinki.fi/en/) by:
 
 * Kenny Heinonen ([kennyhei](https://github.com/kennyhei/))
-* Kasper Hirvikoski ([kasperhirvikoski](https://github.com/kasperhirvikoski/))
+* Kasper Hirvikoski ([kasper](https://github.com/kasper/))
 * Leo Leppänen ([ljleppan](https://github.com/ljleppan/))
 * Joni Salmi ([josalmi](https://github.com/josalmi/))
 
