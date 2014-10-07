@@ -37,7 +37,7 @@ You can also set additional properties as declared in the `.properties`-files.
 
 ## REST API
 
-The REST API provides mostly JSON-responses as `application/json`. Files are returned as `text/plain`. Incase of an error, an error response is returned with the related status code and requested content-type. The API uses basic access for authentication.
+The REST API provides mostly JSON-responses as `application/json`. Files are returned as `text/plain` or `application/zip`. Incase of an error, an error response is returned with the related status code and requested content-type. The API uses basic access for authentication.
 
 ### IDs
 
