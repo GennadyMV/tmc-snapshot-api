@@ -45,11 +45,11 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(final AuthenticationManagerBuilder managerBuilder) throws Exception {
 
         managerBuilder.inMemoryAuthentication()
-                        .withUser(username)
-                        .password(password)
-                        .roles("USER")
-                        .and()
+                          .withUser(username)
+                          .password(password)
+                          .roles("USER")
+                          .and()
                       .and()
-                        .userDetailsService(userDetailsService);
+                          .userDetailsService(userDetailsService);
     }
 }
