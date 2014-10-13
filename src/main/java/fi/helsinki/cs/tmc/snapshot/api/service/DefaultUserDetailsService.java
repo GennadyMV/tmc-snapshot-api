@@ -48,6 +48,5 @@ public final class DefaultUserDetailsService implements UserDetailsService {
                                                                       true,
                                                                       true,
                                                                       getRolesAsGrantedAuthorities(user.getRoles()));
-
     }
 }

@@ -21,12 +21,6 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${security.basic.path}")
     private String basicPath;
 
-    @Value("${security.user.name}")
-    private String username;
-
-    @Value("${security.user.password}")
-    private String password;
-
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -44,12 +38,6 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final AuthenticationManagerBuilder managerBuilder) throws Exception {
 
-        managerBuilder.inMemoryAuthentication()
-                          .withUser(username)
-                          .password(password)
-                          .roles("USER")
-                          .and()
-                      .and()
-                          .userDetailsService(userDetailsService);
+        managerBuilder.userDetailsService(userDetailsService);
     }
 }
