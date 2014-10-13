@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
+@Table(name = "users")
 public class User extends AbstractPersistable<Long> {
 
     @Column(unique = true)

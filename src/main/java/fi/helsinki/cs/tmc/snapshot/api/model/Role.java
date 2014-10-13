@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
+@Table(name = "roles")
 public class Role extends AbstractPersistable<Long> {
 
     @NotBlank
