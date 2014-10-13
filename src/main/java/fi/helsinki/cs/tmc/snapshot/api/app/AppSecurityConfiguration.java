@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -38,6 +39,7 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final AuthenticationManagerBuilder managerBuilder) throws Exception {
 
-        managerBuilder.userDetailsService(userDetailsService);
+        managerBuilder.userDetailsService(userDetailsService)
+                      .passwordEncoder(new BCryptPasswordEncoder());
     }
 }
