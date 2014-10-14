@@ -21,7 +21,7 @@ public class User extends AbstractPersistable<Long> {
     @Size(min = 14)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
     public void setPassword(final String password) {

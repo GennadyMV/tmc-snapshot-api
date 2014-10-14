@@ -15,7 +15,7 @@ public class Role extends AbstractPersistable<Long> {
     @NotBlank
     private String rolename;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private List<User> users;
 
     public void setUsers(final List<User> users) {
