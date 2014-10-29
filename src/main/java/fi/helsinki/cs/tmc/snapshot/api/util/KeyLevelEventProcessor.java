@@ -102,7 +102,7 @@ public final class KeyLevelEventProcessor implements EventProcessor {
 
         // Always try to process both data and metadata
         if (!processData(event) & !processMetadata(event)) {
-            throw new IOException("Nothing new in ZIP.");
+            throw new IOException("Nothing new in ZIP");
         }
     }
 

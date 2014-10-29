@@ -60,7 +60,7 @@ public final class CodeLevelEventProcessor implements EventProcessor {
         // This is somehow pretty ugly
         if (event.getFiles().isEmpty() ||
             (previousEvent != null && !hasChanges && previousEvent.getFiles().size() == event.getFiles().size())) {
-            throw new IOException("Nothing new in ZIP.");
+            throw new IOException("Nothing new in ZIP");
         }
     }
 
