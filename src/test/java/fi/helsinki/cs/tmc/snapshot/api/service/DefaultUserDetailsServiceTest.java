@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class DefaultUserDetailsServiceTest {
+public final class DefaultUserDetailsServiceTest {
 
     @Autowired
     private UserRepository userRepository;
