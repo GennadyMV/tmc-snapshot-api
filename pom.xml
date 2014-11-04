@@ -187,6 +187,7 @@
                 <configuration>
                     <instrumentation>
                         <excludes>
+                            <exclude>**/*$*.class</exclude>
                             <exclude>com/google/*</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/app/App.class</exclude>
                             <exclude>fi/helsinki/cs/tmc/snapshot/api/service/CourseService.class</exclude>
