@@ -24,6 +24,16 @@ public class User extends AbstractPersistable<Long> {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
+    public void setUsername(final String username) {
+
+        this.username = username;
+    }
+
+    public String getUsername() {
+
+        return username;
+    }
+
     public void setPassword(final String password) {
 
         this.password = password;
@@ -42,15 +52,5 @@ public class User extends AbstractPersistable<Long> {
     public List<Role> getRoles() {
 
         return roles;
-    }
-
-    public void setUsername(final String username) {
-
-        this.username = username;
-    }
-
-    public String getUsername() {
-
-        return username;
     }
 }

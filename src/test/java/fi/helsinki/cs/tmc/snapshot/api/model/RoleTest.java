@@ -10,6 +10,15 @@ import static org.junit.Assert.assertEquals;
 public final class RoleTest {
 
     @Test
+    public void casSetRolename() {
+
+        final Role role = new Role();
+        role.setRolename("user");
+
+        assertEquals(role.getRolename(), "user");
+    }
+
+    @Test
     public void canSetUsers() {
 
         final Role role = new Role();
@@ -24,14 +33,5 @@ public final class RoleTest {
 
         assertEquals(1, role.getUsers().size());
         assertEquals(role.getUsers().get(0).getUsername(), "username");
-    }
-
-    @Test
-    public void casSetRolename() {
-
-        final Role role = new Role();
-        role.setRolename("user");
-
-        assertEquals(role.getRolename(), "user");
     }
 }

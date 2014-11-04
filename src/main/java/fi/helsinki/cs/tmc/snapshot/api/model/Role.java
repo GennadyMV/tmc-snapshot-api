@@ -18,16 +18,6 @@ public class Role extends AbstractPersistable<Long> {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private List<User> users;
 
-    public void setUsers(final List<User> users) {
-
-        this.users = users;
-    }
-
-    public List<User> getUsers() {
-
-        return users;
-    }
-
     public void setRolename(final String rolename) {
 
         this.rolename = rolename;
@@ -36,5 +26,15 @@ public class Role extends AbstractPersistable<Long> {
     public String getRolename() {
 
         return rolename;
+    }
+
+    public void setUsers(final List<User> users) {
+
+        this.users = users;
+    }
+
+    public List<User> getUsers() {
+
+        return users;
     }
 }
