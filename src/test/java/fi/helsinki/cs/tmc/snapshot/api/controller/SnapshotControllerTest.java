@@ -2,10 +2,13 @@ package fi.helsinki.cs.tmc.snapshot.api.controller;
 
 import fi.helsinki.cs.tmc.snapshot.api.app.App;
 import fi.helsinki.cs.tmc.snapshot.api.exception.NotFoundException;
+import fi.helsinki.cs.tmc.snapshot.api.model.Exercise;
 import fi.helsinki.cs.tmc.snapshot.api.model.Snapshot;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotFile;
 import fi.helsinki.cs.tmc.snapshot.api.model.SnapshotLevel;
+import fi.helsinki.cs.tmc.snapshot.api.service.ExerciseService;
 import fi.helsinki.cs.tmc.snapshot.api.service.SnapshotService;
+import fi.helsinki.cs.tmc.snapshot.api.spyware.model.SnapshotEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +57,9 @@ public final class SnapshotControllerTest {
     @Mock
     private SnapshotService snapshotService;
 
+    @Mock
+    private ExerciseService exerciseService;
+
     @InjectMocks
     private SnapshotController snapshotController;
 
@@ -88,6 +94,27 @@ public final class SnapshotControllerTest {
 
         verify(snapshotService).findAll(INSTANCE, USER, COURSE, EXERCISE, SnapshotLevel.KEY);
         verifyNoMoreInteractions(snapshotService);
+    }
+
+    @Test
+    public void shouldReturnRawEvents() throws Exception {
+
+        final SnapshotEvent event = new SnapshotEvent();
+        event.setEventType("text_insert");
+
+        final Exercise exercise = new Exercise("exercise");
+        exercise.addSnapshotEvent(event);
+
+        when(exerciseService.find(INSTANCE, USER, COURSE, EXERCISE)).thenReturn(exercise);
+
+        mockMvc.perform(get(SNAPSHOT_BASE_URL + "?level=raw"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", hasSize(1)))
+               .andExpect(jsonPath("$[0].eventType", is("text_insert")));
+
+        verify(exerciseService).find(INSTANCE, USER, COURSE, EXERCISE);
+        verifyNoMoreInteractions(exerciseService);
     }
 
     @Test
