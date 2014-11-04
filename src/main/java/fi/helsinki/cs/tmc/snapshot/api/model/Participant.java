@@ -13,8 +13,7 @@ public final class Participant extends AbstractBase64Identifier {
     public interface Default { }
     public interface WithCourses extends Default { }
 
-    private String username;
-
+    private final String username;
     private final Map<String, Course> courses;
 
     public Participant(final String username) {
@@ -29,11 +28,6 @@ public final class Participant extends AbstractBase64Identifier {
     public String getUsername() {
 
         return this.username;
-    }
-
-    public void setUsername(final String username) {
-
-        this.username = username;
     }
 
     @JsonView(WithCourses.class)
