@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 @SpringApplicationConfiguration(classes = App.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public final class DefaultUserDetailsServiceTest {
+public class DefaultUserDetailsServiceTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,6 +42,7 @@ public final class DefaultUserDetailsServiceTest {
     }
 
     @Test
+    @Transactional
     public void shouldLoadUserByUsername() {
 
         User user = new User();
