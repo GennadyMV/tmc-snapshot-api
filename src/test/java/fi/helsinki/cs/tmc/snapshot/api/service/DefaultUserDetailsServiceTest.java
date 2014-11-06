@@ -7,6 +7,7 @@ import fi.helsinki.cs.tmc.snapshot.api.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,11 +42,10 @@ public class DefaultUserDetailsServiceTest {
     }
 
     @Test
-    @Transactional
     public void shouldLoadUserByUsername() {
 
         User user = new User();
-        user.setUsername("username");
+        user.setUsername(UUID.randomUUID().toString());
         user.setPassword("passwordpassword");
 
         final Role role = new Role();
@@ -59,9 +58,9 @@ public class DefaultUserDetailsServiceTest {
 
         user = userRepository.save(user);
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername("username");
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 
-        assertEquals(userDetails.getUsername(), "username");
+        assertEquals(userDetails.getUsername(), user.getUsername());
         assertEquals(userDetails.getAuthorities()
                                 .iterator()
                                 .next()
